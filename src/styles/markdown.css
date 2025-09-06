@@ -4,6 +4,11 @@
          hover:decoration-transparent;
 }
 
+.btn-regular-dark {
+  @apply bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700;
+  /* 根据你实际想用的样式调整 */
+}
+
 
 .custom-md {
     h1 {
