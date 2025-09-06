@@ -77,11 +77,11 @@ export const profileConfig: ProfileConfig = {
 			icon: "fa6-brands:github",
 			url: "https://github.com/afingpo",
 		},
-    	{
-      		name: "Codeberg",
-     		icon: "simple-icons:codeberg",
-     		url: "https://codeberg.org/afingpo",
-    	},
+    {
+      name: "Codeberg",
+      icon: "simple-icons:codeberg",
+      url: "https://codeberg.org/afingpo",
+    },
 	],
 };
 
