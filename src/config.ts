@@ -8,7 +8,7 @@ import type {
 import { LinkPreset } from "./types/config";
 
 export const siteConfig: SiteConfig = {
-	title: "Aflume",
+	title: "Afingpo's Blog",
 	subtitle: "Blog for Afingpo From Aflume",
 	lang: "zh_CN", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {
@@ -55,7 +55,7 @@ export const navBarConfig: NavBarConfig = {
 export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/demo-avatar.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
 	name: "涵哲子",
-	bio: "天哲地理，共公卿好9",
+	bio: "天哲地理，共公卿好",
 	links: [
 		{
 			name: "GitHub",
