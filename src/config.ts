@@ -49,6 +49,11 @@ export const navBarConfig: NavBarConfig = {
 			url: "https://codeberg.org/afingpo/afingpo-astro-blog", // Internal links should not include the base path, as it is automatically added
 			external: true, // Show an external link icon and will open in a new tab
 		},
+		{
+			name: "开往",
+			url: "https://www.travellings.cn/go.html",
+			external: true,
+		},
 	],
 };
 
@@ -62,11 +67,11 @@ export const profileConfig: ProfileConfig = {
 			icon: "fa6-brands:github",
 			url: "https://github.com/afingpo",
 		},
-    {
-      name: "Codeberg",
-      icon: "simple-icons:codeberg",
-      url: "https://codeberg.org/afingpo"
-    },
+    	{
+      		name: "Codeberg",
+     		icon: "simple-icons:codeberg",
+     		url: "https://codeberg.org/afingpo",
+    	},
 	],
 };
 
