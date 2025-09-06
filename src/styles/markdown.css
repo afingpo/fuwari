@@ -1,3 +1,11 @@
+@layer components {
+  .link {
+    @apply text-[var(--primary)] underline decoration-[var(--link-underline)]
+           decoration-1 decoration-dashed underline-offset-4
+           hover:decoration-transparent;
+  }
+}
+
 .custom-md {
     h1 {
         @apply text-3xl;
