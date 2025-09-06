@@ -69,7 +69,7 @@ export const profileConfig: ProfileConfig = {
 		},
 		{
 			name: "Mail",
-			ico: "material-symbols:mail",
+			ico: "fa6-solid:envelope",
 			url: "mailto:afingpo@465332.xyz"
 		},
 		{
