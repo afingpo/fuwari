@@ -26,7 +26,7 @@ import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-cop
 
 // https://astro.build/config
 export default defineConfig({
-	site: "https://fuwari.vercel.app/",
+	site: "https://blog.afingpo.top/",
 	base: "/",
 	trailingSlash: "always",
 	integrations: [
@@ -48,11 +48,11 @@ export default defineConfig({
 			globalInstance: true,
 		}),
 		icon({
-			include: {
-				"preprocess: vitePreprocess(),": ["*"],
-				"fa6-brands": ["*"],
-				"fa6-regular": ["*"],
-				"fa6-solid": ["*"],
+			collection: {
+			  'fa6-brands': () => import('@iconify-json/fa6-brands/icons.json'),
+        'fa6-regular': () => import('@iconify-json/fa6-regular/icons.json'),
+        'fa6-solid': () => import('@iconify-json/fa6-solid/icons.json'),
+        'material-symbols': () => import('@iconify-json/material-symbols/icons.json'), // 新增
 			},
 		}),
 		expressiveCode({
