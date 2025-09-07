@@ -100,3 +100,12 @@ export type BlogPostData = {
 export type ExpressiveCodeConfig = {
 	theme: string;
 };
+
+export interface CommentConfig {
+  waline?: {
+    serverURL: string          // 必填
+    lang?: string
+    // 需要更多字段自行扩展
+  }
+}
+

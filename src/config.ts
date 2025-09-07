@@ -7,6 +7,15 @@ import type {
 } from "./types/config";
 import { LinkPreset } from "./types/config";
 
+import type { CommentConfig } from './types/config'
+export const commentConfig: CommentConfig = {
+  waline: {
+    serverURL: 'https://comment.afingpo.top',
+    lang: 'zh-CN',
+  },
+}
+
+
 export const siteConfig: SiteConfig = {
 	title: "Afingpo's Blog",
 	subtitle: "Blog for Afingpo From Aflume",
