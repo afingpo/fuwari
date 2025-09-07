@@ -27,7 +27,7 @@ import { defineConfig } from 'astro/config';
 import icon from 'astro-icon';
 import { fileURLToPath } from 'node:url';
 import { readFileSync } from 'node:fs';
-import { getIconCollections } from 'astro-icon';
+//import { getIconCollections } from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
