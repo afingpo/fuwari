@@ -3,11 +3,11 @@ published: 2025-06-29
 updated: 2025-09-07
 title: Termux:通用基础包
 slug: termux-betabox
-tag: [linux,termux]
+tag: [Linux,Termux]
 category: Termux
 ---
 
-:::tip
+:::warning
 ！本文已经失去效应！请勿完全信任该包！请自行按文章配置！
 :::
 
