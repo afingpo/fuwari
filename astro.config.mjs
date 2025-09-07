@@ -23,6 +23,11 @@ import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
+import { defineConfig } from 'astro/config';
+import icon from 'astro-icon';
+import { fileURLToPath } from 'node:url';
+import { readFileSync } from 'node:fs';
+import { getIconCollections } from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
@@ -48,13 +53,15 @@ export default defineConfig({
 			globalInstance: true,
 		}),
 		icon({
-			collection: {
-			  'fa6-brands': () => import('@iconify-json/fa6-brands/icons.json'),
-        'fa6-regular': () => import('@iconify-json/fa6-regular/icons.json'),
-        'fa6-solid': () => import('@iconify-json/fa6-solid/icons.json'),
-        'material-symbols': () => import('@iconify-json/material-symbols/icons.json'), // 新增
-			},
-		}),
+			//collection: {
+			//  'fa6-brands': () => import('@iconify-json/fa6-brands/icons.json'),
+      //  'fa6-regular': () => import('@iconify-json/fa6-regular/icons.json'),
+      //  'fa6-solid': () => import('@iconify-json/fa6-solid/icons.json'),
+      //  'local': () => import('./src/icons/index.js'),
+      //  'material-symbols': () => import('@iconify-json/material-symbols/icons.json'),
+      //},
+      ...getIconCollections(['simple-icons', 'fa6-brands', 'fa6-solid', 'fa6-regular', 'material-symbols']),
+    }),
 		expressiveCode({
 			themes: [expressiveCodeConfig.theme, expressiveCodeConfig.theme],
 			plugins: [
