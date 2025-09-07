@@ -53,14 +53,14 @@ export default defineConfig({
 			globalInstance: true,
 		}),
 		icon({
-			//collection: {
-			//  'fa6-brands': () => import('@iconify-json/fa6-brands/icons.json'),
-      //  'fa6-regular': () => import('@iconify-json/fa6-regular/icons.json'),
-      //  'fa6-solid': () => import('@iconify-json/fa6-solid/icons.json'),
-      //  'local': () => import('./src/icons/index.js'),
-      //  'material-symbols': () => import('@iconify-json/material-symbols/icons.json'),
-      //},
-      ...getIconCollections(['simple-icons', 'fa6-brands', 'fa6-solid', 'fa6-regular', 'material-symbols']),
+			collection: {
+			  'fa6-brands': () => import('@iconify-json/fa6-brands/icons.json'),
+        'fa6-regular': () => import('@iconify-json/fa6-regular/icons.json'),
+        'fa6-solid': () => import('@iconify-json/fa6-solid/icons.json'),
+        'local': () => import('./src/icons/index.js'),
+        'material-symbols': () => import('@iconify-json/material-symbols/icons.json'),
+      },
+      //...getIconCollections(['simple-icons', 'fa6-brands', 'fa6-solid', 'fa6-regular', 'material-symbols']),
     }),
 		expressiveCode({
 			themes: [expressiveCodeConfig.theme, expressiveCodeConfig.theme],
