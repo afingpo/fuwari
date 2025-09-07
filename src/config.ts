@@ -62,16 +62,16 @@ export const profileConfig: ProfileConfig = {
 	name: "涵哲子",
 	bio: "天哲地理，共公卿好",
 	links: [
-		/*{
+		{
 			name: "Telegram",
-			ico: "simple-icons:telegram",
+			icon: "simple-icons:telegram",
 			url: "https://t.me/afingpo"
 		},
 		{
 			name: "Mail",
-			ico: "material-symbols:mail",
+			icon: "material-symbols:mail",
 			url: "mailto:afingpo@465332.xyz"
-		},*/
+		},
 		{
 			name: "GitHub",
 			icon: "fa6-brands:github",
