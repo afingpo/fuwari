@@ -4,16 +4,15 @@ import type {
 	NavBarConfig,
 	ProfileConfig,
 	SiteConfig,
-  CommentConfig,
 } from "./types/config";
 import { LinkPreset } from "./types/config";
 
-export const commentConfig: CommentConfig = {
+/*export const commentConfig: CommentConfig = {
   twikoo: {
     envId: 'https://twikoo.s1.afingpo.top',
     lang: 'zh-CN',
   },
-};
+};*/
 
 export const siteConfig: SiteConfig = {
 	title: "Afingpo's Blog",

@@ -101,13 +101,3 @@ export type ExpressiveCodeConfig = {
 	theme: string;
 };
 
-export type CommentConfig = {
-    twikoo?: TwikooConfig
-};
-  
-type TwikooConfig = {
-  envId: string
-  region?: string
-  lang?: string
-};
-
