@@ -1,3 +1,10 @@
+---
+import { commentConfig } from '@/config'
+const { envId, lang = 'zh-CN', region = '' } = commentConfig.twikoo || {}
+// ↑ 必须在这里解构，define:vars 只能引用顶层变量
+---
+
+
 <script define:vars={{ envId, lang, region, path: Astro.props.path }} type="module">
   /* ===== 调试 ===== */
   console.log('[Twikoo] envId =', envId);
