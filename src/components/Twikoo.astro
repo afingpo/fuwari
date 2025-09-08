@@ -3,7 +3,7 @@
   console.log('[Twikoo] envId =', envId);
   console.log('[Twikoo] path  =', path);
 
-  import twikoo from 'https://cdn.jsdelivr.net/npm/twikoo@1/dist/twikio.min.js';
+  import twikoo from 'https://cdn.jsdelivr.net/npm/twikoo@1/dist/twikoo.min.js';
 
   twikoo.init({
     envId,
@@ -14,7 +14,7 @@
     darkMode: document.documentElement.classList.contains('dark')
   });
 
-  /* 暗色切换后重初始化（Fuwari 切主题会抛 astro:after-swap） */
+  /* 暗色切换后重初始化 */
   document.addEventListener('astro:after-swap', () => {
     twikoo.init({
       envId,
