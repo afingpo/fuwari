@@ -1,31 +1,29 @@
----
-import { commentConfig } from '@/config'
-interface Props { path: string }
-const { envId, lang = 'zh-CN', region = '' } = commentConfig.twikoo || {}
----
-<div id="tcomment" class="w-full mt-8"></div>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/twikoo@1/dist/twikoo.css" />
 <script define:vars={{ envId, lang, region, path: Astro.props.path }} type="module">
-  /* ===== 调试开始 ===== */
-  document.getElementById('tcomment').innerHTML =
-    `<div style="color:red">DEBUG: envId=${envId}, path=${path}</div>`;
-  /* ===== 调试结束 ===== */
+  /* ===== 调试 ===== */
+  console.log('[Twikoo] envId =', envId);
+  console.log('[Twikoo] path  =', path);
 
-  import twikoo from 'https://cdn.jsdelivr.net/npm/twikoo@1/dist/twikoo.min.js'
-  twikoo.init({ envId, path, el: '#tcomment', darkMode: ... })
+  import twikoo from 'https://cdn.jsdelivr.net/npm/twikoo@1/dist/twikio.min.js';
 
-  alert('Twikoo envId=' + envId);
-  import twikoo from 'https://cdn.jsdelivr.net/npm/twikoo@1/dist/twikoo.min.js'
   twikoo.init({
     envId,
     region,
     lang,
     el: '#tcomment',
-    path: Astro.props.path,
+    path,
     darkMode: document.documentElement.classList.contains('dark')
-  })
+  });
+
+  /* 暗色切换后重初始化（Fuwari 切主题会抛 astro:after-swap） */
   document.addEventListener('astro:after-swap', () => {
-    twikoo.init({ envId, region, lang, path: Astro.props.path, el: '#tcomment' })
-  })
+    twikoo.init({
+      envId,
+      region,
+      lang,
+      el: '#tcomment',
+      path,
+      darkMode: document.documentElement.classList.contains('dark')
+    });
+  });
 </script>
 
