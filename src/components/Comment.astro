@@ -1,14 +1,15 @@
 ---
 import type { CollectionEntry } from 'astro:content'
 import { commentConfig } from '@/config'
-import Waline from './Waline.astro'
+//import Waline from './Waline.astro'
+import Twikoo from './Twikoo.astro'
 
 interface Props { post: CollectionEntry<'posts'> }
 const { slug, data } = Astro.props.post
 ---
-{data.comments !== false && commentConfig.waline?.serverURL && (
+{data.comments !== false && commentConfig.twikoo?.serverURL && (
   <div class="card-base p-6 mt-6">
-    <Waline path={`/posts/${slug}`} />
+    <Twikoo path={`/posts/${slug}`} />
   </div>
 )}
 

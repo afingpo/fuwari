@@ -102,10 +102,15 @@ export type ExpressiveCodeConfig = {
 };
 
 export interface CommentConfig {
-  waline?: {
+  /*waline?: {
     serverURL: string          // 必填
     lang?: string
     // 需要更多字段自行扩展
+  }*/
+  twikoo?: {               // 新增
+    envId: string
+    region?: string
+    lang?: string
   }
 }
 

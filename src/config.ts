@@ -9,8 +9,8 @@ import { LinkPreset } from "./types/config";
 
 import type { CommentConfig } from './types/config'
 export const commentConfig: CommentConfig = {
-  waline: {
-    serverURL: 'https://comment.afingpo.top',
+  twikoo: {
+    envId: 'https://twikoo.s1.afingpo.top',
     lang: 'zh-CN',
   },
 }
