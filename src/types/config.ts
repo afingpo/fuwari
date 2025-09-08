@@ -101,16 +101,13 @@ export type ExpressiveCodeConfig = {
 	theme: string;
 };
 
-export interface CommentConfig {
-  /*waline?: {
-    serverURL: string          // 必填
-    lang?: string
-    // 需要更多字段自行扩展
-  }*/
-  twikoo?: {               // 新增
-    envId: string
-    region?: string
-    lang?: string
-  }
-}
+export type CommentConfig = {
+    twikoo?: TwikooConfig
+};
+  
+type TwikooConfig = {
+  envId: string
+  region?: string
+  lang?: string
+};
 
