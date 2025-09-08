@@ -7,7 +7,7 @@ import Twikoo from './Twikoo.astro'
 interface Props { post: CollectionEntry<'posts'> }
 const { slug, data } = Astro.props.post
 ---
-{data.comments !== false && commentConfig.twikoo?.serverURL && (
+{data.comments !== false && commentConfig.twikoo?.envId && (
   <div class="card-base p-6 mt-6">
     <Twikoo path={`/posts/${slug}`} />
   </div>
