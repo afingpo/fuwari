@@ -1,5 +1,5 @@
 import type {
-  CommentConfig
+  CommentConfig,
 	ExpressiveCodeConfig,
 	LicenseConfig,
 	NavBarConfig,
