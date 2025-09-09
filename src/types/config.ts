@@ -82,6 +82,17 @@ export type LIGHT_DARK_MODE =
 	| typeof DARK_MODE
 	| typeof AUTO_MODE;
 
+export type CommentConfig = {
+  twikoo?: TwikooConfig
+};
+
+type TwikooConfig = {
+  envId: string
+  region?: string
+  lang?: string
+};
+
+
 export type BlogPostData = {
 	body: string;
 	title: string;
@@ -100,4 +111,5 @@ export type BlogPostData = {
 export type ExpressiveCodeConfig = {
 	theme: string;
 };
+
 
