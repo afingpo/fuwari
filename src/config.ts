@@ -107,7 +107,8 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 
 export const commentConfig: CommentConfig = {
   twikoo: {
-    envId: 'https://twikoo.s1.afingpo.top',
+    envId: 'https://tw2.s1.afingpo.top',
+    //envId: 'https://twikoo.s1.afingpo.top',
     lang: 'zh-CN',
   },
 };
