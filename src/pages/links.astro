@@ -1,0 +1,42 @@
+---
+import FriendCard from '@/components/LinkCard.astro'
+import friends from '@/data/links.json'
+
+// 按 group 分组
+const groups: Record<string, typeof links> = {}
+links.forEach((f) => {
+  groups[f.group] ??= []
+  groups[f.group].push(f)
+})
+---
+
+<Layout
+  title="朋友们"
+  description="感谢以下站点与本站交换链接"
+>
+  <main class="mx-auto max-w-4xl px-6 py-12">
+    <h1 class="text-3xl font-bold mb-8">朋友们</h1>
+
+    {Object.entries(groups).map(([group, list]) => (
+      <section class="mb-10">
+        <h2 class="text-xl font-semibold mb-4 text-[var(--text-primary)]">
+          {group}
+        </h2>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {list.map(f => (
+            <LinkCard {...f} />
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <div class="mt-12 p-4 rounded-lg bg-[var(--block-bg)] text-sm">
+      <p>📝 想出现在这里？</p>
+      <p>
+        请在<a href="/guestbook" class="underline">留言板</a>留下：
+        <code>名称 / 网址 / 头像地址 / 一句话简介</code>，审核通过即会展示。
+      </p>
+    </div>
+  </main>
+</Layout>
+

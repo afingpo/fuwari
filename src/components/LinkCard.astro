@@ -1,0 +1,30 @@
+---
+export interface Props {
+  name: string
+  url: string
+  avatar: string
+  desc: string
+}
+const { name, url, avatar, desc } = Astro.props
+---
+<a
+  href={url}
+  target="_blank"
+  rel="noopener"
+  class="block rounded-xl border border-[var(--border)] bg-[var(--card-bg)]
+         hover:shadow-md hover:-translate-y-1 transition-all p-4"
+>
+  <div class="flex items-center space-x-3">
+    <img
+      src={avatar}
+      alt={name}
+      class="w-12 h-12 rounded-full object-cover"
+      loading="lazy"
+    />
+    <div class="flex-1 min-w-0">
+      <div class="font-semibold text-[var(--text-primary)]">{name}</div>
+      <div class="text-sm text-[var(--text-secondary)] truncate">{desc}</div>
+    </div>
+  </div>
+</a>
+
