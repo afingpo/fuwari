@@ -52,6 +52,7 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.Home,
 		LinkPreset.Archive,
 		LinkPreset.About,
+    LinkPreset.Links,
 		{
 			name: "GitHub",
 			url: "https://codeberg.org/afingpo/afingpo-astro-blog", // Internal links should not include the base path, as it is automatically added
