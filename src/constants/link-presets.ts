@@ -21,6 +21,6 @@ export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
   },
   [LinkPreset.Bangumi]: {
     name: i18n(I18nKey.bangumi),
-    url: '/bangumi/',
+    url: "/bangumi/",
   },
 };
