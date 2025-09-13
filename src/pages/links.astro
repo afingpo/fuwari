@@ -12,7 +12,7 @@ if (!linksPost) {
 	throw new Error("Links page content not found");
 }
 
-const { Content } = await render(friendsPost);
+const { Content } = await render(linksPost);
 const items = [
   {
     title: 'Astro',
@@ -23,7 +23,7 @@ const items = [
   },
 ]
 
-const { Content } = await render(linksPost);
+
 ---
 <MainGridLayout title={i18n(I18nKey.links)} description={i18n(I18nKey.links)}>
     <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
