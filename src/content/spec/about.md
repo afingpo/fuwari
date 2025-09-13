@@ -1,9 +1,33 @@
-# About
-This is the demo site for [Fuwari](https://github.com/saicaca/fuwari).
+## 何我者也
 
-::github{repo="saicaca/fuwari"}
+贫道 **涵哲子**，依世而立，功就所存。
+闲者也，平居于何处？身立存于世亦基网何、不得论也。
 
-> ### Sources of images used in this site
-> - [Unsplash](https://unsplash.com/)
-> - [星と少女](https://www.pixiv.net/artworks/108916539) by [Stella](https://www.pixiv.net/users/93273965)
-> - [Rabbit - v1.4 Showcase](https://civitai.com/posts/586908) by [Rabbit_YourMajesty](https://civitai.com/user/Rabbit_YourMajesty)
+> 日中长胡言乱语以自创仿古式言为暇矣
+
+### 该地为何
+
+此博客为何而存、为何而立？便值深思。
+或心中所欲，或乱思梦想；
+或求一处于互联网可立之地；
+或闲人无事事而建。
+又是真言何处？同不知、不明悟其所者页
+
+---
+
+### 何以共谈
+
+- 邮箱： afingpo@465332.xyz
+	- 勿与附件或图片相送，若有所需，可从其寻**Telegram**
+
+---
+
+## 本站相关
+
+- 框架为基底：[`Astro`](https://astro.build) + [`Fuwari`](https://github.com/saicaca/fuwari) 主题  
+- 部署在它方：[`Netlify`](https://www.netlify.com)  
+- 字体展品味：霞鹜文楷 LXGW WenKai Lite  
+- 源码有依托：`Codeberg` +  `Github`（实时更新，欢迎 Star）
+
+> 此会有学得笔记、折腾日记、平日乱言相记，  
+> 若道友或志向同合、或望想交流，不妨交换友链与尔我等。
