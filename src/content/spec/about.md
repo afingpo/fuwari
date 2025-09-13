@@ -26,8 +26,8 @@
 
 - 框架为基底：[`Astro`](https://astro.build) + [`Fuwari`](https://github.com/saicaca/fuwari) 主题  
 - 部署在它方：[`Netlify`](https://www.netlify.com)  
-- 字体展品味：霞鹜文楷 LXGW WenKai Lite  
-- 源码有依托：`Codeberg` +  `Github`（实时更新，欢迎 Star）
+- 字体展品味：`霞鹜文楷 LXGW WenKai Lite`  
+- 源码有依托：`Codeberg` +  `Github`
 
 > 此会有学得笔记、折腾日记、平日乱言相记，  
 > 若道友或志向同合、或望想交流，不妨交换友链与尔我等。
