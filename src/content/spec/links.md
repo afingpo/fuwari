@@ -10,9 +10,11 @@
 #### 技术细节
 - 建议先添加本站友链  
 - 完成后[发送邮件](afingpo@465332.xyz)或在下方评论留言，格式如下：
-```text
-title: '涵哲子居'
-imgurl: 'https://www.afingpo.top/assets/logo.png'
-desc: '天哲地理，共公卿好'
-siteurl: 'https://www.afingpo.top'
+```json
+{
+"title": "涵哲子居",
+"imgurl": "https://www.afingpo.top/assets/logo.png",
+"desc": "天哲地理，共公卿好",
+"siteurl": "https://www.afingpo.top"
+}
 ```

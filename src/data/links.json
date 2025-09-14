@@ -1,4 +1,3 @@
-// public/data/friends.json
 [
   {
     "title": "Astro",
@@ -8,9 +7,8 @@
   },
   {
     "title": "Example Site",
-    "imgurl": "/images/example-avatar.jpg", // 或完整的 URL
+    "imgurl": "/images/example-avatar.jpg",
     "desc": "这是一个示例网站的描述。",
     "siteurl": "https://example.com"
   }
-  // ... 更多友链
 ]
