@@ -2,9 +2,6 @@
 
 ### 添置友链
 
-<details>
-<summary>申请条件</summary>
-
 #### 基本要求
 1. 站点可正常访问，HTTPS优先；  
 2. 内容健康、无恶意脚本/广告轰炸；  
@@ -19,5 +16,3 @@ imgurl: 'https://www.afingpo.top/assets/logo.png'
 desc: '天哲地理，共公卿好'
 siteurl: 'https://www.afingpo.top'
 ```
-
-</details>

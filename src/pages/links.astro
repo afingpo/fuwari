@@ -5,6 +5,7 @@ import Markdown from "@components/misc/Markdown.astro";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
+import Comment from '@components/comment/index.astro';
 
 const linksPost = await getEntry("spec", "links");
 
@@ -65,5 +66,7 @@ window.addEventListener('DOMContentLoaded', () => {
     cards.forEach(card => container.appendChild(card));
 });
 </script>
+
+  <Comment post={entry}></Comment>
 
 </MainGridLayout>
