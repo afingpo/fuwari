@@ -16,8 +16,8 @@ import { LinkPreset } from "./types/config";
 };*/
 
 export const siteConfig: SiteConfig = {
-	title: "Afingpo's Blog",
-	subtitle: "Blog for Afingpo From Aflume",
+	title: "涵哲子居",
+	subtitle: "Afingpo's Blog",
 	lang: "zh_CN", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {
 		hue: 195, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
@@ -54,11 +54,11 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.About,
     LinkPreset.Links,
     LinkPreset.Bangumi,
-		{
-			name: "GitHub",
+		/*{
+			name: "Codeberg",
 			url: "https://codeberg.org/afingpo/afingpo-astro-blog", // Internal links should not include the base path, as it is automatically added
 			external: true, // Show an external link icon and will open in a new tab
-		},
+		},*/
 		{
 			name: "开往",
 			url: "https://www.travellings.cn/go.html",
