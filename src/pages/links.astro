@@ -6,9 +6,9 @@ import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 import Comment from '@components/comment/index.astro';
-import LinksData from '../data/links.json'
+//import LinksData from '../data/links.json'
 
-const items = LinksData || [];
+//const items = LinksData || [];
 const linksPost = await getEntry("spec", "links");
 
 if (!linksPost) {
@@ -16,6 +16,24 @@ if (!linksPost) {
 }
 
 const { Content } = await render(linksPost);
+
+//Use Codeberg Raw URL
+const CODEBERG_RAW_URL = 'https://codeberg.org/afingpo/afingpo-blog-data-files/raw/branch/main/data/links.json';
+let items = [];
+
+try {
+    const response = await fetch(CODEBERG_RAW_URL);
+    if (response.ok) {
+        items = await response.json();
+    } else {
+        console.error('获取友链数据失败，使用备用数据');
+        items = []; // 可以在这里设置备用数据
+    }
+} catch (error) {
+    console.error('获取友链数据时出错:', error);
+    items = []; // 可以在这里设置备用数据
+}
+
 /*const items = [
   {
     title: 'Astro',
@@ -23,7 +41,7 @@ const { Content } = await render(linksPost);
     desc: 'The web framework for content-driven websites. ⭐️ Star to support our work!',
     siteurl: 'https://github.com/withastro/astro',
   },
-  ]*/
+]*/
 
 
 ---
