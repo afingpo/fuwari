@@ -9,12 +9,13 @@
 
 #### 技术细节
 - 建议先添加本站友链  
-- 完成后在下方评论留言或在[Codeberg仓库](https://codeberg.org/afingpo/afingpo-blog-data-files)提交一个PR，格式同本站信息为下：
+- 完成后在下方评论留言或在[Codeberg仓库](https://codeberg.org/afingpo/afingpo-blog-data-files)提交一个PR，格式见仓库，本站信息为下：
 ```json
 {
 "title": "涵哲子居",
-"imgurl": "https://www.afingpo.top/assets/logo.png",
+"imgurl": "https://cn.cravatar.com/avatar/73950caa66bb4def92adf280f9609714?s=512",
 "desc": "天哲地理，共公卿好",
-"siteurl": "https://www.afingpo.top"
+"siteurl": "https://blog.afingpo.top",
+"feed": "https://blog.afingpo.top/rss.xml"
 }
 ```
