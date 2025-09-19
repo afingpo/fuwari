@@ -1,216 +1,194 @@
 ---
-// 请替换为你自己的信息
-const uid = "afingpo";        // 替换为你的数字 ID
-const token = 'DWMeMEvsKeoK6ILAetIKWN24TeYHirc6sQIqWsEK';     // 替换为你的 access_token
-const base = 'https://api.bgm.tv/v0';
+import BangumiSection from "@/components/bangumi/BangumiSection.astro";
+import TabNav from "@/components/bangumi/TabNav.astro";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import type {
+  UserSubjectCollection,
+  UserSubjectCollectionResponse,
+} from "@/types/bangumi";
 
-// --- 类型定义 ---
-type Cat = 'watching' | 'wish' | 'collect';
-type CatNum = 3 | 1 | 2;
+//////////////// Bangumi 配置 ////////////////////////
+const bangumiConfig = {
+  username: "afingpo", // 在这里配置你的Bangumi用户名
+  apiUrl: "https://api.bgm.tv/DWMeMEvsKeoK6ILAetIKWN24TeYHirc6sQIqWsEK",
+  categories: {
+    book: false,
+    anime: true,
+    music: false,
+    game: true,
+    real: false,
+  },
+  // 数据获取设置
+  pagination: {
+    limit: 50, // 每页获取数量
+    delay: 50, // 请求间隔毫秒数，避免频率限制
+    maxTotal: 1000, // 最大获取总数，防止无限循环（0=无限制）
+  },
+};
+////////////////////////////////////////////////////
 
-interface Image {
-  large?: string;
-  common?: string;
-  medium?: string;
-  small?: string;
-  grid?: string;
-}
+// 分类映射
+const categoryMap = {
+  book: { id: "book", name: "书籍", subjectType: 1 },
+  anime: { id: "anime", name: "动画", subjectType: 2 },
+  music: { id: "music", name: "音乐", subjectType: 3 },
+  game: { id: "game", name: "游戏", subjectType: 4 },
+  real: { id: "real", name: "三次元", subjectType: 6 },
+};
 
-interface Subject {
-  id: number;
-  type: number;
-  name: string;
-  name_cn: string;
-  eps?: number;
-  images?: Image;
-}
-
-interface CollectionItem {
-  subject_id: number;
-  subject: Subject;
-  ep_status: number;
-  type: CatNum;
-}
-
-interface CollectionResponse {
-  data: CollectionItem[];
-  limit: number;
-  offset: number;
-  total: number;
-}
-
-const cats = [
-  { key: 'watching', name: '在看', type: 3 },
-  { key: 'wish',     name: '想看', type: 1 },
-  { key: 'collect',  name: '看完', type: 2 },
-];
-
-// --- 数据获取 ---
-async function fetchOnce(type: CatNum): Promise<CollectionItem[]> {
+// 获取Bangumi数据的函数 - 支持分页获取所有数据
+async function fetchBangumiData(username: string, subjectType: number) {
   try {
-    const res = await fetch(
-      `${base}/users/${uid}/collections?subject_type=2&type=${type}&limit=50`,
-      { headers: { Authorization: `Bearer ${token}` } }
+    const { limit, delay, maxTotal } = bangumiConfig.pagination;
+    let offset = 0;
+    let allData: UserSubjectCollection[] = [];
+    let hasMore = true;
+
+    console.log(
+      `[Bangumi] 开始获取用户 ${username} 的 subjectType ${subjectType} 数据...`,
     );
 
-    if (!res.ok) {
-      console.error(`API Error (${type}):`, res.status, await res.text());
-      return [];
+    while (hasMore) {
+      // 检查是否超过最大获取限制
+      if (maxTotal > 0 && allData.length >= maxTotal) {
+        console.log(`[Bangumi] 已达到最大获取限制 ${maxTotal}，停止获取`);
+        break;
+      }
+
+      const url = `${bangumiConfig.apiUrl}/v0/users/${username}/collections?subject_type=${subjectType}&limit=${limit}&offset=${offset}`;
+
+      console.log(`[Bangumi] 正在获取数据: ${url} (已获取: ${allData.length})`);
+
+      const response = await fetch(url, {
+        headers: {
+          "User-Agent": "YuuOuRou Blog",
+          Accept: "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        console.warn(
+          `[Bangumi] 无法获取数据 (状态码: ${response.status}):`,
+          url,
+        );
+        break;
+      }
+
+      const data = (await response.json()) as UserSubjectCollectionResponse;
+      const currentBatch = data.data || [];
+
+      if (currentBatch.length > 0) {
+        allData = allData.concat(currentBatch);
+        offset += limit;
+
+        // 如果本次获取的数据少于limit，说明已经是最后一页
+        if (currentBatch.length < limit) {
+          hasMore = false;
+        }
+      } else {
+        hasMore = false;
+      }
+
+      // 添加延迟避免请求过于频繁
+      if (hasMore) {
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
     }
 
-    const json: CollectionResponse = await res.json();
-    return Array.isArray(json.data) ? json.data : [];
-  } catch (err) {
-    console.error('Fetch error:', err);
+    console.log(`[Bangumi] 总共获取到 ${allData.length} 条数据`);
+    return allData;
+  } catch (error) {
+    console.error("[Bangumi] 获取数据时出错:", error);
     return [];
   }
 }
 
-let allDataFetched = true;
-const data: Record<Cat, CollectionItem[]> = { watching: [], wish: [], collect: [] };
+// 获取所有启用分类的数据
+const bangumiData: Record<string, UserSubjectCollection[]> = {};
+const tabs: Array<{ id: string; name: string; count: number }> = [];
 
-try {
-  const results = await Promise.all(cats.map(({ type }) => fetchOnce(type)));
-  cats.forEach(({ key }, i) => { data[key] = results[i]; });
-} catch (err) {
-  console.error("Fetch failed:", err);
-  allDataFetched = false;
+console.log("[Bangumi] 🌐 从 API 获取数据");
+
+for (const [categoryKey, enabled] of Object.entries(bangumiConfig.categories)) {
+  if (enabled && categoryMap[categoryKey as keyof typeof categoryMap]) {
+    const categoryInfo = categoryMap[categoryKey as keyof typeof categoryMap];
+    try {
+      const data = await fetchBangumiData(
+        bangumiConfig.username,
+        categoryInfo.subjectType,
+      );
+      bangumiData[categoryKey] = data;
+      tabs.push({
+        id: categoryKey,
+        name: categoryInfo.name,
+        count: data.length,
+      });
+    } catch (error) {
+      console.error(`[Bangumi] 获取 ${categoryInfo.name} 数据失败:`, error);
+      bangumiData[categoryKey] = [];
+      tabs.push({
+        id: categoryKey,
+        name: categoryInfo.name,
+        count: 0,
+      });
+    }
+  }
 }
 
-import MainGridLayout from "../layouts/MainGridLayout.astro";
+const activeTab = tabs[0]?.id || "anime";
 ---
 
-<MainGridLayout title="Bangumi 追番" description="我的动画收藏列表" class="bangumi-page">
-  <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32 shadow-sm">
-    <div class="card-base z-10 px-4 sm:px-6 py-6 relative w-full">
-      <h1 class="text-2xl font-bold mb-6 dark:text-white">我的 Bangumi 追番</h1>
+<MainGridLayout title={"Bangumi"} description={"Bangumi Collection"}>
+  <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+    <div class="card-base z-10 px-9 py-6 relative w-full">
+      <!-- 页面标题 -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-3">
+          Bangumi Collection
+        </h1>
+        <p class="text-gray-600 dark:text-gray-400 mb-2">
+          对魔女而言二次元是最好的消遣
+        </p>
+      </div>
 
-      {allDataFetched ? (
+      <!-- Tab 导航和内容 -->
+      {tabs.length > 0 ? (
         <>
-          <!-- 标签页 -->
-          <div class="flex border-b border-gray-200 dark:border-gray-700 mb-6" role="tablist" id="bangumi-tabs">
-            {cats.map(({ key, name }, i) => (
-              <button
-                id={`tab-${key}`}
-                class={`tab-button px-4 py-2 font-medium text-sm transition-colors ${
-                  i === 0
-                    ? 'border-b-2 border-primary text-primary dark:text-[var(--primary)]'
-                    : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-                }`}
-                data-target={key}
-                role="tab"
-                aria-selected={i === 0}
-              >
-                {name}（{data[key].length}）
-              </button>
-            ))}
-          </div>
+          <TabNav tabs={tabs} activeTab={activeTab} />
 
-          <!-- 内容区 -->
-          <div class="mt-4 bangumi-content-container">
-            {cats.map(({ key, name }, i) => (
-              <section
-                id={key}
-                role="tabpanel"
-                class={`bangumi-section ${i !== 0 ? 'hidden' : ''}`}
-                aria-hidden={i !== 0}
-              >
-                {data[key].length ? (
-                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    {data[key].map(item => {
-                      const s = item.subject;
-                      const total = s.eps || 0;
-                      const watched = item.ep_status || 0;
-                      const percent = total ? Math.min(100, Math.round((watched / total) * 100)) : 0;
-                      const img = s.images?.large || s.images?.common || '/default-image.png';
-
-                      return (
-                        <div class="card-base overflow-hidden hover:shadow-lg transition-transform hover:scale-[1.02] dark:bg-[var(--card-bg)]">
-                          <div class="aspect-[3/4] overflow-hidden">
-                            <img
-                              src={img}
-                              alt={s.name_cn || s.name || '未知'}
-                              class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                              loading="lazy"
-                              data-src-fallback="/default-image.png"
-                            />
-                          </div>
-                          <div class="p-3">
-                            <h2 class="font-medium text-sm line-clamp-2 mb-2 min-h-[2.5rem] dark:text-white">
-                              {s.name_cn || s.name}
-                            </h2>
-                            <div class="text-xs">
-                              <div class="flex justify-between mb-1">
-                                <span class="text-gray-600 dark:text-gray-300">{watched}/{total}</span>
-                                <span class="text-gray-600 dark:text-gray-300">{percent}%</span>
-                              </div>
-                              <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
-                                <div
-                                  class="h-1.5 rounded-full transition-all duration-300"
-                                  style={`width: ${percent}%; background-color: var(--primary)`}
-                                ></div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div class="text-center py-12 text-gray-500 dark:text-gray-400">
-                    暂无 {name} 的记录
-                  </div>
-                )}
-              </section>
-            ))}
-          </div>
+          <!-- 内容区域 -->
+          {tabs.map((tab) => (
+                      <BangumiSection
+            sectionId={tab.id}
+            items={bangumiData[tab.id] || []}
+            isActive={tab.id === activeTab}
+            itemsPerPage={6}
+          />
+          ))}
         </>
       ) : (
-        <div class="text-center py-12 text-red-500 dark:text-red-400">
-          数据加载失败，请检查网络或稍后重试。
+        <div class="text-center py-12">
+          <h2 class="text-xl font-medium text-gray-600 dark:text-gray-400 mb-2">
+            暂无数据
+          </h2>
+          <p class="text-gray-500 dark:text-gray-400 mb-4">
+            可能的原因：用户名不存在、网络连接问题或API限制
+          </p>
+          <div class="text-sm text-gray-400 dark:text-gray-500 space-y-1">
+            <div>用户名: {bangumiConfig.username}</div>
+            <div>API: {bangumiConfig.apiUrl}</div>
+            <div class="mt-3 text-xs">
+              提示：请在页面配置中设置正确的Bangumi用户名
+            </div>
+          </div>
         </div>
       )}
     </div>
   </div>
 </MainGridLayout>
 
-<!-- 客户端交互 -->
-<script is:inline>
-  document.addEventListener('DOMContentLoaded', () => {
-    const tabs = document.querySelectorAll('#bangumi-tabs .tab-button');
-    const sections = document.querySelectorAll('.bangumi-section');
-
-    function switchTab(tab) {
-      tabs.forEach(t => {
-        const selected = t === tab;
-        t.classList.toggle('border-b-2', selected);
-        t.classList.toggle('border-primary', selected);
-        t.classList.toggle('text-primary', selected);
-        t.classList.toggle('dark:text-[var(--primary)]', selected);
-        t.setAttribute('aria-selected', selected);
-      });
-      sections.forEach(sec => {
-        sec.classList.toggle('hidden', sec.id !== tab.dataset.target);
-        sec.setAttribute('aria-hidden', sec.id !== tab.dataset.target);
-      });
-    }
-
-    tabs.forEach(tab => tab.addEventListener('click', () => switchTab(tab)));
-
-    // 图片错误处理
-    document.querySelectorAll('img[data-src-fallback]').forEach(img => {
-      img.addEventListener('error', function () {
-        if (this.src !== this.dataset.srcFallback) {
-          this.src = this.dataset.srcFallback;
-          this.alt = '图片加载失败';
-        }
-      });
-    });
-  });
-</script>
-
-<!-- 全局样式 -->
-<style is:global>
+<style>
+  /* 自定义样式 */
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
