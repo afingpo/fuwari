@@ -37,4 +37,5 @@ export const zh_CN: Translation = {
 	[Key.license]: "许可协议",
   [Key.links]: "友链",
   [Key.bangumi]: "追番",
+  [Key.essay]: "闲谈",
 };
