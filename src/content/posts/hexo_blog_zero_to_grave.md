@@ -4,6 +4,7 @@ title: Hexo博客搭建之从入门到入土
 slug: "hexo-blog-bluiding"
 tags: [Hexo]
 category: "Hexo"
+series: "博客搭建"
 ---
 
 ## 前言
