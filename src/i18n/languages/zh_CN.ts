@@ -38,4 +38,5 @@ export const zh_CN: Translation = {
   [Key.links]: "友链",
   [Key.bangumi]: "追番",
   [Key.essay]: "闲谈",
+  [Key.series]: "系列",
 };
