@@ -71,7 +71,7 @@ try {
 </section>
 
 <!-- 客户端增量脚本 -->
-<script define:vars={{ MEMOS_API, LIMIT }}>
+<script is:inline define:vars={{ MEMOS_API, LIMIT }}>
   /* ====== 客户端增量拉取 ====== */
   const INTERVAL = 30_000;
   const $list    = document.getElementById('memos-list');
