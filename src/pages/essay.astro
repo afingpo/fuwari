@@ -8,7 +8,7 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
 
 const essayPost = await getEntry("spec", "essay");
 
-if (!aboutPost) {
+if (!essayPost) {
         throw new Error("Essay page content not found");
 }
 
