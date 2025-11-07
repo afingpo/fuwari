@@ -74,25 +74,20 @@ export const profileConfig: ProfileConfig = {
 	bio: "天哲地理，共公卿好",
 	links: [
 		{
-			name: "Telegram",
-			icon: "simple-icons:telegram",
-			url: "https://t.me/afingpo"
-		},
-		{
 			name: "Mail",
 			icon: "material-symbols:mail",
-			url: "mailto:afingpo@465332.xyz"
+			url: "mailto:afipo_han@outlook.com"
 		},
 		{
 			name: "GitHub",
 			icon: "fa6-brands:github",
 			url: "https://github.com/afingpo",
 		},
-    {
-      name: "Codeberg",
-      icon: "simple-icons:codeberg",
-      url: "https://codeberg.org/afingpo",
-    },
+		{
+			name: "Codeberg",
+			icon: "simple-icons:codeberg",
+			url: "https://codeberg.org/afingpo",
+		},
 	],
 };
 
