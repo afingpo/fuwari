@@ -20,8 +20,8 @@
 
 ### 何以共谈
 
-- 邮箱: (`afipo_han@outlook.com`)[mailto:afipo_han@outlook.com]
-    - 备用: (`han_mingp0@163.com`)[mailto:han_mingp0@163.com]
+- 邮箱: [`afipo_han@outlook.com`](mailto:afipo_han@outlook.com)
+    - 备用: [`han_mingp0@163.com`](mailto:han_mingp0@163.com)
 
 ---
 
