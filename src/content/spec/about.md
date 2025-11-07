@@ -1,6 +1,7 @@
 ## 何我者也
 
 余**涵哲子**也，依世而立，功就所存。
+
 闲者也，平居于何处？身立存于世亦基网何、不得论也。
 
 > 日中长胡言乱语以自创仿古式言为暇矣
@@ -8,25 +9,32 @@
 ### 该地为何
 
 此博客为何而存、为何而立？便值深思。
+
 或心中所欲，或乱思梦想；
+
 或立锥于网海，或闲极而无事；
-又是真言何处？同不知、不明悟其所者页
+
+又是真言何处？同不知、不明悟其所者也。
 
 ---
 
 ### 何以共谈
 
-- 邮箱： afingpo@465332.xyz
-	- 勿与附件或图片相送，若有所需，可从其寻**Telegram**
+- 邮箱: (`afipo_han@outlook.com`)[mailto:afipo_han@outlook.com]
+    - 备用: (`han_mingp0@163.com`)[mailto:han_mingp0@163.com]
 
 ---
 
 ## 本站相关
 
 - 框架为基底：[`Astro`](https://astro.build) + [`Fuwari`](https://github.com/saicaca/fuwari) 主题  
+
 - 部署在它方：[`Netlify`](https://www.netlify.com)  
+
 - 字体展品味：`霞鹜文楷 LXGW WenKai Lite`  
+
 - 源码有依托：`Codeberg` +  `Github`
 
 > 此会有学得笔记、折腾日记、平日乱言相记，  
-> 若道友志趣相投，愿互置友链，共结网缘。
+
+> 若有友志趣相投，愿互置友链，共结网缘。
