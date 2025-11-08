@@ -32,11 +32,10 @@ enum I18nKey {
 	author = "author",
 	publishedAt = "publishedAt",
 	license = "license",
-	links = "links",
-	bangumi = "bangumi",
-	essay = "essay",
-	series = "series",
-	others = "others",
+  links = "links",
+  bangumi = "bangumi",
+  essay = "essay",
+  series = "series",
 }
 
 export default I18nKey;

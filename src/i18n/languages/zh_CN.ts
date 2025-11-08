@@ -35,9 +35,8 @@ export const zh_CN: Translation = {
 	[Key.author]: "作者",
 	[Key.publishedAt]: "发布于",
 	[Key.license]: "许可协议",
-	[Key.links]: "友链",
-	[Key.bangumi]: "追番",
-	[Key.essay]: "闲谈",
-	[Key.series]: "系列",
-	[Key.others]: "其它"
+  [Key.links]: "友链",
+  [Key.bangumi]: "追番",
+  [Key.essay]: "闲谈",
+  [Key.series]: "系列",
 };
