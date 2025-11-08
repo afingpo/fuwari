@@ -1,5 +1,5 @@
 import type {
-  CommentConfig,
+	CommentConfig,
 	ExpressiveCodeConfig,
 	LicenseConfig,
 	NavBarConfig,
@@ -51,9 +51,9 @@ export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
 		LinkPreset.Archive,
-		LinkPreset.Bangumi,
-		LinkPreset.Essay,
-		//  LinkPreset.Others,
+		// LinkPreset.Bangumi,
+		// LinkPreset.Essay,
+		LinkPreset.Others,
 		LinkPreset.Links,
 		LinkPreset.About,
 		/*{
