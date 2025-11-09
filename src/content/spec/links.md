@@ -13,7 +13,7 @@
 ```json
 {
 "title": "涵哲子居",
-"imgurl": "https://cn.cravatar.com/avatar/73950caa66bb4def92adf280f9609714?s=512",
+"imgurl": "https://cn.cravatar.com/avatar/1266660773126ea6b42ade84964be5b5?s=512",
 "desc": "天哲地理，共公卿好",
 "siteurl": "https://blog.afingpo.top",
 "feed": "https://blog.afingpo.top/rss.xml"
