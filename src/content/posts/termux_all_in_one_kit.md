@@ -4,7 +4,7 @@ updated: 2025-09-07
 title: Termux:通用基础包
 slug: termux-betabox
 tag: [Linux,Termux]
-category: Linux
+category: 杂谈
 ---
 
 :::warning
