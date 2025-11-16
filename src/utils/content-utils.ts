@@ -130,4 +130,4 @@ export async function getPostSeries(
   })
 
   return posts
-}
+};

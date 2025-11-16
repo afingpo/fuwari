@@ -48,9 +48,9 @@ export enum LinkPreset {
 	Home = 0,
 	Archive = 1,
 	About = 2,
-  Links = 3,
-  Bangumi = 4,
-  Essay = 5,
+	Links = 3,
+	Bangumi = 4,
+	Essay = 5,
 }
 
 export type NavBarLink = {
@@ -86,13 +86,13 @@ export type LIGHT_DARK_MODE =
 	| typeof AUTO_MODE;
 
 export type CommentConfig = {
-  twikoo?: TwikooConfig
+	twikoo?: TwikooConfig
 };
 
 type TwikooConfig = {
-  envId: string
-  region?: string
-  lang?: string
+	envId: string
+	region?: string
+	lang?: string
 };
 
 
@@ -109,7 +109,7 @@ export type BlogPostData = {
 	prevSlug?: string;
 	nextTitle?: string;
 	nextSlug?: string;
-  series?: string;
+	series?: string;
 };
 
 export type ExpressiveCodeConfig = {
