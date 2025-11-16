@@ -10,6 +10,7 @@ slug: add-NMP-To-Fuwari
 官网：[https://nmp.hypcvgm.top](https://nmp.hypcvgm.top)
 
 ![photo-1](./p1.png)
+
 ## 准备工具
 
 - 一个善良、友好的 AI，在报错时先问问它
@@ -66,7 +67,7 @@ slug: add-NMP-To-Fuwari
 
 :::note
 如果使用 CDN，请对文件后半部分进行替换：
-```astro title="src/components/NMP.astro" del{1-6} ins{7-12}
+```astro title="src/components/NMP.astro" del={1-6} ins={7-12}
 <link
   rel="stylesheet"
   href="/NMP/netease-mini-player-v2.css" />
@@ -85,7 +86,7 @@ slug: add-NMP-To-Fuwari
 ### 配置 Layout
 
 更改文件 `Layout.astro`:
-```astro title="src/layouts/Layout.astro" ins{2,25}
+```astro title="src/layouts/Layout.astro" ins={2, 25}
 ---
 import NMP from "@components/NMP.astro";
 import "@fontsource/roboto/400.css";
