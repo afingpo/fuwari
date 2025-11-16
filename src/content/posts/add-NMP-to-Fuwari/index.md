@@ -9,7 +9,7 @@ slug: add-NMP-To-Fuwari
 上周在逛 Bilibili 的时候，偶然刷到了这个项目，UI 尚可，便尝试一下。
 官网：[https://nmp.hypcvgm.top](https://nmp.hypcvgm.top)
 
-![[p1.png]]
+![photo-1](./p1.png)
 ## 准备工具
 
 - 一个善良、友好的 AI，在报错时先问问它
@@ -118,6 +118,6 @@ if (window.swup) {
 pnpm run dev
 ```
 
-![[p2.png]]
+![photo-2](./p2.png)
 
 已经成功配置！
