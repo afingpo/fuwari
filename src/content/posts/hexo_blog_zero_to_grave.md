@@ -3,7 +3,8 @@ published: 2025-06-29
 title: Hexo博客搭建之从入门到入土
 slug: "hexo-blog-bluiding"
 tags: [Hexo]
-category: "博客搭建"
+category: "Blog"
+series: "博客搭建"
 ---
 
 ## 前言
