@@ -17,12 +17,12 @@ if (!linksPost) {
 
 const { Content } = await render(linksPost);
 
-//Use Codeberg Raw URL
-const CODEBERG_RAW_URL = 'https://codeberg.org/afingpo/afingpo-blog-data-files/raw/branch/main/data/links.json';
+//Use Raw URL
+const DATA_RAW_URL = 'https://raw.githubusercontent.com/afingpo/blog-data/refs/heads/main/data/links.json';
 let items = [];
 
 try {
-    const response = await fetch(CODEBERG_RAW_URL);
+    const response = await fetch(DATA_RAW_URL);
     if (response.ok) {
         items = await response.json();
     } else {
