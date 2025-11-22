@@ -105,9 +105,24 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 };
 
 export const commentConfig: CommentConfig = {
-  twikoo: {
-    envId: 'https://tw2.s1.afingpo.top',
-    //envId: 'https://twikoo.s1.afingpo.top',
-    lang: 'zh-CN',
-  },
+	twikoo: {
+		envId: 'https://tw2.s1.afingpo.top',
+		//envId: 'https://twikoo.s1.afingpo.top',
+		lang: 'zh-CN',
+	},
+	giscus: {
+		enable: true,
+		repo: 'afingpo/blog-data',
+		repoId: 'R_kgDOQaktMA',
+		category: 'Announcements',
+		categoryId: 'DIC_kwDOQaktMM4CyEBL',
+		mapping: 'pathname',
+		strict: '1',
+		reactionsEnabled: '1',
+		emitMetadata: '0',
+		inputPosition: 'top',
+		lang: 'zh-CN',
+		theme: 'fro',
+		loading: 'lazy',
+	},
 };
