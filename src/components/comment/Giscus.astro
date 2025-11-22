@@ -1,40 +1,112 @@
 ---
 interface Props {
-  path: string  // 保持接口一致性
+  path: string;
+  // 提供默认值，允许外部覆盖
+  repo?: string;
+  repoId?: string;
+  category?: string;
+  categoryId?: string;
+  mapping?: string;
+  reactionsEnabled?: boolean;
+  emitMetadata?: boolean;
+  inputPosition?: 'top' | 'bottom';
+  lang?: string;
 }
 
-// ✅ 所有配置直接写死，一行一个，清晰明了
-const GISCUS_CONFIG = {
-  "src": "https://giscus.app/client.js",
-  "data-repo": "afingpo/blog-data",
-  "data-repo-id": "R_kgDOQaktMA",
-  "data-category": "Announcements",
-  "data-category-id": "DIC_kwDOQaktMM4CyEBL",
-  "data-mapping": "pathname",
-  "data-strict": "1",
-  "data-reactions-enabled": "1",
-  "data-emit-metadata": "0",
-  "data-input-position": "top",
-  "data-theme": "fro",
-  "data-lang": "zh-CN",
-  "data-loading": "lazy",
-  "crossorigin": "anonymous",
-  async: true,
+// ✅ 默认配置写死，可内部修改
+const DEFAULTS = {
+  repo: 'afingpo/blog-data',
+  repoId: 'R_kgDOQaktMA',
+  category: 'Announcements',
+  categoryId: 'DIC_kwDOQaktMM4CyEBL',
+  mapping: 'pathname',
+  reactionsEnabled: true,
+  emitMetadata: false,
+  inputPosition: 'top' as const,
+  lang: 'zh-CN',
 }
+
+// ✅ 合并外部传参（如果有）
+const {
+  path,
+  repo = DEFAULTS.repo,
+  repoId = DEFAULTS.repoId,
+  category = DEFAULTS.category,
+  categoryId = DEFAULTS.categoryId,
+  mapping = DEFAULTS.mapping,
+  reactionsEnabled = DEFAULTS.reactionsEnabled,
+  emitMetadata = DEFAULTS.emitMetadata,
+  inputPosition = DEFAULTS.inputPosition,
+  lang = DEFAULTS.lang,
+} = Astro.props;
 ---
 
 <div class="giscus-wrapper loading"></div>
 
-<script is:inline define:vars={{ config: GISCUS_CONFIG }}>
-  const script = document.createElement('script');
-  script.src = config.src;
-  
-  // ✅ 直接遍历配置对象，一行代码设置所有属性
-  Object.entries(config).forEach(([key, value]) => {
-    if (key !== 'src') script.setAttribute(key, value);
-  });
-  
-  document.querySelector('.giscus-wrapper').appendChild(script);
+<script is:inline define:vars={{
+  repo,
+  repoId,
+  category,
+  categoryId,
+  mapping,
+  reactionsEnabled,
+  emitMetadata,
+  inputPosition,
+  lang,
+  path,
+}}>
+  function initGiscus() {
+    const container = document.querySelector('.giscus-wrapper');
+    if (!container) return;
+
+    const isDark = document.documentElement.classList.contains('dark');
+    const theme = isDark ? 'dark' : 'light';
+
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', repo);
+    script.setAttribute('data-repo-id', repoId);
+    script.setAttribute('data-category', category);
+    script.setAttribute('data-category-id', categoryId);
+    script.setAttribute('data-mapping', mapping);
+    script.setAttribute('data-strict', '1');
+    script.setAttribute('data-reactions-enabled', reactionsEnabled ? '1' : '0');
+    script.setAttribute('data-emit-metadata', emitMetadata ? '1' : '0');
+    script.setAttribute('data-input-position', inputPosition);
+    script.setAttribute('data-theme', theme);
+    script.setAttribute('data-lang', lang);
+    script.setAttribute('data-loading', 'lazy');
+    script.crossOrigin = 'anonymous';
+    script.async = true;
+
+    container.appendChild(script);
+    
+    // ✅ 加载完成后淡入
+    script.addEventListener('load', () => {
+      container.classList.add('loaded');
+    });
+  }
+
+  // ✅ 主题切换监听
+  function updateGiscusTheme() {
+    const frame = document.querySelector('iframe.giscus-frame');
+    if (frame?.contentWindow) {
+      frame.contentWindow.postMessage({
+        giscus: { setConfig: { theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light' } }
+      }, 'https://giscus.app');
+    }
+  }
+
+  // 页面加载时初始化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGiscus);
+  } else {
+    initGiscus();
+  }
+
+  // 监听主题变化
+  new MutationObserver(() => updateGiscusTheme())
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 </script>
 
 <style is:global>
@@ -47,10 +119,4 @@ const GISCUS_CONFIG = {
     opacity: 1;
   }
 </style>
-
-<script>
-  document.addEventListener('giscus:ready', () => {
-    document.querySelector('.giscus-wrapper')?.classList.add('loaded');
-  });
-</script>
 
