@@ -1,40 +1,40 @@
 ---
-import { commentConfig } from '@/config'
-
 interface Props {
-  path: string
+  path: string  // 保持接口一致性
 }
 
-const config = commentConfig?.giscus || {}
-// ✅ 使用你的 Workers 代理域名
-const GISCUS_ORIGIN = 'https://giscus-proxy.465332.xyz'
+// ✅ 所有配置直接写死，一行一个，清晰明了
+const GISCUS_CONFIG = {
+  "src": "https://giscus.app/client.js",
+  "data-repo": "afingpo/blog-data",
+  "data-repo-id": "R_kgDOQaktMA",
+  "data-category": "Announcements",
+  "data-category-id": "DIC_kwDOQaktMM4CyEBL",
+  "data-mapping": "pathname",
+  "data-strict": "1",
+  "data-reactions-enabled": "1",
+  "data-emit-metadata": "0",
+  "data-input-position": "top",
+  "data-theme": "fro",
+  "data-lang": "zh-CN",
+  "data-loading": "lazy",
+  "crossorigin": "anonymous",
+  async: true,
+}
 ---
 
-<div id="giscus" class="giscus-wrapper loading"></div>
-<script is:inline define:vars={{ 
-  ...config,
-  origin: GISCUS_ORIGIN,
-  path: Astro.props.path 
-}}>
-  // 动态创建 script，走代理域名
+<div class="giscus-wrapper loading"></div>
+
+<script is:inline define:vars={{ config: GISCUS_CONFIG }}>
   const script = document.createElement('script');
-  script.src = `${origin}/client.js`;
-  script.setAttribute('data-repo', config.repo);
-  script.setAttribute('data-repo-id', config.repoId);
-  script.setAttribute('data-category', config.category);
-  script.setAttribute('data-category-id', config.categoryId);
-  script.setAttribute('data-mapping', 'pathname');
-  script.setAttribute('data-strict', '1');
-  script.setAttribute('data-reactions-enabled', '1');
-  script.setAttribute('data-emit-metadata', '0');
-  script.setAttribute('data-input-position', 'top');
-  script.setAttribute('data-theme', 'fro');
-  script.setAttribute('data-lang', 'zh-CN');
-  script.setAttribute('data-loading', 'lazy');
-  script.crossOrigin = 'anonymous';
-  script.async = true;
+  script.src = config.src;
   
-  document.getElementById('giscus').appendChild(script);
+  // ✅ 直接遍历配置对象，一行代码设置所有属性
+  Object.entries(config).forEach(([key, value]) => {
+    if (key !== 'src') script.setAttribute(key, value);
+  });
+  
+  document.querySelector('.giscus-wrapper').appendChild(script);
 </script>
 
 <style is:global>
@@ -51,14 +51,6 @@ const GISCUS_ORIGIN = 'https://giscus-proxy.465332.xyz'
 <script>
   document.addEventListener('giscus:ready', () => {
     document.querySelector('.giscus-wrapper')?.classList.add('loaded');
-  });
-  
-  // ✅ 关键：拦截 iframe 请求，也走代理
-  document.addEventListener('giscus:load', () => {
-    const iframe = document.querySelector('iframe.giscus-frame');
-    if (iframe && iframe.src.includes('giscus.app')) {
-      iframe.src = iframe.src.replace('https://giscus.app', origin);
-    }
   });
 </script>
 
