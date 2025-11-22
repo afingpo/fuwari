@@ -2,37 +2,42 @@
 import { commentConfig } from '@/config'
 
 interface Props {
-  path: string  // 保持与 Twikoo 相同的接口
+  path: string
 }
 
 const config = commentConfig?.giscus || {}
-
-// Giscus 配置（从 config.ts 读取）
-const GISCUS_PROPS = {
-  src: "https://giscus.app/client.js",
-  "data-repo": config.repo,
-  "data-repo-id": config.repoId,
-  "data-category": config.category || "Comments",
-  "data-category-id": config.categoryId,
-  "data-mapping": config.mapping || "pathname",
-  "data-strict": config.strict ?? "1",
-  "data-reactions-enabled": config.reactionsEnabled ?? "1",
-  "data-emit-metadata": config.emitMetadata ?? "0",
-  "data-input-position": config.inputPosition || "bottom",
-  "data-theme": config.theme || "https://giscus.app/themes/dark_dimmed.css",
-  "data-lang": config.lang || "zh-CN",
-  "data-loading": config.loading || "lazy",
-  crossorigin: "anonymous",
-  async: true,
-}
+// ✅ 使用你的 Workers 代理域名
+const GISCUS_ORIGIN = 'https://giscus-proxy.465332.xyz'
 ---
 
-<div class="giscus-wrapper" transition:name="comments">
-  <script {...GISCUS_PROPS} />
-</div>
+<div id="giscus" class="giscus-wrapper loading"></div>
+<script is:inline define:vars={{ 
+  ...config,
+  origin: GISCUS_ORIGIN,
+  path: Astro.props.path 
+}}>
+  // 动态创建 script，走代理域名
+  const script = document.createElement('script');
+  script.src = `${origin}/client.js`;
+  script.setAttribute('data-repo', config.repo);
+  script.setAttribute('data-repo-id', config.repoId);
+  script.setAttribute('data-category', config.category);
+  script.setAttribute('data-category-id', config.categoryId);
+  script.setAttribute('data-mapping', 'pathname');
+  script.setAttribute('data-strict', '1');
+  script.setAttribute('data-reactions-enabled', '1');
+  script.setAttribute('data-emit-metadata', '0');
+  script.setAttribute('data-input-position', 'top');
+  script.setAttribute('data-theme', 'fro');
+  script.setAttribute('data-lang', 'zh-CN');
+  script.setAttribute('data-loading', 'lazy');
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  
+  document.getElementById('giscus').appendChild(script);
+</script>
 
 <style is:global>
-  /* 加载动画，避免 iframe 加载时页面跳动 */
   .giscus-wrapper {
     min-height: 400px;
     opacity: 0;
@@ -44,9 +49,16 @@ const GISCUS_PROPS = {
 </style>
 
 <script>
-  // 监听加载完成事件
   document.addEventListener('giscus:ready', () => {
     document.querySelector('.giscus-wrapper')?.classList.add('loaded');
+  });
+  
+  // ✅ 关键：拦截 iframe 请求，也走代理
+  document.addEventListener('giscus:load', () => {
+    const iframe = document.querySelector('iframe.giscus-frame');
+    if (iframe && iframe.src.includes('giscus.app')) {
+      iframe.src = iframe.src.replace('https://giscus.app', origin);
+    }
   });
 </script>
 

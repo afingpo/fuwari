@@ -90,7 +90,7 @@ const bannerOffset =
 		<meta property="og:title" content={pageTitle}>
 		<meta property="og:description" content={description || pageTitle}>
 		{setOGTypeArticle ? (
-        <meta property="og:type" content="article" />
+	<meta property="og:type" content="article" />
         ) : (
         <meta property="og:type" content="website" />
         )}
@@ -109,6 +109,14 @@ const bannerOffset =
 				  media={favicon.theme && `(prefers-color-scheme: ${favicon.theme})`}
 			/>
 		))}
+		
+		<!-- 预连接你的 Workers 域名 -->
+		<link rel="preconnect" href="https://giscus-proxy.465332.xyz" />
+		<link rel="dns-prefetch" href="https://giscus-proxy.465332.xyz" />
+
+		<!-- 可选：预加载核心 JS -->
+		<link rel="preload" href="https://giscus-proxy.465332.xyz/client.js" as="script" crossorigin />
+
 
 		<!-- Set the theme before the page is rendered to avoid a flash -->
 		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH, configHue}}>
