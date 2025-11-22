@@ -111,7 +111,7 @@ export const commentConfig: CommentConfig = {
 		lang: 'zh-CN',
 	},
 	giscus: {
-		enable: false,
+		enable: true,
 		repo: 'afingpo/blog-data',
 		repoId: 'R_kgDOQaktMA',
 		category: 'Announcements',
