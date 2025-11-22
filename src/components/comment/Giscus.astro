@@ -1,0 +1,52 @@
+---
+import { commentConfig } from '@/config'
+
+interface Props {
+  path: string  // 保持与 Twikoo 相同的接口
+}
+
+const config = commentConfig?.giscus || {}
+
+// Giscus 配置（从 config.ts 读取）
+const GISCUS_PROPS = {
+  src: "https://giscus.app/client.js",
+  "data-repo": config.repo,
+  "data-repo-id": config.repoId,
+  "data-category": config.category || "Comments",
+  "data-category-id": config.categoryId,
+  "data-mapping": config.mapping || "pathname",
+  "data-strict": config.strict ?? "1",
+  "data-reactions-enabled": config.reactionsEnabled ?? "1",
+  "data-emit-metadata": config.emitMetadata ?? "0",
+  "data-input-position": config.inputPosition || "bottom",
+  "data-theme": config.theme || "https://giscus.app/themes/dark_dimmed.css",
+  "data-lang": config.lang || "zh-CN",
+  "data-loading": config.loading || "lazy",
+  crossorigin: "anonymous",
+  async: true,
+}
+---
+
+<div class="giscus-wrapper" transition:name="comments">
+  <script {...GISCUS_PROPS} />
+</div>
+
+<style is:global>
+  /* 加载动画，避免 iframe 加载时页面跳动 */
+  .giscus-wrapper {
+    min-height: 400px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .giscus-wrapper.loaded {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  // 监听加载完成事件
+  document.addEventListener('giscus:ready', () => {
+    document.querySelector('.giscus-wrapper')?.classList.add('loaded');
+  });
+</script>
+
