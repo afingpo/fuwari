@@ -1,5 +1,5 @@
 import type {
-  CommentConfig,
+	CommentConfig,
 	ExpressiveCodeConfig,
 	LicenseConfig,
 	NavBarConfig,
@@ -111,7 +111,7 @@ export const commentConfig: CommentConfig = {
 		lang: 'zh-CN',
 	},
 	giscus: {
-		enable: true,
+		enable: false,
 		repo: 'afingpo/blog-data',
 		repoId: 'R_kgDOQaktMA',
 		category: 'Announcements',
