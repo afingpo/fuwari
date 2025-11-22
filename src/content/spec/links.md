@@ -9,7 +9,7 @@
 
 #### 技术细节
 - 建议先添加本站友链  
-- 完成后在下方评论留言或在[Codeberg仓库](https://codeberg.org/afingpo/afingpo-blog-data-files)提交一个PR，格式见仓库，本站信息为下：
+- 完成后在下方评论留言或在[Github仓库](https://github.com/afingpo/blog-data)提交一个PR，格式见仓库，本站信息为下：
 ```json
 {
 "title": "涵哲子居",
