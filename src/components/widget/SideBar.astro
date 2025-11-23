@@ -2,7 +2,7 @@
 import type { MarkdownHeading } from "astro";
 import Categories from "./Categories.astro";
 import Profile from "./Profile.astro";
-import Tag from "./Tags.astro";
+// import Tag from "./Tags.astro";
 import Series from './Series.astro';
 import UmamiStatus from "./UmamiStatus.astro";
 
@@ -26,6 +26,6 @@ const series = Astro.props.series;
 		</div>
 		<Categories class="onload-animation" style="animation-delay: 150ms"></Categories>
 		<!-- <Tag class="onload-animation" style="animation-delay: 200ms"></Tag>  -->
-		<UmamiStatus class="onload-animation" style="animation-delay: 200ms"></UmamiStatus>
+		<UmamiStatus class="onload-animation" style="animation-delay: 200ms" />
 	</div>
 </div>
