@@ -11,7 +11,7 @@ slug: "try-using-zellij"
 ![photo1](./p1.png)
 使用 `pacman` 安装很简单，但是马上就遇到了 `$SHELL` 的问题，于是在 `~/.config/fish/config.fish` 里加了下环境变量就好了。先简单体验了一下，启动速度对我来说 `Tmux` 没有什么明显区别，但 `Zellij` 界面更现代些；状态栏比较信息全，适应期不会出现忘记快捷键去问ai的情况。
 
-::: note
+:::note
 也可以在 `~/.config/zellij/config.kdl` 里加了一行 `default_shell "fish"` 解决（可以直接取消注释）。
 :::
 
