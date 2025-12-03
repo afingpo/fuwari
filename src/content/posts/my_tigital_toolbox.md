@@ -2,6 +2,7 @@
 published: 2025-07-13
 updated: 2025-09-07
 title: 浅谈个人生态链
+author: ["涵哲子"]
 slug: "my-tool"
 tag: [杂,生态]
 category: 杂谈

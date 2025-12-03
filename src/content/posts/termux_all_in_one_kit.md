@@ -2,6 +2,7 @@
 published: 2025-06-29
 updated: 2025-09-07
 title: Termux:通用基础包
+author: ["涵哲子"]
 slug: termux-betabox
 tag: [Linux,Termux]
 category: 杂谈

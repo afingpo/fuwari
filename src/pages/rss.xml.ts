@@ -22,13 +22,14 @@ export async function GET(context: APIContext) {
 	return rss({
 		title: siteConfig.title,
 		description: siteConfig.subtitle || "No description",
-		site: context.site ?? "https://fuwari.vercel.app",
+		site: context.site ?? "https://blog.afingpo.top",
 		items: blog.map((post) => {
 			const content =
 				typeof post.body === "string" ? post.body : String(post.body || "");
 			const cleanedContent = stripInvalidXmlChars(content);
 			return {
 				title: post.data.title,
+				author: post.data.author,
 				pubDate: post.data.published,
 				description: post.data.description || "",
 				link: url(`/posts/${post.slug}/`),

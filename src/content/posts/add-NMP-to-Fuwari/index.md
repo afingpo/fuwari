@@ -1,5 +1,6 @@
 ---
 title: 给fuwari添加NMP播放器
+author: ["涵哲子"]
 published: 2025-11-16
 updated: 2025-11-16
 tags: [Blog, Astro, Fuwari]

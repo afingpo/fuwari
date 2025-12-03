@@ -1,5 +1,6 @@
 ---
 published: 2025-06-29
+author: ["涵哲子"]
 title: Hexo博客搭建之从入门到入土
 slug: "hexo-blog-bluiding"
 tags: [Hexo]
