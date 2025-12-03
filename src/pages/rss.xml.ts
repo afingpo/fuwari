@@ -29,7 +29,7 @@ export async function GET(context: APIContext) {
 			const cleanedContent = stripInvalidXmlChars(content);
 			return {
 				title: post.data.title,
-				author: post.data.author,
+				author: post.data.author.join(', '),
 				pubDate: post.data.published,
 				description: post.data.description || "",
 				link: url(`/posts/${post.slug}/`),
