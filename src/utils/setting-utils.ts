@@ -54,8 +54,24 @@ export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
 export function setTheme(theme: LIGHT_DARK_MODE): void {
 	localStorage.setItem("theme", theme);
 	applyThemeToDocument(theme);
+	syncNMPTheme();
 }
 
 export function getStoredTheme(): LIGHT_DARK_MODE {
 	return (localStorage.getItem("theme") as LIGHT_DARK_MODE) || DEFAULT_THEME;
 }
+
+// 在文件尾部加上
+export function syncNMPTheme() {
+	const isDark = document.documentElement.classList.contains('dark');
+	// NMP 的根节点（你实际渲染出来的是 <nmp-player> 或它内部第一个 div）
+	const nmpRoot = document.querySelector('nmp-player');
+	if (!nmpRoot) return;
+	// 方式 1：直接改自定义属性（保险，无需 NMP 暴露 API）
+	nmpRoot.style.setProperty('--nmp-bg',        isDark ? '#1e1e1e' : '#ffffff');
+	nmpRoot.style.setProperty('--nmp-text',      isDark ? '#e5e5e5' : '#222222');
+	nmpRoot.style.setProperty('--nmp-primary',   isDark ? '#4dabf7' : '#0066cc');
+	// 方式 2：如果 NMP 官方支持 theme 属性
+	// (nmpRoot as any).theme = isDark ? 'dark' : 'light';
+}
+
