@@ -54,6 +54,7 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.Bangumi,
 		LinkPreset.Essay,
 		//  LinkPreset.Others,
+		LinkPreset.Chronicle,
 		LinkPreset.Links,
 		LinkPreset.About,
 		/*{

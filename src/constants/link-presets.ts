@@ -15,16 +15,20 @@ export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
 		name: i18n(I18nKey.archive),
 		url: "/archive/",
 	},
-  [LinkPreset.Links]: {
-    name: i18n(I18nKey.links),
-    url: "/links/",
-  },
-  [LinkPreset.Bangumi]: {
-    name: i18n(I18nKey.bangumi),
-    url: "/bangumi/",
-  },
-  [LinkPreset.Essay]: {
-    name: i18n(I18nKey.essay),
-    url: "/essay/",
-  },
+	[LinkPreset.Links]: {
+		name: i18n(I18nKey.links),
+		url: "/links/",
+	},
+	[LinkPreset.Bangumi]: {
+		name: i18n(I18nKey.bangumi),
+		url: "/bangumi/",
+	},
+	[LinkPreset.Essay]: {
+		name: i18n(I18nKey.essay),
+		url: "/essay/",
+	},
+	[LinkPreset.Chronicle]: {
+		name: i18n(I18nKey.chronicle),
+		url: "/chronicle/"
+	},
 };
