@@ -4,6 +4,10 @@ import { profileConfig } from "../config";
 import { url } from "../utils/url-utils";
 
 const currentYear = new Date().getFullYear();
+
+const commitHash = import.meta.env.PUBLIC_COMMIT_HASH || 'unknown'
+const displayHash = commitHash ? commitHash.slice(0, 7) : 'unknown'
+
 ---
 
 <!--<div class="border-t border-[var(&#45;&#45;primary)] mx-16 border-dashed py-8 max-w-[var(&#45;&#45;page-width)] flex flex-col items-center justify-center px-6">-->
