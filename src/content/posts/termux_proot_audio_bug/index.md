@@ -1,6 +1,6 @@
 ---
 title: Termux在Proot内播放音频文件的问题
-date: 2026-02-05
+published: 2026-02-05
 author: ["涵哲子"]
 slug: termux_proot_audio_bug
 tags: ["杂", "Linux", "Termux"]
