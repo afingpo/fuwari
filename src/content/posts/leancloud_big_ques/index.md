@@ -3,7 +3,7 @@ published: 2026-01-12
 updated: 2025-01-12
 title: "LeanCloud 停服: 一次关于服务选择的思考"
 author: ["涵哲子"]
-slug: "ques-about-leancloud"
+slug: "ques_about_leancloud"
 tag: [杂,时事]
 category: 杂谈
 ---
