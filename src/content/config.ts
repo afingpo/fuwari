@@ -11,9 +11,15 @@ const postsCollection = defineCollection({
 		image: z.string().optional().default(""),
 		tags: z.array(z.string()).optional().default([]),
 		category: z.string().optional().nullable().default(""),
+		/* 新增字段：用于区分普通博文和诗词散文 */
+        pType: z.enum(["post", "essay"]).optional().default("post"),
+        
+        /* 建议增加：干支纪年字段，方便你处理“丙午年”这种逻辑 */
+        era: z.string().optional(),
 		lang: z.string().optional().default(""),
 		comments: z.boolean().optional().default(true),
 		series: z.string().optional(),
+	
 
 
 		/* For internal use */

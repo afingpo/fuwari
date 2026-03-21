@@ -1,25 +1,31 @@
 ---
-
-import { getEntry, render } from "astro:content";
-import Markdown from "@components/misc/Markdown.astro";
-import I18nKey from "../i18n/i18nKey";
-import { i18n } from "../i18n/translation";
+// src/pages/essay.astro
+import { getCollection } from "astro:content";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
+import PostCard from "@components/PostCard.astro"; 
+import { i18n } from "../i18n/translation";
+import I18nKey from "../i18n/i18nKey";
 
-const essayPost = await getEntry("spec", "essay");
+// 筛选所有 pType 为 'essay' 的内容
+const essays = await getCollection("posts", ({ data }) => {
+    return (import.meta.env.PROD ? data.draft !== true : true) && data.pType === "essay";
+});
 
-if (!essayPost) {
-        throw new Error("Essay page content not found");
-}
-
-const { Content } = await render(essayPost);
+// 按发布日期倒序排列
+essays.sort((a, b) => b.data.published.getTime() - a.data.published.getTime());
 ---
-<MainGridLayout title={i18n(I18nKey.essay)} description={i18n(I18nKey.essay)}>
-    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
-        <div class="card-base z-10 px-9 py-6 relative w-full ">
-            <Markdown class="mt-2">
-                <Content />
-            </Markdown>
-        </div>
+
+<MainGridLayout title={i18n(I18nKey.essay)} description="诗词、散文与感悟">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {essays.map((entry) => (
+            <PostCard entry={entry} />
+        ))}
     </div>
+    
+    {essays.length === 0 && (
+        <div class="card-base p-10 text-center text-black/50 dark:text-white/50">
+            还没有迁移散文内容。
+        </div>
+    )}
 </MainGridLayout>
+
