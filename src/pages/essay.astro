@@ -21,24 +21,28 @@ essays.sort((a, b) => {
 
 <MainGridLayout title={i18n(I18nKey.essay)} description="诗词、散文与感悟">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {essays.map((post) => (
-            <PostCard 
-                entry={post}
-                title={post.data.title}
-                url={`/posts/${post.id}/`}
-                published={post.data.published}
-                updated={post.data.updated}
-                tags={post.data.tags || []}
-                category={post.data.category || null}
-                image={post.data.image}
-                description={post.data.description || ""}
-                draft={post.data.draft || false}
-                style={post.data.style || ""}
-            />
-        ))}
-    </div>
+		{essays.map((post) => {
+    	// 处理掉 id 中的 .md 后缀，生成干净的 URL
+    	const cleanId = post.id.replace(/\.md$/, '');
+			return (
+        	<PostCard
+            	entry={post}
+            	title={post.data.title}
+        		url={`/posts/${cleanId}/`} 
+            	published={post.data.published}
+            	updated={post.data.updated}
+            	tags={post.data.tags || []}
+            	category={post.data.category || null}
+            	image={post.data.image}
+            	description={post.data.description || ""}
+            	draft={post.data.draft || false}
+				style={post.data.style || ""}
+        	/>
+    	)
+		})}
+	</div>
 
-    {essays.length === 0 && (
+	{essays.length === 0 && (
         <div class="card-base p-10 text-center text-black/50 dark:text-white/50">
             还没有迁移散文内容。
         </div>
