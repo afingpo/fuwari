@@ -13,10 +13,10 @@
 ```json
 {
 "title": "涵哲子居",
-"imgurl": "https://afingpp.top/logo.png",
+"imgurl": "https://afipo.top/logo.png",
 "desc": "天哲地理，共公卿好",
-"siteurl": "https://blog.afingpo.top",
-"feed": "https://blog.afingpo.top/rss.xml"
+"siteurl": "https://afipo.top",
+"feed": "https://afipo.top/rss.xml"
 }
 ```
 <!-- "https://cn.cravatar.com/avatar/1266660773126ea6b42ade84964be5b5?s=512" -->
