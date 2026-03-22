@@ -10,22 +10,17 @@ let delay = 0;
 const interval = 50;
 ---
 <div class="transition flex flex-col rounded-[var(--radius-large)] bg-[var(--card-bg)] py-1 md:py-0 md:bg-transparent md:gap-4 mb-4">
-    {page.data.map((entry: CollectionEntry<"posts">) => {
-        // 在 map 顶部完成所有逻辑计算，避免在 Return 语句中进行复杂操作
-        const isEssay = entry.data.pType === "essay";
-        const postUrl = getPostUrlBySlug(entry.slug);
-        const animDelay = `animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`;
-        
-        return isEssay ? (
+    {page.data.map((entry: CollectionEntry<"posts">) => (
+        entry.data.pType === "essay" ? (
             <MiniCard
                 title={entry.data.title}
-                url={postUrl}
+                url={getPostUrlBySlug(entry.slug)}
                 published={entry.data.published}
                 era={entry.data.era}
                 description={entry.data.description}
                 showEnterBtn={true}
                 class:list="onload-animation"
-                style={animDelay}
+                style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
             />
         ) : (
             <PostCard
@@ -35,13 +30,13 @@ const interval = 50;
                 category={entry.data.category}
                 published={entry.data.published}
                 updated={entry.data.updated}
-                url={postUrl}
+                url={getPostUrlBySlug(entry.slug)}
                 image={entry.data.image}
                 description={entry.data.description}
                 draft={entry.data.draft}
                 class:list="onload-animation"
-                style={animDelay}
-            />
-        );
-    })}
+                style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
+            ></PostCard>
+        )
+    ))}
 </div>
