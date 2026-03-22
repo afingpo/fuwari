@@ -1,51 +1,48 @@
 ---
-import MainGridLayout from "../layouts/MainGridLayout.astro";
-import ChroniclePanel from "../components/ChroniclePanel.svelte";
-import MiniCard from "../components/MiniCard.astro"; // 导入 MiniCard
-
+// ... 之前的导入
 const DATA_URL = "https://raw.githubusercontent.com/afingpo/blog-data/refs/heads/main/data/chronicle.json";
 
 let development = [];
 let acknowledgments = [];
 
 try {
-    const response = await fetch(DATA_URL);
-    const data = await response.json();
-    development = data.development || [];
-    acknowledgments = data.acknowledgments || [];
+    // 增加超时控制防止挂死构建
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+    const response = await fetch(DATA_URL, { signal: controller.signal });
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+        const data = await response.json();
+        development = data.development || [];
+        acknowledgments = data.acknowledgments || [];
+    }
 } catch (e) {
-    console.error("Error loading chronicle data:", e);
+    console.error("Fetch 失败:", e);
+    // 这里可以放一份备用的本地数据，防止页面全白
 }
 ---
 
 <MainGridLayout title="纪事" description="网站发展历程与鸣谢">
-    {development.length > 0 && (
-        <ChroniclePanel
-            title="发展历程"
-            items={development}
-            mode="timeline"
-            client:load
-        />
-    )}
-
-    {acknowledgments.length > 0 && (
-        <div class="card-base px-8 py-6 mb-6">
-            <h2 class="text-2xl font-bold mb-6 text-[var(--primary)] flex items-center">
-                <div class="w-2 h-8 bg-[var(--primary)] rounded-full mr-3"></div>
-                致谢名单
-            </h2>
-            <div class="grid grid-cols-1 gap-4">
-                {acknowledgments.map((item) => (
-                    <MiniCard
-                        title={item.title}
-                        description={item.content}
-                        url={item.link}
-                        category={item.author}
-                        showEnterBtn={true}
-                    />
-                ))}
+    <div class="onload-animation">
+        {development.length > 0 ? (
+            <ChroniclePanel
+                title="发展历程"
+                items={development}
+                client:load
+            />
+        ) : (
+            <div class="card-base p-10 text-center opacity-50">
+                暂无记录，请检查网络连接。
             </div>
-        </div>
-    )}
+        )}
+
+        {acknowledgments.length > 0 && (
+            <div class="card-base px-8 py-6 mb-6">
+                 ...
+            </div>
+        )}
+    </div>
 </MainGridLayout>
 
