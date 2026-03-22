@@ -20,29 +20,51 @@ essays.sort((a, b) => {
 ---
 
 <MainGridLayout title={i18n(I18nKey.essay)} description="诗词、散文与感悟">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-		{essays.map((post) => (
-    		<PostCard
-        		entry={post}
-        		title={post.data.title}
-        		url={`/posts/${post.id.replace(/\.md$/, '')}/`} 
-        		published={post.data.published}
-        		/* 以下字段全部设为空或隐藏 */
-        		updated={null}
-        		tags={[]} 
-        		category={null}
-        		image={null} 
-        		description={""} 
-        		words={0}
-        		draft={false}
-    		/>
-		))}
-	</div>
-
-	{essays.length === 0 && (
-        <div class="card-base p-10 text-center text-black/50 dark:text-white/50">
-            还没有迁移散文内容。
-        </div>
-    )}
+    <div class="essay-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+        {essays.map((post) => (
+            <PostCard
+                entry={post}
+                title={post.data.title}
+                /* 修复 URL 后缀问题 */
+                url={`/posts/${post.id.replace(/\.md$/, '')}/`} 
+                published={post.data.published}
+                /* 传参保持原样即可，CSS 会负责隐藏它们 */
+                tags={post.data.tags}
+                category={post.data.category}
+                image={post.data.image}
+                description={post.data.description}
+            />
+        ))}
+    </div>
+    
 </MainGridLayout>
+
+
+<style is:global>
+/* 仅在散文页面生效的“瘦身”补丁 */
+.essay-grid .post-card {
+    min-height: auto !important;
+    padding: 1rem !important; /* 压缩内边距 */
+}
+
+/* 隐藏：标签组、分类信息、摘要文字、字数统计 */
+.essay-grid .post-card .post-tags,
+.essay-grid .post-card .post-category,
+.essay-grid .post-card .post-description,
+.essay-grid .post-card .post-word-count,
+.essay-grid .post-card .post-meta-divider {
+    display: none !important;
+}
+
+/* 调整标题和时间的布局，让它们更紧凑 */
+.essay-grid .post-card .post-title {
+    margin-bottom: 0.25rem !important;
+    font-size: 1.1rem !important; /* 标题稍微缩小一点 */
+}
+
+.essay-grid .post-card .post-meta {
+    opacity: 0.6;
+    font-size: 0.85rem !important;
+}
+</style>
 
