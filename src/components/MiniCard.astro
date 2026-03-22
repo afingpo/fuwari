@@ -1,40 +1,133 @@
 ---
-const { title, url, published, era, category, tags, description, image, showMeta = true } = Astro.props;
+import { Icon } from "astro-icon/components";
+import path from "node:path";
+import ImageWrapper from "./misc/ImageWrapper.astro";
+import { getDir } from "../utils/url-utils";
 
-// 格式化日期逻辑
-const displayDate = published ? new Date(published).toISOString().split('T')[0] : '';
+interface Props {
+    class?: string;
+    entry?: any;           // 用于获取渲染相关的 meta（如字数）
+    title: string;
+    url: string;
+    published?: Date;
+    updated?: Date;
+    tags?: string[];
+    category?: string | null;
+    image?: string;
+    description?: string;
+    era?: string;          // 自定义干支参数
+    words?: number;        // 手动传入字数
+    minutes?: number;      // 手动传入阅读时间
+    showEnterBtn?: boolean;
+}
+
+const {
+    entry,
+    title,
+    url,
+    published,
+    updated,
+    tags,
+    category,
+    image,
+    description,
+    era,
+    words,
+    minutes,
+    showEnterBtn = true,
+    class: className
+} = Astro.props;
+
+const hasCover = !!image;
+const displayDate = published ? new Date(published).toISOString().split('T')[0] : null;
 ---
 
-<a href={url} class="card-base group flex flex-col justify-center px-6 py-4 hover:bg-[var(--primary-light)] transition-all duration-300">
-    <div class="flex items-center justify-between w-full">
-        <div class="flex flex-col gap-1">
-            <div class="text-lg font-bold group-hover:text-[var(--primary)] transition-colors line-clamp-1">
-                {title}
-            </div>
-            
-            {description && <div class="text-sm opacity-60 line-clamp-1">{description}</div>}
-            
-            {tags && tags.length > 0 && (
-                <div class="flex gap-2 mt-1">
-                    {tags.map(tag => <span class="text-[10px] opacity-40">#{tag}</span>)}
-                </div>
-            )}
-        </div>
+<div class:list={["card-base flex flex-col md:flex-row w-full rounded-[var(--radius-large)] overflow-hidden relative group transition-all duration-300", className]}>
+    
+    <!-- 左侧/主体内容区 -->
+    <div class:list={[
+        "pl-6 md:pl-9 pr-6 py-5 flex flex-col justify-center relative w-full",
+        { "md:w-[calc(100%_-_3.25rem_-_12px)]": showEnterBtn && !hasCover },
+        { "md:w-[calc(100%_-_28%_-_12px)]": hasCover }
+    ]}>
+        
+        <!-- 标题前缀装饰条 & 标题 -->
+        <a href={url} class="transition w-full block font-bold text-xl text-90
+            hover:text-[var(--primary)] dark:hover:text-[var(--primary)]
+            active:text-[var(--title-active)]
+            before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
+            before:absolute before:top-1/2 before:-translate-y-1/2 before:left-[18px] before:hidden md:before:block
+        ">
+            {title}
+            <Icon class="inline text-[1.5rem] text-[var(--primary)] md:hidden translate-y-0.5" name="material-symbols:chevron-right-rounded" />
+        </a>
 
-        {showMeta && (
-            <div class="flex items-center gap-3 text-sm opacity-40 shrink-0">
-                {era && <span class="text-xs font-mono text-[var(--primary)] border border-[var(--primary)] px-1 rounded">{era}</span>}
-                {displayDate && <span class="hidden sm:block font-mono">{displayDate}</span>}
-                <i class="fa-solid fa-chevron-right text-xs opacity-20 group-hover:translate-x-1 transition-transform"></i>
+        <!-- 元数据行：日期、干支、分类 (条件显示) -->
+        {(displayDate || era || category) && (
+            <div class="flex flex-wrap gap-3 items-center mt-2 text-xs opacity-50 font-mono">
+                {era && <span class="text-[var(--primary)] font-bold border border-[var(--primary)] px-1 rounded-sm text-[10px]">{era}</span>}
+                {displayDate && <span>{displayDate}</span>}
+                {category && (
+                    <>
+                        <span class="opacity-30">|</span>
+                        <span class="hover:text-[var(--primary)] cursor-pointer">{category}</span>
+                    </>
+                )}
+            </div>
+        )}
+
+        <!-- 描述/摘要 (条件显示) -->
+        {description && (
+            <div class="text-sm text-75 mt-2 line-clamp-2 md:line-clamp-1 opacity-70">
+                {description}
+            </div>
+        )}
+
+        <!-- 标签 (条件显示) -->
+        {tags && tags.length > 0 && (
+            <div class="flex flex-wrap gap-2 mt-2">
+                {tags.map(tag => (
+                    <span class="text-[10px] bg-black/5 dark:bg-white/5 px-2 py-0.5 rounded-full opacity-60">#{tag}</span>
+                ))}
+            </div>
+        )}
+
+        <!-- 字数/时间 (条件显示) -->
+        {(words || minutes) && (
+            <div class="text-[10px] opacity-30 mt-2 flex gap-2">
+                {words && <span>{words} 字</span>}
+                {minutes && <span>{minutes} 分钟阅读</span>}
             </div>
         )}
     </div>
-</a>
+
+    <!-- 封面图 (条件显示) -->
+    {hasCover && (
+        <a href={url} class="hidden md:block w-[28%] relative overflow-hidden group-hover:brightness-90 transition-all">
+            <ImageWrapper 
+                src={image!} 
+                basePath={entry ? path.join("content/posts/", getDir(entry.id)) : ""} 
+                alt={title}
+                class="w-full h-full object-cover absolute inset-0"
+            />
+        </a>
+    )}
+
+    <!-- 右侧进入按钮 (条件显示) -->
+    {showEnterBtn && !hasCover && (
+        <a href={url} aria-label={title} class="hidden md:flex btn-regular w-[3.25rem] 
+            absolute right-3 top-3 bottom-3 rounded-xl bg-[var(--enter-btn-bg)]
+            hover:bg-[var(--enter-btn-bg-hover)] active:bg-[var(--enter-btn-bg-active)] active:scale-95 transition-all
+        ">
+            <Icon name="material-symbols:chevron-right-rounded" 
+                  class="transition text-[var(--primary)] text-4xl mx-auto group-hover:scale-110">
+            </Icon>
+        </a>
+    )}
+</div>
 
 <style>
     .card-base {
-        border-radius: 12px;
-        background: var(--card-bg);
-        /* 继承 Fuwari 的卡片阴影或边框 */
+        background-color: var(--card-bg);
     }
 </style>
