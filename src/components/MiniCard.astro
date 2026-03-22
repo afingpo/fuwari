@@ -3,6 +3,7 @@ import { Icon } from "astro-icon/components";
 import path from "node:path";
 import ImageWrapper from "./misc/ImageWrapper.astro";
 import { getDir } from "../utils/url-utils";
+import { fade } from "astro:transitions";
 
 interface Props {
     class?: string;
@@ -34,7 +35,7 @@ const {
     era,
     words,
     minutes,
-    showEnterBtn = true,
+    showEnterBtn = false,
     class: className
 } = Astro.props;
 
