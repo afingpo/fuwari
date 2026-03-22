@@ -21,21 +21,22 @@ essays.sort((a, b) => {
 
 <MainGridLayout title={i18n(I18nKey.essay)} description="诗词、散文与感悟">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-		{essays.map((post) => {
-    	// 处理掉 id 中的 .md 后缀，生成干净的 URL
-    	const cleanId = post.id.replace(/\.md$/, '');
-			return (
-        	<PostCard
-            	entry={post}
-            	title={post.data.title}
-        		url={`/posts/${cleanId}/`} 
-            	published={post.data.published}
-            	updated={post.data.updated}
-            	tags={post.data.tags || []}
-            	category={post.data.category || null}
-        	/>
-    	)
-		})}
+		{essays.map((post) => (
+    		<PostCard
+        		entry={post}
+        		title={post.data.title}
+        		url={`/posts/${post.id.replace(/\.md$/, '')}/`} 
+        		published={post.data.published}
+        		/* 以下字段全部设为空或隐藏 */
+        		updated={null}
+        		tags={[]} 
+        		category={null}
+        		image={null} 
+        		description={""} 
+        		words={0}
+        		draft={false}
+    		/>
+		))}
 	</div>
 
 	{essays.length === 0 && (
