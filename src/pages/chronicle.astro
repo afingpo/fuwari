@@ -1,5 +1,9 @@
 ---
-// ... 之前的导入
+import MainGridLayout from '@layouts/MainGridLayout.astro';
+import ChroniclePanel from '@components/ChroniclePanel.svelte';
+import { i18n } from '@i18n/translation';
+import I18nKey from '@i18n/i18nKey';
+
 const DATA_URL = "https://raw.githubusercontent.com/afingpo/blog-data/refs/heads/main/data/chronicle.json";
 
 let development = [];
@@ -20,7 +24,6 @@ try {
     }
 } catch (e) {
     console.error("Fetch 失败:", e);
-    // 这里可以放一份备用的本地数据，防止页面全白
 }
 ---
 
@@ -33,16 +36,32 @@ try {
                 client:load
             />
         ) : (
-            <div class="card-base p-10 text-center opacity-50">
+            <div class="card-base p-10 text-center opacity-50 text-[var(--text-main)]">
                 暂无记录，请检查网络连接。
             </div>
         )}
 
         {acknowledgments.length > 0 && (
             <div class="card-base px-8 py-6 mb-6">
-                 ...
+                <h2 class="text-2xl font-bold mb-6 text-[var(--primary)] flex items-center">
+                    <div class="w-2 h-8 bg-[var(--primary)] rounded-full mr-3"></div>
+                    特别鸣谢
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {acknowledgments.map((ack) => (
+                        <a href={ack.link} target="_blank" class="p-4 rounded-xl border border-black/5 dark:border-white/5 hover:border-[var(--primary)] transition-all group">
+                            <div class="font-bold group-hover:text-[var(--primary)] text-[var(--text-main)]">{ack.title}</div>
+                            <div class="text-xs opacity-50 mb-2 text-[var(--text-main)]">@{ack.author}</div>
+                            <div class="text-sm opacity-70 text-[var(--text-main)]">{ack.content}</div>
+                        </a>
+                    ))}
+                </div>
             </div>
         )}
     </div>
 </MainGridLayout>
+
+<style>
+/* 可以在这里添加针对 chronicle 页面的额外样式 */
+</style>
 
