@@ -2,7 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import { getPostUrlBySlug } from "@utils/url-utils";
 import PostCard from "./PostCard.astro";
-import MiniCard from "./MiniCard.astro"; // 1. 引入你的极简组件
+import MiniCard from "./MiniCard.astro";
 
 const { page } = Astro.props;
 
@@ -11,28 +11,23 @@ const interval = 50;
 ---
 <div class="transition flex flex-col rounded-[var(--radius-large)] bg-[var(--card-bg)] py-1 md:py-0 md:bg-transparent md:gap-4 mb-4">
     {page.data.map((entry: CollectionEntry<"posts">) => {
+        // 在 map 顶部完成所有逻辑计算，避免在 Return 语句中进行复杂操作
         const isEssay = entry.data.pType === "essay";
         const postUrl = getPostUrlBySlug(entry.slug);
-        const animationStyle = `animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`;
-
-        // 2. 如果是 essay，渲染 MiniCard
-        if (isEssay) {
-            return (
-                <MiniCard
-                    title={entry.data.title}
-                    url={postUrl}
-                    published={entry.data.published}
-                    era={entry.data.era}
-                    description={entry.data.description}
-                    showEnterBtn={true}
-                    class:list="onload-animation"
-                    style={animationStyle}
-                />
-            );
-        }
-
-        // 3. 否则渲染原有的 PostCard
-        return (
+        const animDelay = `animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`;
+        
+        return isEssay ? (
+            <MiniCard
+                title={entry.data.title}
+                url={postUrl}
+                published={entry.data.published}
+                era={entry.data.era}
+                description={entry.data.description}
+                showEnterBtn={true}
+                class:list="onload-animation"
+                style={animDelay}
+            />
+        ) : (
             <PostCard
                 entry={entry}
                 title={entry.data.title}
@@ -45,8 +40,8 @@ const interval = 50;
                 description={entry.data.description}
                 draft={entry.data.draft}
                 class:list="onload-animation"
-                style={animationStyle}
-            ></PostCard>
+                style={animDelay}
+            />
         );
     })}
 </div>
