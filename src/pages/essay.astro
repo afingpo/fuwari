@@ -26,39 +26,11 @@ essays.sort((a, b) => {
                 title={post.data.title}
                 url={`/posts/${post.id.replace(/\.md$/, '')}/`}
                 published={post.data.published}
-                era={post.data.era}
+				era={post.data.era}
+				showEnterBtn={false}
             />
         ))}
     </div>
     
 </MainGridLayout>
-
-
-<style is:global>
-/* 仅在散文页面生效的“瘦身”补丁 */
-.essay-grid .post-card {
-    min-height: auto !important;
-    padding: 1rem !important; /* 压缩内边距 */
-}
-
-/* 隐藏：标签组、分类信息、摘要文字、字数统计 */
-.essay-grid .post-card .post-tags,
-.essay-grid .post-card .post-category,
-.essay-grid .post-card .post-description,
-.essay-grid .post-card .post-word-count,
-.essay-grid .post-card .post-meta-divider {
-    display: none !important;
-}
-
-/* 调整标题和时间的布局，让它们更紧凑 */
-.essay-grid .post-card .post-title {
-    margin-bottom: 0.25rem !important;
-    font-size: 1.1rem !important; /* 标题稍微缩小一点 */
-}
-
-.essay-grid .post-card .post-meta {
-    opacity: 0.6;
-    font-size: 0.85rem !important;
-}
-</style>
 
