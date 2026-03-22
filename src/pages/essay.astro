@@ -2,7 +2,7 @@
 // src/pages/essay.astro
 import { getCollection } from "astro:content";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
-import PostCard from "@components/PostCard.astro";
+import MiniCard from "@components/MiniCard.astro";
 import { i18n } from "../i18n/translation";
 import I18nKey from "../i18n/i18nKey";
 
@@ -21,18 +21,12 @@ essays.sort((a, b) => {
 
 <MainGridLayout title={i18n(I18nKey.essay)} description="诗词、散文与感悟">
     <div class="essay-grid grid grid-cols-1 md:grid-cols-2 gap-4">
-        {essays.map((post) => (
-            <PostCard
-                entry={post}
+		{essays.map((post) => (
+			<MiniCard
                 title={post.data.title}
-                /* 修复 URL 后缀问题 */
-                url={`/posts/${post.id.replace(/\.md$/, '')}/`} 
+                url={`/posts/${post.id.replace(/\.md$/, '')}/`}
                 published={post.data.published}
-                /* 传参保持原样即可，CSS 会负责隐藏它们 */
-                tags={post.data.tags}
-                category={post.data.category}
-                image={post.data.image}
-                description={post.data.description}
+                era={post.data.era}
             />
         ))}
     </div>

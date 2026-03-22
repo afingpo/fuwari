@@ -1,0 +1,40 @@
+---
+const { title, url, published, era, category, tags, description, image, showMeta = true } = Astro.props;
+
+// 格式化日期逻辑
+const displayDate = published ? new Date(published).toISOString().split('T')[0] : '';
+---
+
+<a href={url} class="card-base group flex flex-col justify-center px-6 py-4 hover:bg-[var(--primary-light)] transition-all duration-300">
+    <div class="flex items-center justify-between w-full">
+        <div class="flex flex-col gap-1">
+            <div class="text-lg font-bold group-hover:text-[var(--primary)] transition-colors line-clamp-1">
+                {title}
+            </div>
+            
+            {description && <div class="text-sm opacity-60 line-clamp-1">{description}</div>}
+            
+            {tags && tags.length > 0 && (
+                <div class="flex gap-2 mt-1">
+                    {tags.map(tag => <span class="text-[10px] opacity-40">#{tag}</span>)}
+                </div>
+            )}
+        </div>
+
+        {showMeta && (
+            <div class="flex items-center gap-3 text-sm opacity-40 shrink-0">
+                {era && <span class="text-xs font-mono text-[var(--primary)] border border-[var(--primary)] px-1 rounded">{era}</span>}
+                {displayDate && <span class="hidden sm:block font-mono">{displayDate}</span>}
+                <i class="fa-solid fa-chevron-right text-xs opacity-20 group-hover:translate-x-1 transition-transform"></i>
+            </div>
+        )}
+    </div>
+</a>
+
+<style>
+    .card-base {
+        border-radius: 12px;
+        background: var(--card-bg);
+        /* 继承 Fuwari 的卡片阴影或边框 */
+    }
+</style>
