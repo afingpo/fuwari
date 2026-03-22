@@ -1,8 +1,7 @@
 ---
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 import ChroniclePanel from "../components/ChroniclePanel.svelte";
-import I18nKey from "../i18n/i18nKey";
-import { i18n } from "../i18n/translation";
+import MiniCard from "../components/MiniCard.astro"; // 导入 MiniCard
 
 const DATA_URL = "https://raw.githubusercontent.com/afingpo/blog-data/refs/heads/main/data/chronicle.json";
 
@@ -11,9 +10,6 @@ let acknowledgments = [];
 
 try {
     const response = await fetch(DATA_URL);
-    if (!response.ok) {
-        throw new Error(`Failed to fetch chronicle data: ${response.status}`);
-    }
     const data = await response.json();
     development = data.development || [];
     acknowledgments = data.acknowledgments || [];
@@ -23,24 +19,33 @@ try {
 ---
 
 <MainGridLayout title="纪事" description="网站发展历程与鸣谢">
-    {development.length > 0 ? (
+    {development.length > 0 && (
         <ChroniclePanel
             title="发展历程"
             items={development}
             mode="timeline"
             client:load
         />
-    ) : (
-        <div class="card-base p-6 text-center text-50">正在加载发展历程...</div>
     )}
 
     {acknowledgments.length > 0 && (
-        <ChroniclePanel
-            title="致谢名单"
-            items={acknowledgments}
-            mode="list"
-            client:load
-        />
+        <div class="card-base px-8 py-6 mb-6">
+            <h2 class="text-2xl font-bold mb-6 text-[var(--primary)] flex items-center">
+                <div class="w-2 h-8 bg-[var(--primary)] rounded-full mr-3"></div>
+                致谢名单
+            </h2>
+            <div class="grid grid-cols-1 gap-4">
+                {acknowledgments.map((item) => (
+                    <MiniCard
+                        title={item.title}
+                        description={item.content}
+                        url={item.link}
+                        category={item.author}
+                        showEnterBtn={true}
+                    />
+                ))}
+            </div>
+        </div>
     )}
 </MainGridLayout>
 
