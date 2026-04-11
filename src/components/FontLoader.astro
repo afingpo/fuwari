@@ -1,0 +1,30 @@
+---
+/**
+ * src/components/FontLoader.astro
+ * 专门负责加载本地字体，减少 Layout.astro 的体积
+ */
+---
+
+<link 
+    rel="preload" 
+    href="/fonts/LXGWWenKaiLite-Regular.woff2" 
+    as="font" 
+    type="font/woff2" 
+    crossorigin
+>
+
+<style is:global>
+    @font-face {
+        font-family: 'LXGW';
+        src: url('/fonts/LXGWWenKaiLite-Regular.woff2') format('woff2');
+        font-display: swap;
+    }
+
+    /* 这里建议将 body 的全局字体定义也放在这里，
+       确保样式加载顺序的一致性。
+    */
+    body {
+        font-family: 'LXGW', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans SC', sans-serif !important;
+    }
+</style>
+
