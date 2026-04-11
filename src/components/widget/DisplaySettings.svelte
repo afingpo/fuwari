@@ -3,6 +3,10 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import Icon from "@iconify/svelte";
 import { getDefaultHue, getHue, setHue } from "@utils/setting-utils";
+
+let hue = getHue();
+const defaultHue = getDefaultHue();
+
 function resetHue() {
 	hue = getDefaultHue();
 }
@@ -37,9 +41,7 @@ $: if (hue || hue === 0) {
         <input aria-label={i18n(I18nKey.themeColor)} type="range" min="0" max="360" bind:value={hue}
                class="slider" id="colorSlider" step="5" style="width: 100%">
     </div>
-
 </div>
-
 
 
 <style lang="stylus">
