@@ -32,7 +32,12 @@ export const ja: Translation = {
 
 	[Key.more]: "もっと",
 
-	[Key.author]: "作者",
+	[Key.author]: "著者",
 	[Key.publishedAt]: "公開日",
 	[Key.license]: "ライセンス",
+	[Key.links]: "リンク",
+	[Key.bangumi]: "アニメ",
+	[Key.essay]: "雑記",
+	[Key.series]: "シリーズ",
+	[Key.chronicle]: "クロニクル",
 };
