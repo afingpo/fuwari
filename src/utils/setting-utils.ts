@@ -75,3 +75,17 @@ export function syncNMPTheme() {
 	// (nmpRoot as any).theme = isDark ? 'dark' : 'light';
 }
 
+export function getLanguage(): string {
+    // 检查是否在浏览器环境，防止 SSR 构建报错
+    if (typeof localStorage !== 'undefined') {
+        return localStorage.getItem("language") || "zh_CN";
+    }
+    return "zh_CN";
+}
+
+export function setLanguage(lang: string): void {
+    if (typeof localStorage !== 'undefined') {
+        localStorage.setItem("language", lang);
+    }
+}
+
