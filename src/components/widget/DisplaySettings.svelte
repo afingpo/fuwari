@@ -3,22 +3,6 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import Icon from "@iconify/svelte";
 import { getDefaultHue, getHue, setHue } from "@utils/setting-utils";
-import { getLanguage, setLanguage } from "@utils/setting-utils"; // 确认你的工具类名
-
-let hue = getHue();
-const defaultHue = getDefaultHue();
-
-// 语言状态
-    let currentLang = getLanguage(); 
-
-    function onLangChange(newLang: string) {
-        currentLang = newLang;
-        setLanguage(newLang);
-        // 通常语言切换需要刷新页面以重新加载 Astro 的静态内容
-        window.location.reload(); 
-    }
-
-
 function resetHue() {
 	hue = getDefaultHue();
 }
@@ -54,30 +38,6 @@ $: if (hue || hue === 0) {
                class="slider" id="colorSlider" step="5" style="width: 100%">
     </div>
 
-    <div class="flex flex-row ..."> ... </div>
-    <div class="w-full h-6 ..."> ... </div>
-
-    <div class="h-px w-full bg-neutral-200 dark:bg-neutral-800 my-4"></div>
-
-    <div class="flex flex-col gap-3">
-        <div class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3
-            before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
-            before:absolute before:-left-3 before:top-[0.33rem]"
-        >
-            {i18n(I18nKey.language)} </div>
-
-        <div class="grid grid-cols-3 gap-2">
-            <button class="btn-regular h-8 rounded-md text-sm" 
-                    class:active={currentLang === 'zh_CN'} 
-                    on:click={() => onLangChange('zh_CN')}>简体中文</button>
-            <button class="btn-regular h-8 rounded-md text-sm" 
-                    class:active={currentLang === 'en'} 
-                    on:click={() => onLangChange('en')}>English</button>
-            <button class="btn-regular h-8 rounded-md text-sm" 
-                    class:active={currentLang === 'ja'} 
-                    on:click={() => onLangChange('ja')}>日本語</button>
-        </div>
-    </div>
 </div>
 
 
@@ -127,9 +87,5 @@ $: if (hue || hue === 0) {
             background rgba(255, 255, 255, 0.8)
           &:active
             background rgba(255, 255, 255, 0.6)
-	  .btn-regular.active
-        background-color var(--primary)
-        color var(--btn-card-bg)
-        border-color var(--primary)
 
 </style>
