@@ -23,6 +23,9 @@
 - 邮箱: [`me@afipo.top`](mailto:me@afipo.top)
     - 获取: [PGP公钥](https://afipo.top/pubkey.asc)
 
+- Matrix: `#afipo_chat:mozilla.org`
+    - 使用 Matrix 服务商所提供的用户加入
+
 ---
 
 ## 本站相关
