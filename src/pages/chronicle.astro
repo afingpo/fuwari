@@ -48,8 +48,8 @@ try {
                     特别鸣谢
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {acknowledgments.map((ack) => (
-                        <a href={ack.link} target="_blank" class="p-4 rounded-xl border border-black/5 dark:border-white/5 hover:border-[var(--primary)] transition-all group">
+					{acknowledgments.map((ack: any) => (
+						<a href={ack.link} target="_blank" class="p-4 rounded-[var(--radius-large)] border border-black/5 dark:border-white/5 hover:border-[var(--primary)] transition-all group">
                             <div class="font-bold group-hover:text-[var(--primary)] text-[var(--text-main)]">{ack.title}</div>
                             <div class="text-xs opacity-50 mb-2 text-[var(--text-main)]">@{ack.author}</div>
                             <div class="text-sm opacity-70 text-[var(--text-main)]">{ack.content}</div>
