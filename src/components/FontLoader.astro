@@ -1,47 +1,30 @@
----
-/**
- * src/components/FontLoader.astro
- * 动态根据字符编码匹配：
- * 1. 日文字符 -> Klee One
- * 2. 繁体中文 -> LXGW WenKai TC
- * 3. 默认字符 (简体) -> LXGW WenKai Lite
- */
----
-
 <style is:global>
-    /* 1. 日文子集 (Klee One) */
+    /* 1. 基础字体定义 */
     @font-face {
         font-family: 'Klee One';
         src: url('/fonts/KleeOne-Regular.woff2') format('woff2');
-        /* 包含假名、日标汉字等范围 */
-        unicode-range: U+3040-309F, U+30A0-30FF, U+31F0-31FF, U+FF00-FFEF, U+4E00-9FFF;
         font-display: swap;
     }
-
-    /* 2. 繁体中文 (LXGW TC) */
     @font-face {
         font-family: 'LXGW WenKai TC';
         src: url('/fonts/LXGWWenKaiTC-Regular.woff2') format('woff2');
-        /* 重点：将常用繁体字范围放在这，浏览器会优先匹配最具体的定义 */
-        unicode-range: U+4E00-9FFF; 
         font-display: swap;
-    }
+	}
 
-    /* 3. 基础版 (LXGW Lite / 简体) */
-    @font-face {
-        font-family: 'LXGW WenKai Lite';
-        src: url('/fonts/LXGWWenKaiLite-Regular.woff2') format('woff2');
-        font-display: swap;
-    }
+	@font-face {
+		font-family: 'LXGW WenKai Lite';
+		src: url('/fonts/LXGWWenKaiLite-Regular.woff2') format('woff2');
+		font-display: swap;
+	}
 
-    /* 全局应用 */
+    /* 2. 默认环境（中文为主）：先找 TC，再找 Klee */
     body {
-		font-family: 
-			'Klee One',
-			'LXGW WenKai TC', 
-			'LXWG WenKai Lite', 
-			-apple-system,
-			sans-serif;
+        font-family: 'LXGW WenKai TC', 'LXGW WenKai Lite', sans-serif;
+    }
+
+    /* 3. 日文环境：优先找 Klee，再找 TC */
+    :lang(ja) {
+		font-family: 'Klee-Han', 'LXGW WenKai TC', 'LXGW WenKai Lite', sans-serif;
     }
 </style>
 
