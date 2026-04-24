@@ -1,16 +1,1 @@
-{
-  "redirects": [
-    {
-      "source": "/(.*)",
-      "destination": "https://afipo.top/$1",
-      "permanent": true,
-      "has": [
-        {
-          "type": "host",
-          "value": "afingpo.top"
-        }
-      ]
-    }
-  ]
-}
-
+{}
