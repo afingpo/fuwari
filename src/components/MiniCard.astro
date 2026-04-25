@@ -53,11 +53,19 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
     ]}>
         
         <!-- 标题前缀装饰条 & 标题 -->
-        <a href={url} class="transition w-full block font-bold text-xl text-90
-            hover:text-[var(--primary)] dark:hover:text-[var(--primary)]
-			active:text-[var(--title-active)]
-			before:absolute before:top-[calc(50%-4px)] before:left-[18px]
-            before:absolute before:top-1/2 before:-translate-y-1/2 before:left-[18px] before:hidden md:before:block
+		<a href={url} class="transition w-full block font-bold text-xl text-90
+    		hover:text-[var(--primary)] dark:hover:text-[var(--primary)]
+    		active:text-[var(--title-active)]
+    		relative
+    		before:content-['']
+    		before:absolute
+    		before:top-[calc(50%-4px)]
+    		before:left-[-18px]
+    		before:w-2
+    		before:h-2
+    		before:rounded-[2px]
+			before:bg-[var(--primary)]
+    		before:hidden md:before:block
         ">
             {title}
             <Icon class="inline text-[1.5rem] text-[var(--primary)] md:hidden translate-y-0.5" name="material-symbols:chevron-right-rounded" />
