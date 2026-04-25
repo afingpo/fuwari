@@ -30,14 +30,21 @@
 
 ## 本站相关
 
-- 框架为基底：[`Astro`](https://astro.build) + [`Fuwari`](https://github.com/saicaca/fuwari) 主题  
+- 框架为基底：[Astro](https://astro.build) + [Fuwari](https://github.com/saicaca/fuwari) 
 
-- 部署在它方：[`Netlify`](https://www.netlify.com)  
+- 部署在它方：
+    - [Netlify](https://www.netlify.com)
+    - [Vercel](https://vercel.com)
 
-- 字体展品味：`霞鹜文楷 LXGW WenKai Lite`  
+- 字体展品味：
+    - 霞鹜文楷 TC ([LXGW WenKai TC](https://github.com/lxgw/LxgwWenKai-Lite))
+    - 霞鹜文楷 Lite ([LXGW WenKai Lite](https://github.com/lxgw/LxgwWenkaiTC))
+    - Klee One ([Klee One](https://github.com/fontworks-fonts/Klee))
 
-- 源码有依托：`Codeberg` +  `Github`
+- 源码有依托：
+    - [Github](https://github.com)
+    - [Codeberg](https://codeberg.org)
 
 > 此会有学得笔记、折腾日记、平日乱言相记，  
-
+>
 > 若有友志趣相投，愿互置友链，共结网缘。
