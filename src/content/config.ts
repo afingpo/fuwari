@@ -18,7 +18,6 @@ const postsCollection = defineCollection({
         era: z.string().optional(),
 		lang: z.string().optional().default(""),
 		comments: z.boolean().optional().default(true),
-		series: z.string().optional(),
 	
 
 

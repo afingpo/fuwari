@@ -38,6 +38,5 @@ export const ja: Translation = {
 	[Key.links]: "リンク",
 	[Key.bangumi]: "アニメ",
 	[Key.essay]: "雑記",
-	[Key.series]: "シリーズ",
 	[Key.chronicle]: "クロニクル",
 };

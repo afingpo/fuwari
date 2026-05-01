@@ -35,7 +35,6 @@ enum I18nKey {
 	links = "links",
 	bangumi = "bangumi",
 	essay = "essay",
-	series = "series",
 	chronicle = "chronicle",
 }
 

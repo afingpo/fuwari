@@ -38,6 +38,5 @@ export const en: Translation = {
 	[Key.links]: "Links",
 	[Key.bangumi]: "Bangumi",
 	[Key.essay]: "Essay",
-	[Key.series]: "Series",
 	[Key.chronicle]: "Chronicle",
 };
