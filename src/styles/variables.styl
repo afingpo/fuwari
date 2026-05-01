@@ -23,87 +23,70 @@ define(vars)
         {key}: value[1]
 
 define({
-  /* 全局强调色：常态下为深灰/浅灰，彻底去色 */
-  --primary: oklch(0.35 0 var(--hue)) oklch(0.85 0 var(--hue))
+  /* --- 核心背景：彻底去色，改用 Hex 控制 --- */
+  /* 页面背景：浅色模式 #f6f6f6 (冷灰)，深色模式 #121212 (深黑) */
+  --page-bg: #f6f6f6 #121212
+  /* 卡片背景：纯白 与 深灰 */
+  --card-bg: #ffffff #1e1e1e
+  /* 浮窗面板：保持与卡片一致 */
+  --float-panel-bg: #ffffff #1e1e1e
+
+  /* --- 强调色：保留 OKLCH 动态色相，确保“细节有色” --- */
+  --primary: oklch(0.70 0.14 var(--hue)) oklch(0.75 0.14 var(--hue))
+  --btn-content: oklch(0.55 0.12 var(--hue)) oklch(0.75 0.1 var(--hue))
+  --title-active: oklch(0.6 0.1 var(--hue))
+  --selection-bg: oklch(0.90 0.05 var(--hue)) oklch(0.40 0.08 var(--hue))
   
-  /* 页面背景：浅色模式接近纯白，深色模式极深灰 */
-  --page-bg: oklch(0.98 0 var(--hue)) oklch(0.12 0 var(--hue))
-  --card-bg: white oklch(0.18 0 var(--hue))
+  /* --- 按钮与交互：背景采用极淡的灰，悬停恢复彩色 --- */
+  --btn-regular-bg: #eeeeee #2d2d2d
+  --btn-regular-bg-hover: oklch(0.9 0.05 var(--hue)) oklch(0.38 0.04 var(--hue))
+  --btn-regular-bg-active: oklch(0.85 0.08 var(--hue)) oklch(0.43 0.045 var(--hue))
 
-  /* 按钮文字与交互内容 */
-  --btn-content: oklch(0.30 0 var(--hue)) oklch(0.85 0 var(--hue))
+  --btn-plain-bg-hover: #f0f0f0 #2a2a2a
+  --btn-plain-bg-active: #e5e5e5 #333333
+  
+  --btn-card-bg-hover: #fafafa #252525
+  --btn-card-bg-active: #f0f0f0 #303030
 
-  /* 按钮背景：利用亮度差营造点击感，但饱和度始终为 0 */
-  --btn-regular-bg: oklch(0.94 0 var(--hue)) oklch(0.26 0 var(--hue))
-  --btn-regular-bg-hover: oklch(0.90 0 var(--hue)) oklch(0.30 0 var(--hue))
-  --btn-regular-bg-active: oklch(0.85 0 var(--hue)) oklch(0.35 0 var(--hue))
+  /* --- 文字颜色：保证在灰黑背景下的可读性 --- */
+  --deep-text: #222222 #eeeeee
+  --line-divider: black(0.08) white(0.08)
+  --line-color: black(0.1) white(0.1)
+  --meta-divider: black(0.2) white(0.2)
 
-  --btn-plain-bg-hover: oklch(0.95 0 var(--hue)) oklch(0.28 0 var(--hue))
-  --btn-plain-bg-active: oklch(0.92 0 var(--hue)) oklch(0.32 0 var(--hue))
-
-  --btn-card-bg-hover: oklch(0.98 0 var(--hue)) oklch(0.25 0 var(--hue))
-  --btn-card-bg-active: oklch(0.94 0 var(--hue)) oklch(0.30 0 var(--hue))
-
-  --enter-btn-bg: var(--btn-regular-bg)
-  --enter-btn-bg-hover: var(--btn-regular-bg-hover)
-  --enter-btn-bg-active: var(--btn-regular-bg-active)
-
-  /* 文字颜色：深度黑与纯白 */
-  --deep-text: oklch(0.15 0 var(--hue)) oklch(0.98 0 var(--hue))
-  --title-active: oklch(0.10 0 var(--hue)) oklch(1.00 0 var(--hue))
-
-  /* 分割线与装饰线 */
-  --line-divider: black(0.06) white(0.06)
-  --line-color: black(0.08) white(0.08)
-  --meta-divider: black(0.15) white(0.15)
-
-  /* 代码块与行内代码 */
+  /* --- 代码块与链接 --- */
   --inline-code-bg: var(--btn-regular-bg)
   --inline-code-color: var(--btn-content)
-  --selection-bg: oklch(0.90 0 var(--hue)) oklch(0.35 0 var(--hue))
-  --codeblock-selection: oklch(0.40 0 var(--hue))
-  --codeblock-bg: oklch(0.15 0 var(--hue)) oklch(0.15 0 var(--hue))
-  --codeblock-topbar-bg: oklch(0.25 0 var(--hue)) oklch(0.10 0 var(--hue))
+  --codeblock-selection: oklch(0.40 0.08 var(--hue))
+  /* 代码块保持深色主题风格 */
+  --codeblock-bg: #1a1a1a #161616
+  --codeblock-topbar-bg: #252525 #0d0d0d
+  
+  --license-block-bg: black(0.03) var(--codeblock-bg)
+  --link-underline: oklch(0.93 0.04 var(--hue)) oklch(0.40 0.08 var(--hue))
+  --link-hover: oklch(0.95 0.025 var(--hue)) oklch(0.40 0.08 var(--hue))
+  --link-active: oklch(0.90 0.05 var(--hue)) oklch(0.35 0.07 var(--hue))
 
-  --license-block-bg: black(0.02) var(--codeblock-bg)
-
-  /* 链接装饰：使用亮度区分而非色相 */
-  --link-underline: oklch(0.90 0 var(--hue)) oklch(0.35 0 var(--hue))
-  --link-hover: oklch(0.85 0 var(--hue)) oklch(0.40 0 var(--hue))
-  --link-active: oklch(0.80 0 var(--hue)) oklch(0.45 0 var(--hue))
-
-  --float-panel-bg: white oklch(0.20 0 var(--hue))
-
-  /* 滚动条 */
-  --scrollbar-bg-light: black(0.3)
-  --scrollbar-bg-hover-light: black(0.4)
-  --scrollbar-bg-active-light: black(0.5)
-  --scrollbar-bg-dark: white(0.3)
-  --scrollbar-bg-hover-dark: white(0.4)
-  --scrollbar-bg-active-dark: white(0.5)
-
-  --scrollbar-bg: var(--scrollbar-bg-light) var(--scrollbar-bg-dark)
-  --scrollbar-bg-hover: var(--scrollbar-bg-hover-light) var(--scrollbar-bg-hover-dark)
-  --scrollbar-bg-active: var(--scrollbar-bg-active-light) var(--scrollbar-bg-active-dark)
-
-  /* 进度条：如果你想连顶部的彩虹进度条都变灰，可以改为单一灰度 */
-  --color-selection-bar: #888 #444
-
+  /* --- 其他 UI 组件 --- */
+  --scrollbar-bg: #cccccc #444444
+  --scrollbar-bg-hover: #bbbbbb #555555
+  --scrollbar-bg-active: #aaaaaa #666666
+  
+  --color-selection-bar: rainbow-light rainbow-dark
   --display-light-icon: 1 0
   --display-dark-icon: 0 1
 
-  /* 提示框（Admonitions）：即使是警告也要黑白，靠亮度识别 */
-  --admonitions-color-tip: oklch(0.45 0 0) oklch(0.75 0 0)
-  --admonitions-color-note: oklch(0.40 0 0) oklch(0.70 0 0)
-  --admonitions-color-important: oklch(0.35 0 0) oklch(0.65 0 0)
-  --admonitions-color-warning: oklch(0.30 0 0) oklch(0.60 0 0)
-  --admonitions-color-caution: oklch(0.25 0 0) oklch(0.55 0 0)
+  /* 提示框保持彩色标识，方便识别类型 */
+  --admonitions-color-tip: oklch(0.7 0.14 180) oklch(0.75 0.14 180)
+  --admonitions-color-note: oklch(0.7 0.14 250) oklch(0.75 0.14 250)
+  --admonitions-color-important: oklch(0.7 0.14 310) oklch(0.75 0.14 310)
+  --admonitions-color-warning: oklch(0.7 0.14 60) oklch(0.75 0.14 60)
+  --admonitions-color-caution: oklch(0.6 0.2 25) oklch(0.65 0.2 25)
 
-  /* 目录（TOC） */
-  --toc-badge-bg: oklch(0.90 0 var(--hue)) var(--btn-regular-bg)
-  --toc-btn-hover: oklch(0.92 0 var(--hue)) oklch(0.24 0 var(--hue))
-  --toc-btn-active: oklch(0.88 0 var(--hue)) oklch(0.28 0 var(--hue))
+  --toc-badge-bg: #eeeeee #333333
+  --toc-btn-hover: #f5f5f5 #2a2a2a
+  --toc-btn-active: #e0e0e0 #383838
   --toc-width: calc((100vw - var(--page-width)) / 2 - 1rem)
-  --toc-item-active: oklch(0.30 0 var(--hue)) oklch(0.85 0 var(--hue))
+  --toc-item-active: oklch(0.70 0.13 var(--hue)) oklch(0.35 0.07 var(--hue))
 })
 
