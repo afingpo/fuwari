@@ -168,15 +168,19 @@ const bannerOffset =
 				/* 第一个阴影：非常淡的描边，增加立体感
 				   第二个阴影：主体投影，负责平滑过渡
     			*/
-				--cc-card-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 10px 20px rgba(0, 0, 0, 0.05);
-				/* 
+				--cc-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 4px 8px rgba(0, 0, 0, 0.05);
+				/*
+				--cc-card-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 10px 20px rgba(0, 0, 0, 0.05); 
 				--cc-card-shadow: 0 20px 40px rgba(0, 0, 0, 0.03), 0 10px 20px rgba(0, 0, 0, 0.05);
-				 */
+				*/
 			}
 
 			:root.dark {
 				/* 深色模式下，阴影要更深、更重一些，或者用带颜色的暗影 */
-    			--cc-card-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+				--cc-card-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+				/*
+				--cc-card-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+				*/
 			}
 
 			/* 劫持保持不变 */
