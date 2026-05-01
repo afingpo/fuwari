@@ -131,7 +131,7 @@
                             {@html item.excerpt}
                         </div>
                     </a>
-                {each}
+                {/each}
             {:else if keyword}
                 <div class="py-10 text-center text-black/30 dark:text-white/30">
                     No results found for "{keyword}"
