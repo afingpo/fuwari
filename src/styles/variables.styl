@@ -29,6 +29,13 @@ define({
   --page-bg: #f6f6f6 #121212
   --card-bg: #ffffff #1e1e1e
   --float-panel-bg: #ffffff #1e1e1e
+
+  // ... 其他变量
+  --card-bg: #ffffff #1e1e1e
+  
+  /* 新增：卡片阴影变量 */
+  /* 浅色模式：柔和的深灰色投影 | 深色模式：通常投影设为透明或极深，因为黑底看不见阴影 */
+  --card-shadow: 0 4px 10px rgba(0,0,0,0.05), 0 0 1px rgba(0,0,0,0.1)  transparent
   /* ------------------------------------ */
 
   --btn-content: oklch(0.55 0.12 var(--hue)) oklch(0.75 0.1 var(--hue))

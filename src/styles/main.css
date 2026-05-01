@@ -2,13 +2,14 @@
 
 @layer components {
     .card-base {
-        @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition;
+		@apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition;
+        box-shadow: var(--card-shadow); /* 使用刚才定义的变量 */
     }
     h1, h2, h3, h4, h5, h6, p, a, span, li, ul, ol, blockquote, code, pre, table, th, td, strong {
         @apply transition;
     }
     .card-shadow {
-        @apply drop-shadow-[0_2px_4px_rgba(0,0,0,0.005)]
+		box-shadow: var(--card-shadow);
     }
     .expand-animation {
         @apply relative before:ease-out before:transition active:bg-none hover:before:bg-[var(--btn-plain-bg-hover)] active:before:bg-[var(--btn-plain-bg-active)] z-0
