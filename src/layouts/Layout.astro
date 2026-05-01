@@ -163,6 +163,30 @@ const bannerOffset =
 			'page-width': `${PAGE_WIDTH}rem`,
 		}}></style>  <!-- defines global css variables. This will be applied to <html> <body> and some other elements idk why -->
 
+		<style is:global>
+			:root {
+				/* 第一个阴影：非常淡的描边，增加立体感
+				   第二个阴影：主体投影，负责平滑过渡
+    			*/
+				--cc-card-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 10px 20px rgba(0, 0, 0, 0.05);
+				--cc-card-shadow: 0 20px 40px rgba(0, 0, 0, 0.03), 0 10px 20px rgba(0, 0, 0, 0.05);
+			}
+
+			:root.dark {
+				/* 深色模式下，阴影要更深、更重一些，或者用带颜色的暗影 */
+    			--cc-card-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+			}
+
+			/* 劫持保持不变 */
+			:root, html {
+    			--card-shadow: var(--cc-card-shadow) !important;
+			}
+
+			.card-base, .card-shadow {
+    			box-shadow: var(--cc-card-shadow) !important;
+			}
+		</style>
+
 
 		<slot name="head"></slot>
 
