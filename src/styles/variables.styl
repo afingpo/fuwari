@@ -5,8 +5,8 @@ white(a)
 black(a)
   rgba(0, 0, 0, a)
 
-/* 你的真理色：海绿色 */
-$my-theme-color = #2E8B57
+/* 你的真理色：FF3273DC (采用标准 16 进制格式) */
+$cc-theme-color = #3273DC
 
 rainbow-light = linear-gradient(to right, oklch(0.80 0.10 0), oklch(0.80 0.10 30), oklch(0.80 0.10 60), oklch(0.80 0.10 90), oklch(0.80 0.10 120), oklch(0.80 0.10 150), oklch(0.80 0.10 180), oklch(0.80 0.10 210), oklch(0.80 0.10 240), oklch(0.80 0.10 270), oklch(0.80 0.10 300), oklch(0.80 0.10 330), oklch(0.80 0.10 360))
 rainbow-dark = linear-gradient(to right, oklch(0.70 0.10 0), oklch(0.70 0.10 30), oklch(0.70 0.10 60), oklch(0.70 0.10 90), oklch(0.70 0.10 120), oklch(0.70 0.10 150), oklch(0.70 0.10 180), oklch(0.70 0.10 210), oklch(0.70 0.10 240), oklch(0.70 0.10 270), oklch(0.70 0.10 300), oklch(0.70 0.10 330), oklch(0.70 0.10 360))
@@ -26,37 +26,36 @@ define(vars)
         {key}: value[1]
 
 define({
-  /* --- 核心主题色：全部指向 $my-theme-color --- */
-  --primary: $my-theme-color $my-theme-color
-  --hue: hue($my-theme-color)
+  /* --- 核心主题色：指向 $cc-theme-color --- */
+  --primary: $cc-theme-color $cc-theme-color
+  --hue: hue($cc-theme-color)
   
   --page-bg: #f6f6f6 #121212
   --card-bg: #ffffff #1e1e1e
   --float-panel-bg: #ffffff #1e1e1e
 
-  /* --- 阴影修复：从惊悚红变回优雅灰 --- */
+  /* --- 阴影修复：极简风格投影 --- */
   --card-shadow: '0 4px 12px rgba(0,0,0,0.05)' 'none'
 
   /* --- 关键 UI 元素 --- */
-  --btn-content: $my-theme-color $my-theme-color
+  --btn-content: $cc-theme-color $cc-theme-color
   
-  /* 按钮背景：稍微加一点点透明度看起来更自然 */
-  --btn-regular-bg: rgba($my-theme-color, 0.1) rgba($my-theme-color, 0.15)
-  --btn-regular-bg-hover: rgba($my-theme-color, 0.2) rgba($my-theme-color, 0.25)
-  --btn-regular-bg-active: rgba($my-theme-color, 0.3) rgba($my-theme-color, 0.35)
+  --btn-regular-bg: rgba($cc-theme-color, 0.1) rgba($cc-theme-color, 0.15)
+  --btn-regular-bg-hover: rgba($cc-theme-color, 0.2) rgba($cc-theme-color, 0.25)
+  --btn-regular-bg-active: rgba($cc-theme-color, 0.3) rgba($cc-theme-color, 0.35)
   
-  --btn-plain-bg-hover: rgba($my-theme-color, 0.1) rgba($my-theme-color, 0.15)
-  --btn-plain-bg-active: rgba($my-theme-color, 0.2) rgba($my-theme-color, 0.2)
+  --btn-plain-bg-hover: rgba($cc-theme-color, 0.1) rgba($cc-theme-color, 0.15)
+  --btn-plain-bg-active: rgba($cc-theme-color, 0.2) rgba($cc-theme-color, 0.2)
   
-  --btn-card-bg-hover: rgba($my-theme-color, 0.05) rgba($my-theme-color, 0.1)
-  --btn-card-bg-active: rgba($my-theme-color, 0.1) rgba($my-theme-color, 0.15)
+  --btn-card-bg-hover: rgba($cc-theme-color, 0.05) rgba($cc-theme-color, 0.1)
+  --btn-card-bg-active: rgba($cc-theme-color, 0.1) rgba($cc-theme-color, 0.15)
   
   --enter-btn-bg: var(--btn-regular-bg)
   --enter-btn-bg-hover: var(--btn-regular-bg-hover)
   --enter-btn-bg-active: var(--btn-regular-bg-active)
 
   --deep-text: oklch(0.25 0.02 var(--hue))
-  --title-active: $my-theme-color $my-theme-color
+  --title-active: $cc-theme-color $cc-theme-color
   
   --line-divider: black(0.08) white(0.08)
   --line-color: black(0.1) white(0.1)
@@ -65,17 +64,17 @@ define({
   --inline-code-bg: var(--btn-regular-bg)
   --inline-code-color: var(--btn-content)
   
-  --selection-bg: rgba($my-theme-color, 0.2) rgba($my-theme-color, 0.3)
-  --codeblock-selection: rgba($my-theme-color, 0.4)
+  --selection-bg: rgba($cc-theme-color, 0.2) rgba($cc-theme-color, 0.3)
+  --codeblock-selection: rgba($cc-theme-color, 0.4)
   
   --codeblock-bg: oklch(0.17 0.015 var(--hue)) oklch(0.17 0.015 var(--hue))
   --codeblock-topbar-bg: oklch(0.3 0.02 var(--hue)) oklch(0.12 0.015 var(--hue))
   
   --license-block-bg: black(0.03) var(--codeblock-bg)
   
-  --link-underline: rgba($my-theme-color, 0.15) rgba($my-theme-color, 0.3)
-  --link-hover: rgba($my-theme-color, 0.1) rgba($my-theme-color, 0.2)
-  --link-active: rgba($my-theme-color, 0.2) rgba($my-theme-color, 0.3)
+  --link-underline: rgba($cc-theme-color, 0.15) rgba($cc-theme-color, 0.3)
+  --link-hover: rgba($cc-theme-color, 0.1) rgba($cc-theme-color, 0.2)
+  --link-active: rgba($cc-theme-color, 0.2) rgba($cc-theme-color, 0.3)
 
   --scrollbar-bg-light: black(0.4)
   --scrollbar-bg-hover-light: black(0.5)
@@ -92,15 +91,15 @@ define({
   --display-dark-icon: 0 1
 
   --admonitions-color-tip: #3eaf7c #42b983
-  --admonitions-color-note: #2e80b7 #3498db
+  --admonitions-color-note: #3273DC #4a8df3
   --admonitions-color-important: #8e44ad #9b59b6
   --admonitions-color-warning: #f39c12 #f1c40f
   --admonitions-color-caution: #e74c3c #ff6b6b
 
-  --toc-badge-bg: rgba($my-theme-color, 0.1) var(--btn-regular-bg)
-  --toc-btn-hover: rgba($my-theme-color, 0.05) oklch(0.22 0.02 var(--hue))
-  --toc-btn-active: rgba($my-theme-color, 0.1) oklch(0.25 0.02 var(--hue))
+  --toc-badge-bg: rgba($cc-theme-color, 0.1) var(--btn-regular-bg)
+  --toc-btn-hover: rgba($cc-theme-color, 0.05) oklch(0.22 0.02 var(--hue))
+  --toc-btn-active: rgba($cc-theme-color, 0.1) oklch(0.25 0.02 var(--hue))
   --toc-width: calc((100vw - var(--page-width)) / 2 - 1rem)
-  --toc-item-active: $my-theme-color $my-theme-color
+  --toc-item-active: $cc-theme-color $cc-theme-color
 })
 
