@@ -3,7 +3,7 @@
     import { i18n } from "@i18n/translation";
     import Icon from "@iconify/svelte";
     import { url } from "@utils/url-utils.ts";
-    import { onMount, tick } from "svelte";
+    import { onMount, tick, onDestroy } from "svelte";
     import type { SearchResult } from "@/global";
 
     let keyword = "";
@@ -12,7 +12,9 @@
     let pagefindLoaded = false;
     let initialized = false;
     let showPanel = false;
+    
     let inputElement: HTMLInputElement;
+    let containerElement: HTMLElement; // 用于挂载到 body
 
     const fakeResult: SearchResult[] = [
         {
@@ -22,18 +24,23 @@
         },
         {
             url: url("/"),
-            meta: { title: "If You Want to Test the Search" },
-            excerpt: "Try running <mark>npm build && npm preview</mark> instead.",
+            meta: { title: "Try npm build && npm preview" },
+            excerpt: "To test the real search functionality.",
         },
     ];
 
     const togglePanel = async () => {
         showPanel = !showPanel;
         if (showPanel) {
-            // 等待 DOM 更新后聚焦
+            // 关键：将 DOM 移出 Navbar，直接挂在 body 下实现真全屏
             await tick();
+            if (containerElement) {
+                document.body.appendChild(containerElement);
+                document.body.style.overflow = 'hidden'; // 锁定背景滚动
+            }
             inputElement?.focus();
         } else {
+            document.body.style.overflow = '';
             keyword = "";
             result = [];
         }
@@ -79,6 +86,14 @@
         }
     });
 
+    onDestroy(() => {
+        // 组件销毁时，如果还在 body 里则移除它
+        if (containerElement && containerElement.parentNode === document.body) {
+            document.body.removeChild(containerElement);
+            document.body.style.overflow = '';
+        }
+    });
+
     $: if (initialized) {
         search(keyword);
     }
@@ -90,92 +105,104 @@
 </button>
 
 {#if showPanel}
-    <div class="search-mask fixed inset-0 z-[99] bg-black/40 backdrop-blur-sm transition-opacity" 
-         on:click={togglePanel} 
-         on:keydown={(e) => e.key === 'Escape' && togglePanel()}>
-    </div>
+    <div bind:this={containerElement} class="search-root">
+        <div class="search-mask" on:click={togglePanel} on:keydown={(e) => e.key === 'Escape' && togglePanel()}></div>
 
-    <div id="search-panel" 
-         class="fixed inset-x-4 top-24 md:inset-x-0 md:mx-auto md:w-[40rem] z-[100] 
-                bg-[var(--card-bg)] shadow-2xl rounded-2xl p-4 flex flex-col 
-                border border-black/5 dark:border-white/10 overflow-hidden animate-in fade-in zoom-in duration-200">
-        
-        <div class="flex items-center h-12 px-4 rounded-xl bg-black/[0.04] dark:bg-white/5 
-                    border-2 border-transparent focus-within:border-[var(--primary)] transition-all">
-            <Icon icon="material-symbols:search" class="text-[1.5rem] text-black/30 dark:text-white/30"></Icon>
-            <input 
-                bind:this={inputElement}
-                bind:value={keyword}
-                placeholder="Search articles..." 
-                class="flex-1 ml-3 bg-transparent outline-none text-black/70 dark:text-white/80 text-base"
-            />
-            {#if isSearching}
-                <div class="animate-spin h-5 w-5 border-2 border-[var(--primary)] border-t-transparent rounded-full"></div>
-            {/if}
-            <button on:click={togglePanel} class="ml-3 p-1 hover:bg-black/10 dark:hover:bg-white/10 rounded-full transition">
-                <Icon icon="material-symbols:close" class="text-black/40 dark:text-white/40" />
-            </button>
-        </div>
+        <div id="search-panel" 
+             class="search-panel-body animate-in">
+            
+            <div class="flex items-center h-12 px-4 rounded-xl bg-black/[0.04] dark:bg-white/5 
+                        border-2 border-transparent focus-within:border-[var(--primary)] transition-all">
+                <Icon icon="material-symbols:search" class="text-[1.5rem] text-black/30 dark:text-white/30"></Icon>
+                <input 
+                    bind:this={inputElement}
+                    bind:value={keyword}
+                    placeholder={i18n(I18nKey.search)}
+                    class="flex-1 ml-3 bg-transparent outline-none text-black/70 dark:text-white/80 text-base"
+                />
+                {#if isSearching}
+                    <div class="animate-spin h-5 w-5 border-2 border-[var(--primary)] border-t-transparent rounded-full"></div>
+                {/if}
+                <button on:click={togglePanel} class="ml-3 p-1 hover:bg-black/10 dark:hover:bg-white/10 rounded-full transition">
+                    <Icon icon="material-symbols:close" class="text-black/40 dark:text-white/40" />
+                </button>
+            </div>
 
-        <div class="mt-4 overflow-y-auto max-h-[60vh] custom-scrollbar">
-            {#if result.length > 0}
-                {#each result as item}
-                    <a href={item.url} on:click={togglePanel}
-                       class="group block px-4 py-3 mb-2 rounded-xl transition
-                              hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)]">
-                        <div class="flex items-center font-bold text-[var(--deep-text)] group-hover:text-[var(--primary)] transition">
-                            {item.meta.title}
-                            <Icon icon="material-symbols:chevron-right" class="ml-1 text-lg opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
-                        </div>
-                        <div class="text-sm text-black/50 dark:text-white/40 mt-1 line-clamp-2">
-                            {@html item.excerpt}
-                        </div>
-                    </a>
-                {/each}
-            {:else if keyword}
-                <div class="py-10 text-center text-black/30 dark:text-white/30">
-                    No results found for "{keyword}"
-                </div>
-            {/if}
+            <div class="mt-4 overflow-y-auto max-h-[60vh] custom-scrollbar px-1">
+                {#if result.length > 0}
+                    {#each result as item}
+                        <a href={item.url} on:click={togglePanel}
+                           class="group block px-4 py-3 mb-2 rounded-xl transition
+                                  hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)]">
+                            <div class="flex items-center font-bold text-[var(--deep-text)] group-hover:text-[var(--primary)] transition">
+                                {item.meta.title}
+                                <Icon icon="material-symbols:chevron-right" class="ml-1 text-lg opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+                            </div>
+                            <div class="text-sm text-black/50 dark:text-white/40 mt-1 line-clamp-2">
+                                {@html item.excerpt}
+                            </div>
+                        </a>
+                    {/each}
+                {:else if keyword}
+                    <div class="py-10 text-center text-black/30 dark:text-white/30">
+                        No results found for "{keyword}"
+                    </div>
+                {/if}
+            </div>
         </div>
     </div>
 {/if}
 
 <style>
-    /* 遮罩层：确保它是 fixed 且 inset-0，强制覆盖全屏 */
-    .search-mask {
+    /* 根容器：真正的全屏状态 */
+    .search-root {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.4); /* 暗色半透明 */
-        backdrop-filter: blur(8px);    /* 增大模糊半径，更有质感 */
-        -webkit-backdrop-filter: blur(8px); /* 兼容 Safari */
-        z-index: 9998; /* 确保在所有内容之上，但在面板之下 */
+        inset: 0;
+        z-index: 10000;
+        display: flex;
+        align-items: flex-start; /* 从顶部开始排列 */
+        justify-content: center;
+        padding-top: 5rem; /* 距离顶部留出空间 */
     }
 
-    /* 搜索面板：确保 z-index 比遮罩层高 */
-    #search-panel {
-        z-index: 9999;
-        /* 避免被 Navbar 的 overflow 裁剪 */
-        position: fixed; 
+    /* 全屏遮罩 */
+    .search-mask {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(12px); /* 强力模糊 */
+        -webkit-backdrop-filter: blur(12px);
     }
 
-    /* 自定义滚动条 */
+    /* 弹出框主体 */
+    .search-panel-body {
+        position: relative;
+        width: 90vw;
+        max-width: 40rem;
+        max-height: 80vh;
+        background: var(--card-bg);
+        border-radius: 1.5rem;
+        padding: 1rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
     .custom-scrollbar::-webkit-scrollbar {
         width: 4px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: rgba(var(--primary-rgb), 0.2);
+        background: rgba(0,0,0,0.1);
         border-radius: 10px;
     }
+    :global(.dark) .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.1);
+    }
 
-    /* 进场动画：不仅有缩放，还带一点点淡入 */
     .animate-in {
         animation: modal-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    
     @keyframes modal-in {
         from { opacity: 0; transform: scale(0.95) translateY(-20px); }
         to { opacity: 1; transform: scale(1) translateY(0); }
