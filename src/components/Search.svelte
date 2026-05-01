@@ -142,27 +142,42 @@
 {/if}
 
 <style>
-    :global(.float-panel-closed) {
-        display: none !important;
+    /* 遮罩层：确保它是 fixed 且 inset-0，强制覆盖全屏 */
+    .search-mask {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.4); /* 暗色半透明 */
+        backdrop-filter: blur(8px);    /* 增大模糊半径，更有质感 */
+        -webkit-backdrop-filter: blur(8px); /* 兼容 Safari */
+        z-index: 9998; /* 确保在所有内容之上，但在面板之下 */
     }
 
+    /* 搜索面板：确保 z-index 比遮罩层高 */
+    #search-panel {
+        z-index: 9999;
+        /* 避免被 Navbar 的 overflow 裁剪 */
+        position: fixed; 
+    }
+
+    /* 自定义滚动条 */
     .custom-scrollbar::-webkit-scrollbar {
         width: 4px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: rgba(0,0,0,0.1);
+        background: rgba(var(--primary-rgb), 0.2);
         border-radius: 10px;
     }
-    .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: rgba(255,255,255,0.1);
-    }
 
-    /* 进场动画 */
+    /* 进场动画：不仅有缩放，还带一点点淡入 */
     .animate-in {
-        animation: modal-in 0.2s ease-out;
+        animation: modal-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
+    
     @keyframes modal-in {
-        from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+        from { opacity: 0; transform: scale(0.95) translateY(-20px); }
         to { opacity: 1; transform: scale(1) translateY(0); }
     }
 </style>
