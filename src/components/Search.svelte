@@ -98,7 +98,7 @@
 </script>
 
 <button on:click={togglePanel} aria-label="Search" id="search-switch"
-        class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90 flex items-center justify-center">
+        class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90 flex items-center justify-center p-0">
     <Icon icon="material-symbols:search" class="text-[1.25rem]"></Icon>
 </button>
 
