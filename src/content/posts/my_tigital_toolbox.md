@@ -5,7 +5,7 @@ title: 浅谈个人生态链
 author: ["涵哲子"]
 slug: "my-tool"
 tag: [""]
-category: ""杂谈随笔"
+category: "杂谈随笔"
 ---
 ## 前言
 ---
