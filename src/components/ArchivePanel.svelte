@@ -11,22 +11,28 @@
     let filterCategory: string = 'all';
     let filterTag: string = 'all';
 
-    // 控制自定义下拉框的显隐
     let showCatMenu = false;
     let showTagMenu = false;
 
-    // --- 数据提取 (逻辑同步你之前的冗余处理) ---
-    $: categories = ['all', ...new Set(sortedPosts.map(p => {
-        if (p.data?.pType === 'essay' && !p.data?.category) return '随笔';
-        return p.data?.category || '未分类';
-    }))].sort();
+    // --- 数据提取 (修正排序逻辑，确保 all 在最上方) ---
+    
+    $: categories = (() => {
+        const cats = [...new Set(sortedPosts.map(p => {
+            if (p.data?.pType === 'essay' && !p.data?.category) return '随笔';
+            return p.data?.category || '未分类';
+        }))].sort((a, b) => a.localeCompare(b, 'zh-CN')); // 中文友好排序
+        return ['all', ...cats]; // 确保 all 永远在第一位
+    })();
 
-    $: tags = ['all', ...new Set(sortedPosts.flatMap(p => {
-        const t = p.data?.tags;
-        if (Array.isArray(t)) return t.filter(tag => tag && String(tag).trim() !== '');
-        if (typeof t === 'string' && t.trim() !== '') return [t.trim()];
-        return [];
-    }))].sort();
+    $: tags = (() => {
+        const rawTags = [...new Set(sortedPosts.flatMap(p => {
+            const t = p.data?.tags;
+            if (Array.isArray(t)) return t.filter(tag => tag && String(tag).trim() !== '');
+            if (typeof t === 'string' && t.trim() !== '') return [t.trim()];
+            return [];
+        }))].sort((a, b) => a.localeCompare(b, 'en')); // 字母排序
+        return ['all', ...rawTags]; // 确保 all 永远在第一位
+    })();
 
     // --- 筛选逻辑 ---
     $: filteredPosts = sortedPosts.filter(post => {
@@ -61,7 +67,6 @@
         return `${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
     }
 
-    // 点击外部关闭下拉框
     function closeMenus(e: MouseEvent) {
         if (!(e.target as Element).closest('.custom-select-container')) {
             showCatMenu = false;
@@ -122,6 +127,10 @@
         {/if}
     </div>
 
+    <div class="text-xs text-30 font-bold border-l border-black/10 dark:border-white/10 pl-4 py-1 hidden sm:block">
+        已筛选出 <span class="text-[var(--primary)] font-mono text-sm">{filteredPosts.length}</span> 篇文章
+    </div>
+
     <div class="ml-auto flex gap-1 bg-black/5 dark:bg-white/5 p-1 rounded-lg">
         <button class="p-2 rounded-md transition-all {viewMode === 'timeline' ? 'text-[var(--primary)] bg-[var(--card-bg)] shadow-sm' : 'opacity-30'}" on:click={() => viewMode = 'timeline'}>
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -133,7 +142,7 @@
 </div>
 
 {#if viewMode === 'timeline'}
-    <div class="card-base px-8 py-6 onload-animation">
+    <div class="card-base px-8 py-6">
         {#each groups as group}
             <div class="mb-6 last:mb-0">
                 <div class="flex items-center h-10 font-bold text-xl text-75 mb-2">{group.year}</div>
@@ -146,11 +155,11 @@
             </div>
         {/each}
         {#if groups.length === 0}
-            <div class="py-12 text-center text-30">没有找到相关文章</div>
+            <div class="py-12 text-center text-30 italic">没有找到符合条件的文章</div>
         {/if}
     </div>
 {:else}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 onload-animation">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         {#each filteredPosts as post}
             <a href={getPostUrlBySlug(post.slug)} class="card-base p-5 group hover:border-[var(--primary)] border border-transparent transition-all min-h-[110px] flex flex-col justify-between">
                 <div>
@@ -170,7 +179,7 @@
             </a>
         {/each}
         {#if filteredPosts.length === 0}
-            <div class="col-span-full card-base py-12 text-center text-30">没有找到相关文章</div>
+            <div class="col-span-full card-base py-12 text-center text-30 italic">没有找到符合条件的文章</div>
         {/if}
     </div>
 {/if}
@@ -181,44 +190,26 @@
         border-radius: var(--radius-small);
         transition: all 0.2s;
     }
-    :global(.dark) .select-trigger {
-        background: rgba(255,255,255,0.05);
-    }
-    .select-trigger:hover {
-        background: rgba(0,0,0,0.06);
-        color: var(--primary);
-    }
-    :global(.dark) .select-trigger:hover {
-        background: rgba(255,255,255,0.1);
-    }
+    :global(.dark) .select-trigger { background: rgba(255,255,255,0.05); }
+    .select-trigger:hover { background: rgba(0,0,0,0.06); color: var(--primary); }
 
     .dropdown-menu {
         background: var(--card-bg);
         border: 1px solid rgba(0,0,0,0.05);
         border-radius: var(--radius-small);
-        max-height: 300px;
+        max-height: 280px;
         overflow-y: auto;
     }
-    :global(.dark) .dropdown-menu {
-        border-color: rgba(255,255,255,0.1);
-    }
+    :global(.dark) .dropdown-menu { border-color: rgba(255,255,255,0.1); }
 
-    .animate-in {
-        animation: fadeIn 0.15s ease-out;
-    }
+    .animate-in { animation: fadeIn 0.12s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-4px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* 统一 Fuwari 颜色变量 */
     .text-75 { color: var(--text-color-75); }
     .text-50 { color: var(--text-color-50); }
     .text-30 { color: var(--text-color-30); }
 
-    /* 滚动条美化 */
-    .dropdown-menu::-webkit-scrollbar { width: 4px; }
+    .dropdown-menu::-webkit-scrollbar { width: 3px; }
     .dropdown-menu::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
 </style>
 
