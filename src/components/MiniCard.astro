@@ -48,7 +48,7 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
         "pl-6 md:pl-9 pr-6 py-5 flex flex-col justify-center relative w-full",
         { "md:w-[calc(100%_-_28%_-_12px)]": hasCover }
     ]}>
-        <a href={url} class="transition w-full block font-bold text-xl text-90
+        <a href={url} class="transition w-full flex items-center font-bold text-xl text-90
                 hover:text-[var(--primary)] dark:hover:text-[var(--primary)]
                 active:text-[var(--title-active)]
                 relative
@@ -63,8 +63,8 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
                 before:hidden md:before:block
         ">
             {title}
-            <Icon name="material-symbols:chevron-right-rounded" 
-                  class="inline text-[var(--primary)] text-2xl translate-y-1 ml-0.5 transition-transform group-hover:translate-x-1" />
+            <Icon name="material-symbols:chevron-right-rounded"
+                  class="text-[var(--primary)] text-2xl ml-0.5 shrink-0 transition-transform group-hover:translate-x-1" />
         </a>
 
         {(displayDate || era || category) && (
