@@ -13,12 +13,12 @@ const interval = 50;
     {page.data.map((entry: CollectionEntry<"posts">) => (
         entry.data.pType === "essay" ? (
             <MiniCard
+                entry={entry}
                 title={entry.data.title}
                 url={getPostUrlBySlug(entry.slug)}
                 published={entry.data.published}
-                era={entry.data.era}
-                description={entry.data.description}
-                showEnterBtn={true}
+                tags={entry.data.tags}           category={entry.data.category}   description={entry.data.description}
+                words={entry.data.words}         minutes={entry.data.minutes}     showEnterBtn={true}
                 class:list="onload-animation"
                 style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
             />
@@ -40,3 +40,4 @@ const interval = 50;
         )
     ))}
 </div>
+

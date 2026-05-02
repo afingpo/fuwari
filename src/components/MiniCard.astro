@@ -50,18 +50,20 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
             <Icon name="material-symbols:chevron-right-rounded" class="text-[var(--primary)] text-2xl ml-0.5 shrink-0 transition-transform group-hover:translate-x-1" />
         </a>
 
-        <div class="flex flex-wrap gap-2 items-center mt-2 text-[10px] md:text-xs opacity-50 font-mono">
-            {displayDate && <span>{displayDate}</span>}
+        <div class="flex flex-wrap gap-2 items-center mt-2 text-[10px] md:text-xs font-mono">
+            {displayDate && <span class="opacity-50">{displayDate}</span>}
+            
             {category && (
                 <>
                     <span class="opacity-30">|</span>
-                    <span class="hover:opacity-100 cursor-default">{category}</span>
+                    <span class="text-90 font-bold cursor-default">{category}</span>
                 </>
             )}
+            
             {words && (
                 <>
                     <span class="opacity-30">|</span>
-                    <span>{words} {i18n(I18nKey.wordsCount)}</span>
+                    <span class="opacity-50">{words} {i18n(I18nKey.wordsCount)}</span>
                 </>
             )}
         </div>
@@ -89,12 +91,19 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
 
     {hasCover && (
         <a href={url} class="hidden md:block w-[28%] relative overflow-hidden group-hover:brightness-90 transition-all">
-            <ImageWrapper src={image!} basePath={entry ? path.join("content/posts/", getDir(entry.id)) : ""} alt={title} class="w-full h-full object-cover absolute inset-0" />
+            <ImageWrapper 
+                src={image!} 
+                basePath={entry ? path.join("content/posts/", getDir(entry.id)) : ""} 
+                alt={title} 
+                class="w-full h-full object-cover absolute inset-0" 
+            />
         </a>
     )}
 </div>
 
 <style>
-    .card-base { background-color: var(--card-bg); }
+    .card-base { 
+        background-color: var(--card-bg); 
+    }
 </style>
 
