@@ -16,7 +16,7 @@ const config = profileConfig;
                   class="transition opacity-0 scale-90 group-hover:scale-100 group-hover:opacity-100 text-white text-5xl">
             </Icon>
         </div>
-        <ImageWrapper src={config.avatar || ""} alt="Profile Image of the Author" class="mx-auto lg:w-full h-full lg:mt-0 "></ImageWrapper>
+		<ImageWrapper src={config.avatar || ""} alt="Profile Image of the Author" class="mx-auto lg:w-full h-full lg:mt-0 profile-avatar"></ImageWrapper>
     </a>
     <div class="px-2">
         <div class="font-bold text-xl text-center mb-1 dark:text-neutral-50 transition">{config.name}</div>
@@ -36,4 +36,23 @@ const config = profileConfig;
         </div>
     </div>
 </div>
+
+<style is:global>
+    /* 增加平滑过渡 */
+    .profile-avatar {
+        transition: filter 0.3s ease !important;
+    }
+
+    /* 深色模式下的针对性调整 */
+    .dark .profile-avatar {
+        /* brightness(0.8) 把白色背景压成浅灰 */
+        /* contrast(0.9) 让线条感更温和 */
+        filter: brightness(0.8) contrast(0.9) !important;
+    }
+
+    /* 鼠标悬停恢复亮度（可选） */
+    .dark a:hover .profile-avatar {
+        filter: brightness(1) contrast(1) !important;
+    }
+</style>
 
