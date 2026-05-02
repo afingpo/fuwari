@@ -4,15 +4,30 @@
 
     export let sortedPosts: any[] = [];
 
-    // --- 状态管理 ---
+    // --- 状态管理：初始化时直接读取 URL ---
+    const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    
     let viewMode: 'timeline' | 'grid' = 'timeline';
-    let filterCategory: string = 'all';
-    let filterTag: string = 'all';
+    
+    // 初始化 filterCategory
+    let filterCategory = (() => {
+        if (!params) return 'all';
+        if (params.get('uncategorized') === 'true') return '未分类';
+        const cat = params.get('category');
+        return cat ? decodeURIComponent(cat) : 'all';
+    })();
+
+    // 初始化 filterTag
+    let filterTag = (() => {
+        if (!params) return 'all';
+        const tag = params.get('tag');
+        return tag ? decodeURIComponent(tag) : 'all';
+    })();
 
     let showCatMenu = false;
     let showTagMenu = false;
 
-    // --- 1. 计算分类列表（全量文章提取） ---
+    // --- 1. 计算分类列表 ---
     $: categories = (() => {
         const cats = [...new Set(sortedPosts.map(p => {
             if (p.data?.pType === 'essay' && !p.data?.category) return '随笔';
@@ -21,31 +36,43 @@
         return ['all', ...cats];
     })();
 
-    // --- URL 参数处理与同步 ---
-    onMount(() => {
-        const params = new URLSearchParams(window.location.search);
-        const cat = params.get('category');
-        const tag = params.get('tag');
-        const isUncategorized = params.get('uncategorized');
-
-        // 优先处理“未分类”逻辑
-        if (isUncategorized === 'true') {
-            filterCategory = '未分类';
-        } else if (cat) {
-            const decodedCat = decodeURIComponent(cat);
-            if (categories.includes(decodedCat)) filterCategory = decodedCat;
-        }
-
-        if (tag) {
-            filterTag = decodeURIComponent(tag);
-        }
+    // --- 2. 第一步筛选：根据分类过滤文章 ---
+    $: postsInCategory = sortedPosts.filter(post => {
+        const postCat = (post.data?.pType === 'essay' && !post.data?.category) ? '随笔' : (post.data?.category || '未分类');
+        return filterCategory === 'all' || postCat === filterCategory;
     });
 
-    // 响应式同步 URL 地址栏
+    // --- 3. 动态计算标签列表 ---
+    $: availableTags = (() => {
+        const rawTags = [...new Set(postsInCategory.flatMap(p => {
+            const t = p.data?.tags;
+            if (Array.isArray(t)) return t.filter(tag => tag && String(tag).trim() !== '');
+            if (typeof t === 'string' && t.trim() !== '') return [t.trim()];
+            return [];
+        }))].sort((a, b) => a.localeCompare(b, 'en'));
+        return ['all', ...rawTags];
+    })();
+
+    // --- 4. 自动校准：增加保护锁 ---
+    // 只有当 availableTags 真正计算出内容（长度 > 1，即除了 'all' 还有别的）时，才执行校准
+    $: if (filterTag !== 'all' && availableTags.length > 1) {
+        if (!availableTags.includes(filterTag)) {
+            // 只有当用户切换了分类，且新分类下确实没有这个标签时，才重置
+            // 初始加载时，因为 filterTag 是从 URL 拿的，它会匹配到计算出来的 availableTags
+            filterTag = 'all';
+        }
+    }
+
+    // --- 5. 第二步筛选：在分类基础上应用标签过滤 ---
+    $: filteredPosts = postsInCategory.filter(post => {
+        let postTags = post.data?.tags || [];
+        if (typeof postTags === 'string') postTags = [postTags];
+        return filterTag === 'all' || (Array.isArray(postTags) && postTags.includes(filterTag));
+    });
+
+    // --- 6. 同步到地址栏 ---
     $: if (typeof window !== 'undefined') {
         const url = new URL(window.location.href);
-        
-        // 分类同步
         if (filterCategory === '未分类') {
             url.searchParams.set('uncategorized', 'true');
             url.searchParams.delete('category');
@@ -57,44 +84,11 @@
             url.searchParams.delete('uncategorized');
         }
 
-        // 标签同步
-        if (filterTag !== 'all') {
-            url.searchParams.set('tag', filterTag);
-        } else {
-            url.searchParams.delete('tag');
-        }
+        if (filterTag !== 'all') url.searchParams.set('tag', filterTag);
+        else url.searchParams.delete('tag');
 
         window.history.replaceState({}, '', url.toString());
     }
-
-    // --- 2. 第一步筛选：根据分类过滤文章 ---
-    $: postsInCategory = sortedPosts.filter(post => {
-        const postCat = (post.data?.pType === 'essay' && !post.data?.category) ? '随笔' : (post.data?.category || '未分类');
-        return filterCategory === 'all' || postCat === filterCategory;
-    });
-
-    // --- 3. 动态计算标签列表（仅从当前选定分类的文章中提取） ---
-    $: availableTags = (() => {
-        const rawTags = [...new Set(postsInCategory.flatMap(p => {
-            const t = p.data?.tags;
-            if (Array.isArray(t)) return t.filter(tag => tag && String(tag).trim() !== '');
-            if (typeof t === 'string' && t.trim() !== '') return [t.trim()];
-            return [];
-        }))].sort((a, b) => a.localeCompare(b, 'en'));
-        return ['all', ...rawTags];
-    })();
-
-    // --- 4. 自动校准：如果当前标签不在可用列表中，重置为 all ---
-    $: if (filterTag !== 'all' && !availableTags.includes(filterTag)) {
-        filterTag = 'all';
-    }
-
-    // --- 5. 第二步筛选：在分类基础上应用标签过滤 ---
-    $: filteredPosts = postsInCategory.filter(post => {
-        let postTags = post.data?.tags || [];
-        if (typeof postTags === 'string') postTags = [postTags];
-        return filterTag === 'all' || (Array.isArray(postTags) && postTags.includes(filterTag));
-    });
 
     // --- 后续逻辑（分组、格式化等） ---
     $: groups = groupPosts(filteredPosts);
@@ -202,9 +196,6 @@
                 {/each}
             </div>
         {/each}
-        {#if groups.length === 0}
-            <div class="py-12 text-center text-30 italic font-mono">No entries found under this combination.</div>
-        {/if}
     </div>
 {:else}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -231,13 +222,7 @@
     :global(.dark) .select-trigger { background: rgba(255,255,255,0.05); }
     .select-trigger:hover { background: rgba(0,0,0,0.06); color: var(--primary); }
     
-    .dropdown-menu {
-        background: var(--card-bg);
-        border: 1px solid rgba(0,0,0,0.05);
-        border-radius: var(--radius-small);
-        max-height: 280px;
-        overflow-y: auto;
-    }
+    .dropdown-menu { background: var(--card-bg); border: 1px solid rgba(0,0,0,0.05); border-radius: var(--radius-small); max-height: 280px; overflow-y: auto; }
     :global(.dark) .dropdown-menu { border-color: rgba(255,255,255,0.1); }
     .animate-in { animation: fadeIn 0.1s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
