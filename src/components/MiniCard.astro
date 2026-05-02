@@ -7,7 +7,7 @@ import { fade } from "astro:transitions";
 
 interface Props {
     class?: string;
-    entry?: any;           // 用于获取渲染相关的 meta（如字数）
+    entry?: any;
     title: string;
     url: string;
     published?: Date;
@@ -16,9 +16,9 @@ interface Props {
     category?: string | null;
     image?: string;
     description?: string;
-    era?: string;          // 自定义干支参数
-    words?: number;        // 手动传入字数
-    minutes?: number;      // 手动传入阅读时间
+    era?: string;
+    words?: number;
+    minutes?: number;
     showEnterBtn?: boolean;
 }
 
@@ -44,34 +44,29 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
 ---
 
 <div class:list={["card-base flex flex-col md:flex-row w-full rounded-[var(--radius-large)] overflow-hidden relative group transition-all duration-300", className]}>
-    
-    <!-- 左侧/主体内容区 -->
     <div class:list={[
         "pl-6 md:pl-9 pr-6 py-5 flex flex-col justify-center relative w-full",
-        { "md:w-[calc(100%_-_3.25rem_-_12px)]": showEnterBtn && !hasCover },
         { "md:w-[calc(100%_-_28%_-_12px)]": hasCover }
     ]}>
-        
-        <!-- 标题前缀装饰条 & 标题 -->
-		<a href={url} class="transition w-full block font-bold text-xl text-90
-    		hover:text-[var(--primary)] dark:hover:text-[var(--primary)]
-    		active:text-[var(--title-active)]
-    		relative
-    		before:content-['']
-    		before:absolute
-    		before:top-[calc(50%-4px)]
-    		before:left-[-18px]
-    		before:w-2
-    		before:h-2
-    		before:rounded-[2px]
-			before:bg-[var(--primary)]
-    		before:hidden md:before:block
+        <a href={url} class="transition w-full block font-bold text-xl text-90
+                hover:text-[var(--primary)] dark:hover:text-[var(--primary)]
+                active:text-[var(--title-active)]
+                relative
+                before:content-['']
+                before:absolute
+                before:top-[calc(50%-4px)]
+                before:left-[-18px]
+                before:w-2
+                before:h-2
+                before:rounded-[2px]
+                before:bg-[var(--primary)]
+                before:hidden md:before:block
         ">
             {title}
-            <Icon class="inline text-[1.5rem] text-[var(--primary)] md:hidden translate-y-0.5" name="material-symbols:chevron-right-rounded" />
+            <Icon name="material-symbols:chevron-right-rounded" 
+                  class="inline text-[var(--primary)] text-2xl translate-y-1 ml-0.5 transition-transform group-hover:translate-x-1" />
         </a>
 
-        <!-- 元数据行：日期、干支、分类 (条件显示) -->
         {(displayDate || era || category) && (
             <div class="flex flex-wrap gap-3 items-center mt-2 text-xs opacity-50 font-mono">
                 {era && <span class="text-[var(--primary)] font-bold border border-[var(--primary)] px-1 rounded-sm text-[10px]">{era}</span>}
@@ -85,14 +80,12 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
             </div>
         )}
 
-        <!-- 描述/摘要 (条件显示) -->
         {description && (
             <div class="text-sm text-75 mt-2 line-clamp-2 md:line-clamp-1 opacity-70">
                 {description}
             </div>
         )}
 
-        <!-- 标签 (条件显示) -->
         {tags && tags.length > 0 && (
             <div class="flex flex-wrap gap-2 mt-2">
                 {tags.map(tag => (
@@ -101,7 +94,6 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
             </div>
         )}
 
-        <!-- 字数/时间 (条件显示) -->
         {(words || minutes) && (
             <div class="text-[10px] opacity-30 mt-2 flex gap-2">
                 {words && <span>{words} 字</span>}
@@ -110,32 +102,16 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
         )}
     </div>
 
-    <!-- 封面图 (条件显示) -->
     {hasCover && (
         <a href={url} class="hidden md:block w-[28%] relative overflow-hidden group-hover:brightness-90 transition-all">
-            <ImageWrapper 
-                src={image!} 
-                basePath={entry ? path.join("content/posts/", getDir(entry.id)) : ""} 
+            <ImageWrapper
+                src={image!}
+                basePath={entry ? path.join("content/posts/", getDir(entry.id)) : ""}
                 alt={title}
                 class="w-full h-full object-cover absolute inset-0"
             />
         </a>
     )}
-
-	<!-- 右侧进入按钮 (条件显示) -->
-	{showEnterBtn && !hasCover && (
-        <a href={url} aria-label={title} class="hidden md:flex 
-            absolute right-8 top-1/2 -translate-y-1/2 
-            transition-all items-center justify-center
-            hover:translate-x-1 active:scale-95"
-        >
-            <Icon name="material-symbols:arrow-right-alt" 
-                  class="text-[var(--primary)] text-2xl scale-x-125 origin-right transition-transform">
-            </Icon>
-        </a>
-    )}
-
-
 </div>
 
 <style>
@@ -143,3 +119,4 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
         background-color: var(--card-bg);
     }
 </style>
+
