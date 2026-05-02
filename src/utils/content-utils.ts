@@ -3,19 +3,54 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import { getCategoryUrl } from "@utils/url-utils.ts";
 
-// // Retrieve posts and sort them by publication date
+// Retrieve posts and sort them by publication date
 async function getRawSortedPosts() {
-	const allBlogPosts = await getCollection("posts", ({ data }) => {
-		return import.meta.env.PROD ? data.draft !== true : true;
-	});
+    const allBlogPosts = await getCollection("posts", ({ data }) => {
+        return import.meta.env.PROD ? data.draft !== true : true;
+    });
 
-	const sorted = allBlogPosts.sort((a, b) => {
-		const dateA = new Date(a.data.published);
-		const dateB = new Date(b.data.published);
-		return dateA > dateB ? -1 : 1;
-	});
-	return sorted;
+    // 1. 严格升序排序，确保 TT 编号稳定
+    const entriesForCalc = [...allBlogPosts].sort((a, b) => {
+        const dateA = a.data.published.getTime();
+        const dateB = b.data.published.getTime();
+        if (dateA !== dateB) return dateA - dateB;
+        return a.id.localeCompare(b.id);
+    });
+
+    const dailyCount: Record<string, number> = {};
+    const slugMap = new Map();
+
+    entriesForCalc.forEach((entry) => {
+        const date = entry.data.published;
+        const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        
+        // 自动计算 TT 编号
+        if (dailyCount[dateStr] === undefined) dailyCount[dateStr] = 0;
+        else dailyCount[dateStr]++;
+        const tt = String(dailyCount[dateStr]).padStart(2, '0');
+        const generatedId = `${dateStr}-${tt}`;
+
+        // 保留目录前缀（比如 essay/）
+        const pathParts = entry.slug.split('/');
+        pathParts.pop(); 
+        const prefix = pathParts.length > 0 ? pathParts.join('/') + '/' : '';
+
+        // 如果文章 frontmatter 没写 slug，就用这种“目录+日期+TT”的格式
+        const finalSlug = entry.data.slug || `${prefix}${generatedId}`;
+        slugMap.set(entry.id, finalSlug);
+    });
+
+    // 2. 注入新 slug 并按日期降序返回（供主页显示）
+    return allBlogPosts.map(post => {
+        const newSlug = slugMap.get(post.id);
+        return {
+            ...post,
+            slug: newSlug,
+            data: { ...post.data, slug: newSlug }
+        };
+    }).sort((a, b) => b.data.published.getTime() - a.data.published.getTime());
 }
+
 
 export async function getSortedPosts() {
 	const sorted = await getRawSortedPosts();
