@@ -31,11 +31,11 @@ const posts: PostItem[] = page.data.map((entry: CollectionEntry<"posts">, index:
 });
 ---
 
-<div class="transition grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+<div class="transition grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 items-stretch">
     {posts.map((item) => (
         item.isEssay ? (
             <div class:list={[
-                "flex w-full h-full", // 容器强制铺满
+                "flex w-full", 
                 { "md:col-span-2": item.isLoneEssay }
             ]}>
                 <MiniCard
@@ -49,12 +49,12 @@ const posts: PostItem[] = page.data.map((entry: CollectionEntry<"posts">, index:
                     words={item.entry.data.words}
                     minutes={item.entry.data.minutes}
                     showEnterBtn={true}
-                    class:list="onload-animation w-full h-full flex-1" 
+                    class:list="onload-animation flex-1 w-full" 
                     style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
                 />
             </div>
         ) : (
-            <div class="md:col-span-2 flex w-full h-full">
+            <div class="md:col-span-2 flex w-full">
                 <PostCard
                     entry={item.entry}
                     title={item.entry.data.title}
@@ -66,7 +66,7 @@ const posts: PostItem[] = page.data.map((entry: CollectionEntry<"posts">, index:
                     image={item.entry.data.image}
                     description={item.entry.data.description}
                     draft={item.entry.data.draft}
-                    class:list="onload-animation w-full h-full flex-1"
+                    class:list="onload-animation flex-1 w-full"
                     style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
                 ></PostCard>
             </div>
