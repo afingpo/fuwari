@@ -6,6 +6,7 @@ const postsCollection = defineCollection({
 		author: z.array(z.string()).default(["涵哲子"]),
 		published: z.date(),
 		updated: z.date().optional(),
+		slug: z.string().optional(),
 		draft: z.boolean().optional().default(false),
 		description: z.string().optional().default(""),
 		image: z.string().optional().default(""),

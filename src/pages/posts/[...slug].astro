@@ -14,13 +14,51 @@ import PostMetadata from "../../components/PostMeta.astro";
 import { profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
 import Comment from '@components/comment/index.astro';
-
 export async function getStaticPaths() {
-	const blogEntries = await getSortedPosts();
-	return blogEntries.map((entry) => ({
-		params: { slug: entry.slug },
-		props: { entry },
-	}));
+    const blogEntries = await getSortedPosts();
+    
+    // 1. 严格排序：日期升序 > ID (路径/文件名) 字母序
+    // 这样无论是在根目录还是 essay 目录下，顺序永远固定
+    const sortedEntries = [...blogEntries].sort((a, b) => {
+        const dateA = a.data.published.getTime();
+        const dateB = b.data.published.getTime();
+
+        if (dateA !== dateB) {
+            return dateA - dateB;
+        }
+        // 对于文件夹存储，id 可能是 "2026-01-12-00/index"
+        // 对于单文件存储，id 可能是 "2025-06-29-00.md"
+        return a.id.localeCompare(b.id);
+    });
+
+    const dailyCount: Record<string, number> = {};
+
+    return sortedEntries.map((entry) => {
+        let finalSlug = entry.data.slug;
+
+        // 2. 生成 YYYY-MM-DD-TT
+        if (!finalSlug) {
+            const date = entry.data.published;
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const dateStr = `${year}-${month}-${day}`;
+
+            if (dailyCount[dateStr] === undefined) {
+                dailyCount[dateStr] = 0;
+            } else {
+                dailyCount[dateStr]++;
+            }
+            
+            const tt = String(dailyCount[dateStr]).padStart(2, '0');
+            finalSlug = `${dateStr}-${tt}`;
+        }
+
+        return {
+            params: { slug: finalSlug },
+            props: { entry },
+        };
+    });
 }
 
 const { entry } = Astro.props;

@@ -50,8 +50,7 @@ export enum LinkPreset {
 	About = 2,
 	Links = 3,
 	Bangumi = 4,
-	Essay = 5,
-	Chronicle = 6,
+	Chronicle = 5,
 }
 
 export type NavBarLink = {
@@ -102,6 +101,7 @@ export type BlogPostData = {
 	title: string;
 	published: Date;
 	description: string;
+	slug: string;
 	tags: string[];
 	draft?: boolean;
 	image?: string;
