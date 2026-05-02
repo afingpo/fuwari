@@ -23,7 +23,7 @@ let links: NavBarLink[] = navBarConfig.links.map(
 
 <nav id="navbar" class:list={[
     className,
-    "z-50 onload-animation absolute top-0 left-0 right-0 h-[3.75rem] bg-[var(--card-bg)] border-b border-black/5 dark:border-white/5 transition-all shadow-sm w-full"
+    "z-50 onload-animation fixed top-0 left-0 right-0 h-[3.75rem] bg-[var(--card-bg)] border-b border-black/5 dark:border-white/5 transition-all duration-300 shadow-sm w-full"
 ]}>
     <div class="max-w-[var(--page-width)] mx-auto h-full flex items-center justify-between px-6">
         <div class="flex items-center h-full">
@@ -69,8 +69,11 @@ let links: NavBarLink[] = navBarConfig.links.map(
     <DisplaySettings client:only="svelte"></DisplaySettings>
 </nav>
 
+<div class="h-[3.75rem] w-full"></div>
+
 <script>
 function loadButtonScript() {
+    // 菜单和设置按钮逻辑
     let settingBtn = document.getElementById("display-settings-switch");
     if (settingBtn) {
         settingBtn.onclick = function () {
@@ -90,6 +93,27 @@ function loadButtonScript() {
             }
         };
     }
+
+    // --- 新增：智能滚动隐藏逻辑 ---
+    const navbar = document.getElementById('navbar');
+    let lastScrollTop = 0;
+    const threshold = 50; // 滚动超过 50px 后才开始触发隐藏
+
+    window.addEventListener('scroll', () => {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (Math.abs(lastScrollTop - scrollTop) <= 5) return; // 过滤微小滚动
+
+        if (scrollTop > lastScrollTop && scrollTop > threshold) {
+            // 下滑：隐藏导航栏
+            navbar.style.transform = 'translateY(-100%)';
+        } else {
+            // 上滑：显示导航栏
+            navbar.style.transform = 'translateY(0)';
+        }
+        
+        lastScrollTop = scrollTop;
+    }, { passive: true });
 }
 
 document.addEventListener('astro:page-load', loadButtonScript);
