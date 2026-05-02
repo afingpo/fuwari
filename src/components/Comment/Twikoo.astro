@@ -1,0 +1,38 @@
+---
+interface Props {
+  path: string
+}
+const { path } = Astro.props
+
+// 直接在这里硬编码你的后端 URL，不再引用 config.ts
+const twikooConfig = {
+  envId: 'https://twikoo3-060502-netlify.netlify.app/.netlify/functions/twikoo', // 替换为你的 Vercel 域名
+  el: '#tcomment',
+  path: path,
+}
+
+// 缺失检查：如果是默认空值直接报错
+if (twikooConfig.envId.includes('')) {
+  throw new Error("Twikoo envId 未配置，请在 Twikoo.astro 中填写后端地址");
+}
+---
+
+<div id="tcomment"></div>
+
+<script 
+  src="https://cdn.jsdelivr.net/npm/twikoo@1.7.7/dist/twikoo.min.js" 
+  integrity="sha384-CXhXF3hh7LQyBPKnwgq/KgbcvoQcedpFyE4YuV8GLc+pKO1vCqQpuyNQ60/UblNE"
+  crossorigin="anonymous"
+></script>
+
+<script is:inline define:vars={{ twikooConfig }}>
+  function initTwikoo() {
+    const el = document.querySelector('#tcomment');
+    if (el && window.twikoo) {
+      window.twikoo.init(twikooConfig);
+    }
+  }
+  initTwikoo();
+  document.addEventListener('astro:after-swap', initTwikoo);
+</script>
+
