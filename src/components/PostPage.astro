@@ -9,57 +9,61 @@ const { page } = Astro.props;
 let delay = 0;
 const interval = 50;
 
-// 预处理数据，判断哪些 essay 需要占满全列
-const posts = page.data;
+// 在 Frontmatter 部分预处理逻辑，避免在下方 HTML 模板中定义变量
+const posts = page.data.map((entry: CollectionEntry<"posts">, index: number) => {
+    const isEssay = entry.data.pType === "essay";
+    // 判断是否为单出来的最后一个 essay
+    const isLoneEssay = isEssay && (index === page.data.length - 1) && (index % 2 === 0);
+    
+    return {
+        entry,
+        isEssay,
+        isLoneEssay,
+        url: getPostUrlBySlug(entry.slug)
+    };
+});
 ---
 
 <div class="transition grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-    {posts.map((entry: CollectionEntry<"posts">, index: number) => {
-        const isEssay = entry.data.pType === "essay";
-        
-        // 逻辑：如果是最后一个元素，且 index 是偶数（代表它是单出来的一个），则占满两列
-        // 注意：index 从 0 开始，0, 2, 4 是每一行的第一个
-        const isLoneEssay = isEssay && (index === posts.length - 1) && (index % 2 === 0);
-
-        return isEssay ? (
+    {posts.map((item) => (
+        item.isEssay ? (
             <div class:list={[
                 "flex",
-                { "md:col-span-2": isLoneEssay }
+                { "md:col-span-2": item.isLoneEssay }
             ]}>
                 <MiniCard
-                    entry={entry}
-                    title={entry.data.title}
-                    url={getPostUrlBySlug(entry.slug)}
-                    published={entry.data.published}
-                    tags={entry.data.tags}
-                    category={entry.data.category}
-                    description={entry.data.description}
-                    words={entry.data.words}
-                    minutes={entry.data.minutes}
+                    entry={item.entry}
+                    title={item.entry.data.title}
+                    url={item.url}
+                    published={item.entry.data.published}
+                    tags={item.entry.data.tags}
+                    category={item.entry.data.category}
+                    description={item.entry.data.description}
+                    words={item.entry.data.words}
+                    minutes={item.entry.data.minutes}
                     showEnterBtn={true}
                     class:list="onload-animation w-full"
                     style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
                 />
             </div>
         ) : (
-            /* 普通文章 PostCard 始终占满两列（独占一行） */
             <div class="md:col-span-2 flex">
                 <PostCard
-                    entry={entry}
-                    title={entry.data.title}
-                    tags={entry.data.tags}
-                    category={entry.data.category}
-                    published={entry.data.published}
-                    updated={entry.data.updated}
-                    url={getPostUrlBySlug(entry.slug)}
-                    image={entry.data.image}
-                    description={entry.data.description}
-                    draft={entry.data.draft}
+                    entry={item.entry}
+                    title={item.entry.data.title}
+                    tags={item.entry.data.tags}
+                    category={item.entry.data.category}
+                    published={item.entry.data.published}
+                    updated={item.entry.data.updated}
+                    url={item.url}
+                    image={item.entry.data.image}
+                    description={item.entry.data.description}
+                    draft={item.entry.data.draft}
                     class:list="onload-animation w-full"
                     style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
                 ></PostCard>
             </div>
         )
-    })}
+    ))}
 </div>
 
