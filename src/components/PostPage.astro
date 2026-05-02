@@ -9,12 +9,19 @@ const { page } = Astro.props;
 let delay = 0;
 const interval = 50;
 
-// 在 Frontmatter 部分预处理逻辑，避免在下方 HTML 模板中定义变量
-const posts = page.data.map((entry: CollectionEntry<"posts">, index: number) => {
+// 定义接口，彻底解决 LSP 报错
+interface PostItem {
+    entry: CollectionEntry<"posts">;
+    isEssay: boolean;
+    isLoneEssay: boolean;
+    url: string;
+}
+
+const posts: PostItem[] = page.data.map((entry: CollectionEntry<"posts">, index: number) => {
     const isEssay = entry.data.pType === "essay";
-    // 判断是否为单出来的最后一个 essay
+    // 判断逻辑：如果是 essay，且它是当前数组最后一个，且索引是偶数（代表它在当前行落单了）
     const isLoneEssay = isEssay && (index === page.data.length - 1) && (index % 2 === 0);
-    
+
     return {
         entry,
         isEssay,
@@ -28,7 +35,7 @@ const posts = page.data.map((entry: CollectionEntry<"posts">, index: number) => 
     {posts.map((item) => (
         item.isEssay ? (
             <div class:list={[
-                "flex",
+                "flex w-full h-full", // 容器强制铺满
                 { "md:col-span-2": item.isLoneEssay }
             ]}>
                 <MiniCard
@@ -42,12 +49,12 @@ const posts = page.data.map((entry: CollectionEntry<"posts">, index: number) => 
                     words={item.entry.data.words}
                     minutes={item.entry.data.minutes}
                     showEnterBtn={true}
-                    class:list="onload-animation w-full"
+                    class:list="onload-animation w-full h-full flex-1" 
                     style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
                 />
             </div>
         ) : (
-            <div class="md:col-span-2 flex">
+            <div class="md:col-span-2 flex w-full h-full">
                 <PostCard
                     entry={item.entry}
                     title={item.entry.data.title}
@@ -59,7 +66,7 @@ const posts = page.data.map((entry: CollectionEntry<"posts">, index: number) => 
                     image={item.entry.data.image}
                     description={item.entry.data.description}
                     draft={item.entry.data.draft}
-                    class:list="onload-animation w-full"
+                    class:list="onload-animation w-full h-full flex-1"
                     style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
                 ></PostCard>
             </div>
