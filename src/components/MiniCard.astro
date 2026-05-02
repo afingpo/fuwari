@@ -44,8 +44,9 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
 ---
 
 <div class:list={["card-base flex flex-col md:flex-row w-full rounded-[var(--radius-large)] overflow-hidden relative group transition-all duration-300", className]}>
+    
     <div class:list={[
-        "pl-6 md:pl-9 pr-6 py-5 flex flex-col justify-center relative w-full",
+        "pl-6 md:pl-7 pr-6 py-5 flex flex-col justify-center relative w-full", // 修改点：md:pl-9 -> md:pl-7
         { "md:w-[calc(100%_-_28%_-_12px)]": hasCover }
     ]}>
         <a href={url} class="transition w-full flex items-center font-bold text-xl text-90
@@ -63,7 +64,7 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
                 before:hidden md:before:block
         ">
             {title}
-            <Icon name="material-symbols:chevron-right-rounded"
+            <Icon name="material-symbols:chevron-right-rounded" 
                   class="text-[var(--primary)] text-2xl ml-0.5 shrink-0 transition-transform group-hover:translate-x-1" />
         </a>
 
