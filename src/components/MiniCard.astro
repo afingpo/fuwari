@@ -123,19 +123,14 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
     )}
 
 	<!-- 右侧进入按钮 (条件显示) -->
-	{showEnterBtn && !hasCover && (
-        <a href={url} aria-label={title} class="hidden md:flex 
-            absolute right-6 top-1/2 -translate-y-1/2 
-            w-8 h-8 rounded-full bg-[var(--primary)] 
-            hover:bg-[var(--primary)] hover:brightness-110
-            active:scale-90 transition-all items-center justify-center
-            shadow-sm shadow-[var(--primary)]/20
-        ">
-            <Icon name="material-symbols:chevron-right-rounded" 
-                  class="text-white text-2xl transition-transform group-hover:translate-x-0.5">
+    {showEnterBtn && !hasCover && (
+        <a href={url} ...>
+            <Icon name="material-symbols:arrow-forward-rounded" 
+                  class="text-white text-xl transition-transform group-hover:translate-x-0.5">
             </Icon>
         </a>
     )}
+
 
 </div>
 
