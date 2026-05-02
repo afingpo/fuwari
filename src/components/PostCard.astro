@@ -102,12 +102,12 @@ const { remarkPluginFrontmatter } = await entry.render();
 
 	{!hasCover &&
         <a href={url} aria-label={title} class="!hidden md:!flex 
-            absolute right-6 top-1/2 -translate-y-1/2 
+            absolute right-8 top-1/2 -translate-y-1/2 
             transition-all items-center justify-center
-            hover:scale-110 active:scale-90"
+            hover:translate-x-1 active:scale-95"
         >
-            <Icon name="material-symbols:arrow-forward-rounded" 
-                  class="text-[var(--primary)] text-3xl transition-transform group-hover:translate-x-1">
+            <Icon name="material-symbols:arrow-right-alt" 
+                  class="text-[var(--primary)] text-2xl scale-x-125 origin-right transition-transform">
             </Icon>
         </a>
     }
