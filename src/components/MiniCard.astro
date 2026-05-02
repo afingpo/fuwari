@@ -19,7 +19,6 @@ interface Props {
     description?: string;
     words?: number;
     minutes?: number;
-    showEnterBtn?: boolean;
 }
 
 const {
@@ -27,14 +26,12 @@ const {
     title,
     url,
     published,
-    updated,
     tags,
     category,
     image,
     description,
     words,
     minutes,
-    showEnterBtn = false,
     class: className
 } = Astro.props;
 
@@ -48,15 +45,9 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
         "pl-6 md:pl-7 pr-6 py-5 flex flex-col justify-center relative w-full",
         { "md:w-[calc(100%_-_28%_-_12px)]": hasCover }
     ]}>
-        <a href={url} class="transition w-full flex items-center font-bold text-xl text-90 
-                hover:text-[var(--primary)] dark:hover:text-[var(--primary)]
-                active:text-[var(--title-active)] relative
-                before:content-[''] before:absolute before:top-[calc(50%-4px)] before:left-[-18px]
-                before:w-2 before:h-2 before:rounded-[2px] before:bg-[var(--primary)]
-                before:hidden md:before:block">
+        <a href={url} class="transition w-full flex items-center font-bold text-xl text-90 hover:text-[var(--primary)] active:text-[var(--title-active)] relative before:content-[''] before:absolute before:top-[calc(50%-4px)] before:left-[-18px] before:w-2 before:h-2 before:rounded-[2px] before:bg-[var(--primary)] before:hidden md:before:block">
             {title}
-            <Icon name="material-symbols:chevron-right-rounded"
-                  class="text-[var(--primary)] text-2xl ml-0.5 shrink-0 transition-transform group-hover:translate-x-1" />
+            <Icon name="material-symbols:chevron-right-rounded" class="text-[var(--primary)] text-2xl ml-0.5 shrink-0 transition-transform group-hover:translate-x-1" />
         </a>
 
         <div class="flex flex-wrap gap-2 items-center mt-2 text-[10px] md:text-xs opacity-50 font-mono">
@@ -64,19 +55,13 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
             {category && (
                 <>
                     <span class="opacity-30">|</span>
-                    <span class="hover:text-[var(--primary)] cursor-pointer">{category}</span>
+                    <span class="hover:opacity-100 cursor-default">{category}</span>
                 </>
             )}
             {words && (
                 <>
                     <span class="opacity-30">|</span>
                     <span>{words} {i18n(I18nKey.wordsCount)}</span>
-                </>
-            )}
-            {minutes && (
-                <>
-                    <span class="opacity-30">|</span>
-                    <span>{minutes} {i18n(I18nKey.minutesCount)}</span>
                 </>
             )}
         </div>
@@ -88,9 +73,12 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
         )}
 
         {tags && tags.length > 0 && (
-            <div class="flex flex-wrap gap-2 mt-2.5">
+            <div class="flex flex-wrap gap-2 mt-3">
                 {tags.map(tag => (
-                    <div class="flex items-center text-[10px] bg-black/5 dark:bg-white/5 px-2 py-0.5 rounded-md border border-black/5 dark:border-white/5 opacity-60">
+                    <div class="flex items-center text-[10px] font-bold
+                        bg-[var(--primary-light)] text-[var(--primary)] 
+                        px-2 py-0.5 rounded-md border border-[var(--primary-light)]
+                        transition-colors hover:brightness-95">
                         <Icon name="material-symbols:tag-rounded" class="mr-0.5" />
                         {tag}
                     </div>
@@ -101,19 +89,12 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
 
     {hasCover && (
         <a href={url} class="hidden md:block w-[28%] relative overflow-hidden group-hover:brightness-90 transition-all">
-            <ImageWrapper
-                src={image!}
-                basePath={entry ? path.join("content/posts/", getDir(entry.id)) : ""}
-                alt={title}
-                class="w-full h-full object-cover absolute inset-0"
-            />
+            <ImageWrapper src={image!} basePath={entry ? path.join("content/posts/", getDir(entry.id)) : ""} alt={title} class="w-full h-full object-cover absolute inset-0" />
         </a>
     )}
 </div>
 
 <style>
-    .card-base {
-        background-color: var(--card-bg);
-    }
+    .card-base { background-color: var(--card-bg); }
 </style>
 
