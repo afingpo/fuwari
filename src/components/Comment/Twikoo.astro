@@ -11,10 +11,6 @@ const twikooConfig = {
   path: path,
 }
 
-// 缺失检查：如果是默认空值直接报错
-if (twikooConfig.envId.includes('')) {
-  throw new Error("Twikoo envId 未配置，请在 Twikoo.astro 中填写后端地址");
-}
 ---
 
 <div id="tcomment"></div>
