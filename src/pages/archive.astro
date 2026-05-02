@@ -3,12 +3,21 @@ import ArchivePanel from "@components/ArchivePanel.svelte";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
-import { getSortedPostsList } from "../utils/content-utils";
+import { getCollection } from "astro:content";
 
-const sortedPostsList = await getSortedPostsList();
+// 获取全站文章，不按类型预过滤
+const allPosts = await getCollection("posts", ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+});
+
+// 格式化数据以便传入 Svelte
+const sortedPosts = allPosts.map(post => ({
+    slug: post.id,
+    data: post.data
+})).sort((a, b) => b.data.published.getTime() - a.data.published.getTime());
 ---
 
 <MainGridLayout title={i18n(I18nKey.archive)}>
-    <ArchivePanel sortedPosts={sortedPostsList} client:only="svelte"></ArchivePanel>
+    <ArchivePanel sortedPosts={sortedPosts} client:only="svelte"></ArchivePanel>
 </MainGridLayout>
 
