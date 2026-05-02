@@ -1,7 +1,5 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import I18nKey from "../i18n/i18nKey";
-    import { i18n } from "../i18n/translation";
     import { getPostUrlBySlug } from "../utils/url-utils";
 
     export let sortedPosts: any[] = [];
@@ -14,38 +12,45 @@
     let showCatMenu = false;
     let showTagMenu = false;
 
-    // --- 数据提取 (修正排序逻辑，确保 all 在最上方) ---
-    
+    // --- 1. 计算分类列表（全量文章提取） ---
     $: categories = (() => {
         const cats = [...new Set(sortedPosts.map(p => {
             if (p.data?.pType === 'essay' && !p.data?.category) return '随笔';
             return p.data?.category || '未分类';
-        }))].sort((a, b) => a.localeCompare(b, 'zh-CN')); // 中文友好排序
-        return ['all', ...cats]; // 确保 all 永远在第一位
+        }))].sort((a, b) => a.localeCompare(b, 'zh-CN'));
+        return ['all', ...cats];
     })();
 
-    $: tags = (() => {
-        const rawTags = [...new Set(sortedPosts.flatMap(p => {
+    // --- 2. 第一步筛选：根据分类过滤文章 ---
+    $: postsInCategory = sortedPosts.filter(post => {
+        const postCat = (post.data?.pType === 'essay' && !post.data?.category) ? '随笔' : (post.data?.category || '未分类');
+        return filterCategory === 'all' || postCat === filterCategory;
+    });
+
+    // --- 3. 动态计算标签列表（仅从当前选定分类的文章中提取） ---
+    $: availableTags = (() => {
+        const rawTags = [...new Set(postsInCategory.flatMap(p => {
             const t = p.data?.tags;
             if (Array.isArray(t)) return t.filter(tag => tag && String(tag).trim() !== '');
             if (typeof t === 'string' && t.trim() !== '') return [t.trim()];
             return [];
-        }))].sort((a, b) => a.localeCompare(b, 'en')); // 字母排序
-        return ['all', ...rawTags]; // 确保 all 永远在第一位
+        }))].sort((a, b) => a.localeCompare(b, 'en'));
+        return ['all', ...rawTags];
     })();
 
-    // --- 筛选逻辑 ---
-    $: filteredPosts = sortedPosts.filter(post => {
-        const postCat = (post.data?.pType === 'essay' && !post.data?.category) ? '随笔' : (post.data?.category || '未分类');
-        const matchCategory = filterCategory === 'all' || postCat === filterCategory;
-        
+    // --- 4. 自动校准：如果当前标签不在可用列表中，重置为 all ---
+    $: if (filterTag !== 'all' && !availableTags.includes(filterTag)) {
+        filterTag = 'all';
+    }
+
+    // --- 5. 第二步筛选：在分类基础上应用标签过滤 ---
+    $: filteredPosts = postsInCategory.filter(post => {
         let postTags = post.data?.tags || [];
         if (typeof postTags === 'string') postTags = [postTags];
-        const matchTag = filterTag === 'all' || (Array.isArray(postTags) && postTags.includes(filterTag));
-        
-        return matchCategory && matchTag;
+        return filterTag === 'all' || (Array.isArray(postTags) && postTags.includes(filterTag));
     });
 
+    // --- 后续逻辑（分组、格式化等） ---
     $: groups = groupPosts(filteredPosts);
 
     function groupPosts(posts: any[]) {
@@ -115,12 +120,12 @@
         
         {#if showTagMenu}
             <div class="dropdown-menu card-base absolute top-full left-0 mt-2 z-[100] min-w-[160px] py-2 shadow-xl animate-in">
-                {#each tags as t}
+                {#each availableTags as t}
                     <button 
                         class="w-full text-left px-4 py-2 text-sm hover:bg-[var(--primary-light)] hover:text-[var(--primary)] transition-colors {filterTag === t ? 'text-[var(--primary)] font-bold' : 'text-75'}"
                         on:click={() => { filterTag = t; showTagMenu = false; }}
                     >
-                        {t === 'all' ? '显示全部' : `# ${t}`}
+                        {t === 'all' ? '在该分类下搜索...' : `# ${t}`}
                     </button>
                 {/each}
             </div>
@@ -155,7 +160,7 @@
             </div>
         {/each}
         {#if groups.length === 0}
-            <div class="py-12 text-center text-30 italic">没有找到符合条件的文章</div>
+            <div class="py-12 text-center text-30 italic font-mono">No entries found under this combination.</div>
         {/if}
     </div>
 {:else}
@@ -178,18 +183,11 @@
                 </div>
             </a>
         {/each}
-        {#if filteredPosts.length === 0}
-            <div class="col-span-full card-base py-12 text-center text-30 italic">没有找到符合条件的文章</div>
-        {/if}
     </div>
 {/if}
 
 <style>
-    .select-trigger {
-        background: rgba(0,0,0,0.03);
-        border-radius: var(--radius-small);
-        transition: all 0.2s;
-    }
+    .select-trigger { background: rgba(0,0,0,0.03); border-radius: var(--radius-small); transition: all 0.2s; cursor: pointer; }
     :global(.dark) .select-trigger { background: rgba(255,255,255,0.05); }
     .select-trigger:hover { background: rgba(0,0,0,0.06); color: var(--primary); }
 
@@ -202,7 +200,7 @@
     }
     :global(.dark) .dropdown-menu { border-color: rgba(255,255,255,0.1); }
 
-    .animate-in { animation: fadeIn 0.12s ease-out; }
+    .animate-in { animation: fadeIn 0.1s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 
     .text-75 { color: var(--text-color-75); }
