@@ -21,6 +21,52 @@
         return ['all', ...cats];
     })();
 
+    // --- URL 参数处理与同步 ---
+    onMount(() => {
+        const params = new URLSearchParams(window.location.search);
+        const cat = params.get('category');
+        const tag = params.get('tag');
+        const isUncategorized = params.get('uncategorized');
+
+        // 优先处理“未分类”逻辑
+        if (isUncategorized === 'true') {
+            filterCategory = '未分类';
+        } else if (cat) {
+            const decodedCat = decodeURIComponent(cat);
+            if (categories.includes(decodedCat)) filterCategory = decodedCat;
+        }
+
+        if (tag) {
+            filterTag = decodeURIComponent(tag);
+        }
+    });
+
+    // 响应式同步 URL 地址栏
+    $: if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href);
+        
+        // 分类同步
+        if (filterCategory === '未分类') {
+            url.searchParams.set('uncategorized', 'true');
+            url.searchParams.delete('category');
+        } else if (filterCategory !== 'all') {
+            url.searchParams.set('category', filterCategory);
+            url.searchParams.delete('uncategorized');
+        } else {
+            url.searchParams.delete('category');
+            url.searchParams.delete('uncategorized');
+        }
+
+        // 标签同步
+        if (filterTag !== 'all') {
+            url.searchParams.set('tag', filterTag);
+        } else {
+            url.searchParams.delete('tag');
+        }
+
+        window.history.replaceState({}, '', url.toString());
+    }
+
     // --- 2. 第一步筛选：根据分类过滤文章 ---
     $: postsInCategory = sortedPosts.filter(post => {
         const postCat = (post.data?.pType === 'essay' && !post.data?.category) ? '随笔' : (post.data?.category || '未分类');
@@ -83,9 +129,8 @@
 <svelte:window on:click={closeMenus} />
 
 <div class="mb-6 p-3 card-base flex flex-wrap gap-4 items-center overflow-visible">
-    
     <div class="custom-select-container relative">
-        <button 
+        <button
             class="select-trigger flex items-center gap-2 px-4 py-2 text-sm font-bold text-75"
             on:click|stopPropagation={() => { showCatMenu = !showCatMenu; showTagMenu = false; }}
         >
@@ -93,11 +138,10 @@
             <span>{filterCategory === 'all' ? '全部' : filterCategory}</span>
             <svg class="w-4 h-4 transition-transform {showCatMenu ? 'rotate-180' : ''}" viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
         </button>
-        
         {#if showCatMenu}
             <div class="dropdown-menu card-base absolute top-full left-0 mt-2 z-[100] min-w-[160px] py-2 shadow-xl animate-in">
                 {#each categories as cat}
-                    <button 
+                    <button
                         class="w-full text-left px-4 py-2 text-sm hover:bg-[var(--primary-light)] hover:text-[var(--primary)] transition-colors {filterCategory === cat ? 'text-[var(--primary)] font-bold' : 'text-75'}"
                         on:click={() => { filterCategory = cat; showCatMenu = false; }}
                     >
@@ -109,7 +153,7 @@
     </div>
 
     <div class="custom-select-container relative">
-        <button 
+        <button
             class="select-trigger flex items-center gap-2 px-4 py-2 text-sm font-bold text-75"
             on:click|stopPropagation={() => { showTagMenu = !showTagMenu; showCatMenu = false; }}
         >
@@ -117,11 +161,10 @@
             <span>{filterTag === 'all' ? '全部' : `#${filterTag}`}</span>
             <svg class="w-4 h-4 transition-transform {showTagMenu ? 'rotate-180' : ''}" viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
         </button>
-        
         {#if showTagMenu}
             <div class="dropdown-menu card-base absolute top-full left-0 mt-2 z-[100] min-w-[160px] py-2 shadow-xl animate-in">
                 {#each availableTags as t}
-                    <button 
+                    <button
                         class="w-full text-left px-4 py-2 text-sm hover:bg-[var(--primary-light)] hover:text-[var(--primary)] transition-colors {filterTag === t ? 'text-[var(--primary)] font-bold' : 'text-75'}"
                         on:click={() => { filterTag = t; showTagMenu = false; }}
                     >
@@ -187,7 +230,7 @@
     .select-trigger { background: rgba(0,0,0,0.03); border-radius: var(--radius-small); transition: all 0.2s; cursor: pointer; }
     :global(.dark) .select-trigger { background: rgba(255,255,255,0.05); }
     .select-trigger:hover { background: rgba(0,0,0,0.06); color: var(--primary); }
-
+    
     .dropdown-menu {
         background: var(--card-bg);
         border: 1px solid rgba(0,0,0,0.05);
@@ -196,14 +239,13 @@
         overflow-y: auto;
     }
     :global(.dark) .dropdown-menu { border-color: rgba(255,255,255,0.1); }
-
     .animate-in { animation: fadeIn 0.1s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
-
+    
     .text-75 { color: var(--text-color-75); }
     .text-50 { color: var(--text-color-50); }
     .text-30 { color: var(--text-color-30); }
-
+    
     .dropdown-menu::-webkit-scrollbar { width: 3px; }
     .dropdown-menu::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
 </style>
