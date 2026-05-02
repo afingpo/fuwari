@@ -35,7 +35,7 @@ export const siteConfig: SiteConfig = {
 	},
 	toc: {
 		enable: false, // Display the table of contents on the right side of the post
-		depth: , // Maximum heading depth to show in the table, from 1 to 3
+		depth: 2, // Maximum heading depth to show in the table, from 1 to 3
 	},
 	favicon: [
 		// Leave this array empty to use the default favicon
