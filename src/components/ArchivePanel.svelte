@@ -200,22 +200,30 @@
 {:else}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         {#each filteredPosts as post}
-            <a href={getPostUrlBySlug(post.slug)} class="card-base p-5 group hover:border-[var(--primary)] border border-transparent transition-all min-h-[110px] flex flex-col justify-between">
+            <a href={getPostUrlBySlug(post.slug)} class="card-base p-5 group hover:border-[var(--primary)] border border-transparent transition-all flex flex-col justify-between min-h-[140px]">
                 <div>
-                    <div class="flex items-center gap-2 mb-2">
+                    <div class="flex items-center justify-between mb-2">
                         <span class="text-xs text-30 font-mono">{new Date(post.data.published).toISOString().split('T')[0]}</span>
+                        <span class="text-[10px] px-2 py-0.5 bg-[var(--primary-light)] text-[var(--primary)] rounded-md font-bold uppercase">
+                            {post.data.category || '未分类'}
+                        </span>
                     </div>
-                    <div class="text-75 font-bold transition group-hover:text-[var(--primary)] text-lg line-clamp-2">
+                    <div class="text-75 font-bold transition group-hover:text-[var(--primary)] text-lg line-clamp-2 mb-2">
                         {post.data.title}
                     </div>
                 </div>
-                <div class="text-[10px] text-50 mt-4 uppercase tracking-widest font-bold">
-                    <span class="bg-black/5 dark:bg-white/5 px-2 py-1 rounded-md">{post.data.category || '未分类'}</span>
-                </div>
+                
+                {#if post.data.tags && post.data.tags.length > 0}
+                    <div class="flex flex-wrap gap-1.5 mt-auto">
+                        {#each post.data.tags.slice(0, 3) as tag} <span class="text-[9px] opacity-40 bg-black/5 dark:bg-white/5 px-1.5 py-0.5 rounded">#{tag}</span>
+                        {/each}
+                    </div>
+                {/if}
             </a>
         {/each}
     </div>
 {/if}
+
 
 <style>
     .select-trigger { background: rgba(0,0,0,0.03); border-radius: var(--radius-small); transition: all 0.2s; cursor: pointer; }

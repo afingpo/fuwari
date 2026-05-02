@@ -3,28 +3,10 @@ import ArchivePanel from "@components/ArchivePanel.svelte";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
-import { getCollection } from "astro:content";
+import { getSortedPosts } from "@utils/content-utils"; // 引入你魔改后的函数
 
-// 获取全站文章，不按类型预过滤
-const allPosts = await getCollection("posts", ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-});
-
-const sortedPosts = allPosts.map(post => {
-    // 1. 先去掉 .md 或 .mdx 后缀
-    let cleanSlug = post.id.replace(/\.(md|mdx)$/, '');
-    
-    // 2. 如果路径以 /index 结尾，或者是纯 index，则彻底删掉 index 部分
-    // 这样 posts/essay-1/index.md 会变成 posts/essay-1/
-    // 而 posts/index.md 会变成 posts/
-    cleanSlug = cleanSlug.replace(/\/index$/, '').replace(/^index$/, '');
-    
-    return {
-        slug: cleanSlug,
-        data: post.data
-    };
-}).sort((a, b) => b.data.published.getTime() - a.data.published.getTime());
-
+// 直接使用统一的排序和 slug 计算逻辑
+const sortedPosts = await getSortedPosts();
 ---
 
 <MainGridLayout title={i18n(I18nKey.archive)}>
