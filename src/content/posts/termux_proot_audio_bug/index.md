@@ -4,7 +4,7 @@ published: 2026-02-05
 updated: 2026-02-06
 author: ["涵哲子"]
 slug: termux_proot_audio_bug
-tags: ["杂", "Linux", "Termux"]
+tags: ["Linux", "Termux"]
 category: "日常折腾"
 ---
 昨天，我突发奇想打算找个TUI播放器在Termux的Arch里使用，但是，发生了一些令人不悦的小插曲。

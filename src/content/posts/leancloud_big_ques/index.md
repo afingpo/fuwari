@@ -5,7 +5,7 @@ title: "LeanCloud 停服: 一次关于服务选择的思考"
 author: ["涵哲子"]
 slug: "ques_about_leancloud"
 tag: [杂,时事]
-category: 杂谈
+category: 杂谈随笔
 ---
 
 LeanCloud 宣布一年后停止对外服务。看到通知时，我第一时间想到：Valine用户怎么办？

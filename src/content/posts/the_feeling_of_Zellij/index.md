@@ -3,7 +3,7 @@ title: 记一次使用Zellij的体验
 author: ["涵哲子"]
 published: 2025-11-29
 tags: ["Termux", "Linux"]
-category: "杂谈"
+category: "杂谈随笔"
 slug: "try-using-zellij"
 ---
 

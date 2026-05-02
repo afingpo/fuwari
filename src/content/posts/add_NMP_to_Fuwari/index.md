@@ -4,7 +4,7 @@ author: ["涵哲子"]
 published: 2025-11-16
 updated: 2025-11-16
 tags: [Blog, Astro, Fuwari]
-category: "博客搭建"
+category: "博客改造"
 slug: add_NMP_To_Fuwari
 ---
 上周在逛 Bilibili 的时候，偶然刷到了这个项目，UI 尚可，便尝试一下。
