@@ -169,9 +169,6 @@
             <a href={getPostUrlBySlug(post.slug)} class="card-base p-5 group hover:border-[var(--primary)] border border-transparent transition-all min-h-[110px] flex flex-col justify-between">
                 <div>
                     <div class="flex items-center gap-2 mb-2">
-                        {#if post.data.era}
-                            <span class="text-[10px] text-[var(--primary)] font-bold border border-[var(--primary)] px-1.5 py-0.5 rounded-sm">{post.data.era}</span>
-                        {/if}
                         <span class="text-xs text-30 font-mono">{new Date(post.data.published).toISOString().split('T')[0]}</span>
                     </div>
                     <div class="text-75 font-bold transition group-hover:text-[var(--primary)] text-lg line-clamp-2">

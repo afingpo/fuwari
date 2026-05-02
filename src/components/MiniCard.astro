@@ -16,7 +16,6 @@ interface Props {
     category?: string | null;
     image?: string;
     description?: string;
-    era?: string;
     words?: number;
     minutes?: number;
     showEnterBtn?: boolean;
@@ -32,7 +31,6 @@ const {
     category,
     image,
     description,
-    era,
     words,
     minutes,
     showEnterBtn = false,
@@ -68,9 +66,8 @@ const displayDate = published ? new Date(published).toISOString().split('T')[0] 
                   class="text-[var(--primary)] text-2xl ml-0.5 shrink-0 transition-transform group-hover:translate-x-1" />
         </a>
 
-        {(displayDate || era || category) && (
+        {(displayDate || category) && (
             <div class="flex flex-wrap gap-3 items-center mt-2 text-xs opacity-50 font-mono">
-                {era && <span class="text-[var(--primary)] font-bold border border-[var(--primary)] px-1 rounded-sm text-[10px]">{era}</span>}
                 {displayDate && <span>{displayDate}</span>}
                 {category && (
                     <>
