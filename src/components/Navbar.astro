@@ -23,7 +23,7 @@ let links: NavBarLink[] = navBarConfig.links.map(
 
 <nav id="navbar" class:list={[
     className,
-    "z-50 onload-animation fixed top-0 left-0 right-0 h-[3.75rem] bg-[var(--card-bg)] border-b border-black/5 dark:border-white/5 transition-transform duration-500 shadow-sm w-full"
+    "z-50 onload-animation sticky top-0 left-0 right-0 h-[3.75rem] bg-[var(--card-bg)] border-b border-black/5 dark:border-white/5 transition-all shadow-sm w-full"
 ]}>
     <div class="max-w-[var(--page-width)] mx-auto h-full flex items-center justify-between px-6">
         <div class="flex items-center h-full">
@@ -69,58 +69,31 @@ let links: NavBarLink[] = navBarConfig.links.map(
     <DisplaySettings client:only="svelte"></DisplaySettings>
 </nav>
 
-<div class="h-[3.75rem] w-full"></div>
-
 <script>
-function initNavbar() {
-    const navbar = document.getElementById('navbar');
-    const settingBtn = document.getElementById("display-settings-switch");
-    const menuBtn = document.getElementById("nav-menu-switch");
-    const settingPanel = document.getElementById("display-setting");
-    const menuPanel = document.getElementById("nav-menu-panel");
-
-    // 1. 处理按钮点击逻辑
-    if (settingBtn && settingPanel) {
-        settingBtn.onclick = (e) => {
-            e.stopPropagation();
-            settingPanel.classList.toggle("float-panel-closed");
-        };
-    }
-    if (menuBtn && menuPanel) {
-        menuBtn.onclick = (e) => {
-            e.stopPropagation();
-            menuPanel.classList.toggle("float-panel-closed");
+function loadButtonScript() {
+    let settingBtn = document.getElementById("display-settings-switch");
+    if (settingBtn) {
+        settingBtn.onclick = function () {
+            let settingPanel = document.getElementById("display-setting");
+            if (settingPanel) {
+                settingPanel.classList.toggle("float-panel-closed");
+            }
         };
     }
 
-    // 2. 处理滚动隐藏逻辑
-    let lastScrollTop = 0;
-    const threshold = 80; // 滚动多远才开始隐藏
-
-    // 移除旧的监听器防止叠加 (针对 Astro 视图过渡)
-    window.removeEventListener('scroll', handleScroll);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    function handleScroll() {
-        if (!navbar) return;
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        // 向上滑或在顶部时显示
-        if (scrollTop < lastScrollTop || scrollTop < threshold) {
-            navbar.style.transform = 'translateY(0)';
-        } 
-        // 向下滑超过阈值时隐藏
-        else if (scrollTop > lastScrollTop && scrollTop > threshold) {
-            navbar.style.transform = 'translateY(-100%)';
-        }
-        
-        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    let menuBtn = document.getElementById("nav-menu-switch");
+    if (menuBtn) {
+        menuBtn.onclick = function () {
+            let menuPanel = document.getElementById("nav-menu-panel");
+            if (menuPanel) {
+                menuPanel.classList.toggle("float-panel-closed");
+            }
+        };
     }
 }
 
-// 确保在初次加载和页面跳转后都执行
-document.addEventListener('astro:page-load', initNavbar);
-initNavbar();
+document.addEventListener('astro:page-load', loadButtonScript);
+loadButtonScript();
 </script>
 
 {import.meta.env.PROD && <script is:inline define:vars={{scriptUrl: url('/pagefind/pagefind.js')}}>
