@@ -105,14 +105,3 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 	theme: "github-dark",
 };
 
-export const commentConfig: CommentConfig = {
-	twikoo: {
-		enable: false,
-		envId: 'https://tw2.s1.afingpo.top',
-		//envId: 'https://twikoo.s1.afingpo.top',
-		lang: 'zh-CN',
-	},
-	giscus: {
-		enable: true,
-	},
-};
