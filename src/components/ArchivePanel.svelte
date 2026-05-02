@@ -83,7 +83,7 @@
                     </div>
                 </div>
                 {#each group.posts as post}
-                    <a href={getPostUrlBySlug(post.slug)} class="group btn-plain !block h-10 w-full rounded-lg">
+                    <a href={getPostUrlBySlug(post.slug.replace(/\.md$/, ''))} class="group btn-plain !block h-10 w-full rounded-lg">
                         <div class="flex flex-row justify-start items-center h-full">
                             <div class="w-[15%] md:w-[10%] transition text-sm text-right text-50">{formatDate(post.data.published)}</div>
                             <div class="w-[15%] md:w-[10%] relative h-full flex items-center">
@@ -101,7 +101,7 @@
 {:else}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 onload-animation">
         {#each filteredPosts as post}
-            <a href={getPostUrlBySlug(post.slug)} class="card-base p-5 flex flex-col justify-center group hover:border-[var(--primary)] border border-transparent transition-all">
+            <a href={getPostUrlBySlug(post.slug.replace(/\.md$/, ''))} class="card-base p-5 flex flex-col justify-center group hover:border-[var(--primary)] border border-transparent transition-all">
                 <div class="flex items-center gap-2 mb-2">
                     {#if post.data.era}
                         <span class="text-[10px] text-[var(--primary)] font-bold border border-[var(--primary)] px-1 rounded-sm">{post.data.era}</span>
