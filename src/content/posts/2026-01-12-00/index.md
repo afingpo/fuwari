@@ -1,16 +1,15 @@
 ---
 published: 2026-01-12
-updated: 2025-01-12
+updated: 2026-05-02
 title: "LeanCloud 停服: 一次关于服务选择的思考"
 author: ["涵哲子"]
-slug: "ques_about_leancloud"
-tag: [杂,时事]
+tag: ["闲谈", "记事"]
 category: 杂谈随笔
 ---
 
 LeanCloud 宣布一年后停止对外服务。看到通知时，我第一时间想到：Valine用户怎么办？
 
-![p1](p1.jpg)
+![](p1.jpg)
 
 我在几个月前就把评论系统从 Twikoo + LeanCloud 的组合迁到了 Giscus。主要是因为对于评论邮件通知功能的困扰和 Twikoo 后端维护属实困难。便看中了Giscus 的零成本、零维护的简单。
 

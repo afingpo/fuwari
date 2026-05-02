@@ -1,9 +1,8 @@
 ---
 title: Termux在Proot内播放音频文件的问题
 published: 2026-02-05
-updated: 2026-02-06
+updated: 2026-05-02
 author: ["涵哲子"]
-slug: termux_proot_audio_bug
 tags: ["Linux", "Termux"]
 category: "日常折腾"
 ---
@@ -121,6 +120,6 @@ ctl.!default {
 
 目前，我们已经完成了相关配置，接下来便可以在 Proot 环境内播放音频试一试了。
 
-![p1](p1.png)
+![](p1.png)
 
 可见，musicfox已经可以正常播放了。
