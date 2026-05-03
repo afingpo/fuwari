@@ -10,8 +10,8 @@ interface Props {
 const { slug } = Astro.props.post
 const path = `/posts/${slug}`
 
-// 在这里手动选择你要用的系统：'twikoo' | 'giscus' | ''
-const commentService = 'twikoo' 
+// 在此选择评论系统：'twikoo' | 'giscus' | ''
+const commentService = 'giscus' 
 ---
 
 {commentService !== '' && (
