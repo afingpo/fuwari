@@ -6,7 +6,9 @@ const { path } = Astro.props
 
 // 直接在这里硬编码你的后端 URL，不再引用 config.ts
 const twikooConfig = {
-  envId: 'https://twikoo3-260502-netlify.netlify.app/.netlify/functions/twikoo', // 替换为你的 Vercel 域名
+  // envId: 'https://twikoo3-060502-netlify.netlify.app/.netlify/functions/twikoo', // Netlify
+  envId: 'https://twikoo3-vercel.afipo.top', // Vercel
+  lang: 'zh-CN',
   el: '#tcomment',
   path: path,
 }
