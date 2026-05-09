@@ -4,7 +4,14 @@
         font-family: 'Klee One';
         src: url('/fonts/KleeOne-Regular.woff2') format('woff2');
         font-display: swap;
-    }
+	}
+
+	@font-face {
+		font-family: 'Noto Sans SC';
+		src: url('/fonts/NotoSansSC-regular.woff2') format('woff2');
+		font-display: swap;
+	}
+
     @font-face {
         font-family: 'LXGW WenKai TC';
         src: url('/fonts/LXGWWenKaiTC-Regular.woff2') format('woff2');
@@ -19,12 +26,14 @@
 
     /* 2. 默认环境（中文为主）：先找 TC，再找 Klee */
     body {
-        font-family: 'LXGW WenKai TC', 'LXGW WenKai Lite', sans-serif;
+        font-family: 'Noto Sans SC', sans-serif;
     }
 
-    /* 3. 日文环境：优先找 Klee，再找 TC */
+	/* 3. 日文环境：优先找 Klee，再找 TC */
+	/*
     :lang(ja) {
 		font-family: 'Klee One', 'LXGW WenKai TC', 'LXGW WenKai Lite', sans-serif;
-    }
+	}
+	 */
 </style>
 
