@@ -1,39 +1,74 @@
 <style is:global>
-    /* 1. 基础字体定义 */
     @font-face {
-        font-family: 'Klee One';
-        src: url('/fonts/KleeOne-Regular.woff2') format('woff2');
+        font-family: 'IBM Plex Sans';
+        src: url('/fonts/IBMPlexSans/IBMPlexSans-Regular.woff2') format('woff2');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+    }
+    @font-face {
+        font-family: 'IBM Plex Sans';
+        src: url('/fonts/IBMPlexSans/IBMPlexSans-Bold.woff2') format('woff2');
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+    }
+    @font-face {
+        font-family: 'IBM Plex Sans';
+        src: url('/fonts/IBMPlexSans/IBMPlexSans-Italic.woff2') format('woff2');
+        font-weight: 400;
+        font-style: italic;
         font-display: swap;
 	}
 
 	@font-face {
-		font-family: 'Noto Sans SC';
-		src: url('/fonts/NotoSansSC-regular.woff2') format('woff2');
+		font-family: 'IBM Plex Sans';
+		src: url('/fonts/IBMPlexSans/IBMPlexSans-BoldItalic.woff2') format('woff2');
+		font-weight: 700;
+		font-style: italic;
 		font-display: swap;
 	}
+
+    @font-face {
+        font-family: 'Noto Sans SC';
+        src: url('/fonts/NotoSansSC-Regular.woff2') format('woff2');
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Klee One';
+        src: url('/fonts/KleeOne-Regular.woff2') format('woff2');
+        font-display: swap;
+    }
 
     @font-face {
         font-family: 'LXGW WenKai TC';
         src: url('/fonts/LXGWWenKaiTC-Regular.woff2') format('woff2');
         font-display: swap;
-	}
-
-	@font-face {
-		font-family: 'LXGW WenKai Lite';
-		src: url('/fonts/LXGWWenKaiLite-Regular.woff2') format('woff2');
-		font-display: swap;
-	}
-
-    /* 2. 默认环境（中文为主）：先找 TC，再找 Klee */
-    body {
-        font-family: 'Noto Sans SC', sans-serif;
     }
 
-	/* 3. 日文环境：优先找 Klee，再找 TC */
-	/*
-    :lang(ja) {
-		font-family: 'Klee One', 'LXGW WenKai TC', 'LXGW WenKai Lite', sans-serif;
-	}
-	 */
+    @font-face {
+        font-family: 'LXGW WenKai Lite';
+        src: url('/fonts/LXGWWenKaiLite-Regular.woff2') format('woff2');
+        font-display: swap;
+    }
+
+    /* --- 3. 全局应用逻辑 --- */
+    body {
+        /* 现在的顺序：
+           1. 英文\数字: IBM Plex Sans
+           2. 中文\日文: Noto Sans SC
+        */
+        font-family: 'IBM Plex Sans', 'Noto Sans SC', 'LXGW WenKai Lite', 'LXGW WenKai TC', 'Klee One', sans-serif;
+        
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+
+    h1, h2, h3, h4, h5, h6, b, strong {
+        font-weight: 700;
+    }
 </style>
 
