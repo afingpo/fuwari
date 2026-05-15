@@ -14,6 +14,7 @@ const postsCollection = defineCollection({
 		category: z.string().optional().nullable().default(""),
 		/* 新增字段：用于区分普通博文和诗词散文 */
         pType: z.enum(["post", "essay"]).optional().default("post"),
+		sync: z.boolean().default(false),
         
 		lang: z.string().optional().default(""),
 		comments: z.boolean().optional().default(true),

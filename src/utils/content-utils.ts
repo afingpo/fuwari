@@ -40,12 +40,15 @@ async function getRawSortedPosts() {
         slugMap.set(entry.id, finalSlug);
     });
 
-    // 帮助函数：仅用于最终排序，优先取更新时间，没有则取发布时间
+    // 帮助函数：根据 sync 状态动态决定排序时间基准
     const getSortDate = (entry: any) => {
-        return entry.data.updated ? entry.data.updated.getTime() : entry.data.published.getTime();
+        if (entry.data.sync === true) {
+            return entry.data.updated ? entry.data.updated.getTime() : entry.data.published.getTime();
+        }
+        return entry.data.published.getTime();
     };
 
-    // 2. 注入新 slug，但【最终返回时】改为按更新时间降序返回（供主页显示）
+    // 2. 注入新 slug，但【最终返回时】改为按动态计算出的时间降序返回（供主页显示）
     return allBlogPosts.map(post => {
         const newSlug = slugMap.get(post.id);
         return {
@@ -53,7 +56,7 @@ async function getRawSortedPosts() {
             slug: newSlug,
             data: { ...post.data, slug: newSlug }
         };
-    }).sort((a, b) => getSortDate(b) - getSortDate(a)); // 这里改成了通过 updated 排序
+    }).sort((a, b) => getSortDate(b) - getSortDate(a));
 }
 
 

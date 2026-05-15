@@ -110,6 +110,7 @@ export type BlogPostData = {
 	prevSlug?: string;
 	nextTitle?: string;
 	nextSlug?: string;
+	sync?: boolean;
 };
 
 export type ExpressiveCodeConfig = {
