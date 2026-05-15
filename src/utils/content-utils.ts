@@ -21,14 +21,17 @@ async function getRawSortedPosts() {
     const slugMap = new Map();
 
     entriesForCalc.forEach((entry) => {
-        const date = entry.data.published;
-        const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-        
-        // 自动计算 TT 编号
-        if (dailyCount[dateStr] === undefined) dailyCount[dateStr] = 0;
-        else dailyCount[dateStr]++;
-        const tt = String(dailyCount[dateStr]).padStart(2, '0');
-        const generatedId = `${dateStr}-${tt}`;
+		const date = entry.data.published;
+		// 1. 去掉中间的横杠 '-'
+		const dateStr = `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}`;
+
+		// 自动计算 TT 编号
+		if (dailyCount[dateStr] === undefined) dailyCount[dateStr] = 0;
+		else dailyCount[dateStr]++;
+		const tt = String(dailyCount[dateStr]).padStart(2, '0');
+
+		// 2. 将此处的连字符也去掉，直接拼接 tt
+		const generatedId = `${dateStr}${tt}`;
 
         // 保留目录前缀（比如 essay/）
         const pathParts = entry.slug.split('/');
