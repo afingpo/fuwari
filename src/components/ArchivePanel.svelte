@@ -6,9 +6,9 @@
 
     // --- 状态管理：初始化时直接读取 URL ---
     const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
-    
+
     let viewMode: 'timeline' | 'grid' = 'timeline';
-    
+
     // 初始化 filterCategory
     let filterCategory = (() => {
         if (!params) return 'all';
@@ -27,18 +27,17 @@
     let showCatMenu = false;
     let showTagMenu = false;
 
-    // --- 1. 计算分类列表 ---
+    // --- 1. 计算分类列表（已移除 pType 逻辑） ---
     $: categories = (() => {
         const cats = [...new Set(sortedPosts.map(p => {
-            if (p.data?.pType === 'essay' && !p.data?.category) return '随笔';
             return p.data?.category || '未分类';
         }))].sort((a, b) => a.localeCompare(b, 'zh-CN'));
         return ['all', ...cats];
     })();
 
-    // --- 2. 第一步筛选：根据分类过滤文章 ---
+    // --- 2. 第一步筛选：根据分类过滤文章（已移除 pType 逻辑） ---
     $: postsInCategory = sortedPosts.filter(post => {
-        const postCat = (post.data?.pType === 'essay' && !post.data?.category) ? '随笔' : (post.data?.category || '未分类');
+        const postCat = post.data?.category || '未分类';
         return filterCategory === 'all' || postCat === filterCategory;
     });
 
@@ -54,11 +53,8 @@
     })();
 
     // --- 4. 自动校准：增加保护锁 ---
-    // 只有当 availableTags 真正计算出内容（长度 > 1，即除了 'all' 还有别的）时，才执行校准
     $: if (filterTag !== 'all' && availableTags.length > 1) {
         if (!availableTags.includes(filterTag)) {
-            // 只有当用户切换了分类，且新分类下确实没有这个标签时，才重置
-            // 初始加载时，因为 filterTag 是从 URL 拿的，它会匹配到计算出来的 availableTags
             filterTag = 'all';
         }
     }
@@ -212,10 +208,11 @@
                         {post.data.title}
                     </div>
                 </div>
-                
+
                 {#if post.data.tags && post.data.tags.length > 0}
                     <div class="flex flex-wrap gap-1.5 mt-auto">
-                        {#each post.data.tags.slice(0, 3) as tag} <span class="text-[9px] opacity-40 bg-black/5 dark:bg-white/5 px-1.5 py-0.5 rounded">#{tag}</span>
+                        {#each post.data.tags.slice(0, 3) as tag} 
+                            <span class="text-[9px] opacity-40 bg-black/5 dark:bg-white/5 px-1.5 py-0.5 rounded">#{tag}</span>
                         {/each}
                     </div>
                 {/if}
@@ -229,16 +226,16 @@
     .select-trigger { background: rgba(0,0,0,0.03); border-radius: var(--radius-small); transition: all 0.2s; cursor: pointer; }
     :global(.dark) .select-trigger { background: rgba(255,255,255,0.05); }
     .select-trigger:hover { background: rgba(0,0,0,0.06); color: var(--primary); }
-    
+
     .dropdown-menu { background: var(--card-bg); border: 1px solid rgba(0,0,0,0.05); border-radius: var(--radius-small); max-height: 280px; overflow-y: auto; }
     :global(.dark) .dropdown-menu { border-color: rgba(255,255,255,0.1); }
     .animate-in { animation: fadeIn 0.1s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
-    
+
     .text-75 { color: var(--text-color-75); }
     .text-50 { color: var(--text-color-50); }
     .text-30 { color: var(--text-color-30); }
-    
+
     .dropdown-menu::-webkit-scrollbar { width: 3px; }
     .dropdown-menu::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
 </style>

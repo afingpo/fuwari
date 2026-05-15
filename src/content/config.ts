@@ -13,7 +13,6 @@ const postsCollection = defineCollection({
 		tags: z.array(z.string()).optional().default([]),
 		category: z.string().optional().nullable().default(""),
 		/* 新增字段：用于区分普通博文和诗词散文 */
-        pType: z.enum(["post", "essay"]).optional().default("post"),
 		sync: z.boolean().default(false),
         
 		lang: z.string().optional().default(""),

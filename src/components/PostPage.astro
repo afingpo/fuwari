@@ -2,75 +2,43 @@
 import type { CollectionEntry } from "astro:content";
 import { getPostUrlBySlug } from "@utils/url-utils";
 import PostCard from "./PostCard.astro";
-import MiniCard from "./MiniCard.astro";
 
 const { page } = Astro.props;
 
 let delay = 0;
 const interval = 50;
 
-// 定义接口，彻底解决 LSP 报错
 interface PostItem {
     entry: CollectionEntry<"posts">;
-    isEssay: boolean;
-    isLoneEssay: boolean;
     url: string;
 }
 
-const posts: PostItem[] = page.data.map((entry: CollectionEntry<"posts">, index: number) => {
-    const isEssay = entry.data.pType === "essay";
-    // 判断逻辑：如果是 essay，且它是当前数组最后一个，且索引是偶数（代表它在当前行落单了）
-    const isLoneEssay = isEssay && (index === page.data.length - 1) && (index % 2 === 0);
-
+const posts: PostItem[] = page.data.map((entry: CollectionEntry<"posts">) => {
     return {
         entry,
-        isEssay,
-        isLoneEssay,
         url: getPostUrlBySlug(entry.slug)
     };
 });
 ---
 
-<div class="transition grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 items-stretch">
+<div class="transition grid grid-cols-1 gap-4 mb-4 items-stretch">
     {posts.map((item) => (
-        item.isEssay ? (
-            <div class:list={[
-                "flex w-full", 
-                { "md:col-span-2": item.isLoneEssay }
-            ]}>
-                <MiniCard
-                    entry={item.entry}
-                    title={item.entry.data.title}
-                    url={item.url}
-                    published={item.entry.data.published}
-                    tags={item.entry.data.tags}
-                    category={item.entry.data.category}
-                    description={item.entry.data.description}
-                    words={item.entry.data.words}
-                    minutes={item.entry.data.minutes}
-                    showEnterBtn={true}
-                    class:list="onload-animation flex-1 w-full" 
-                    style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
-                />
-            </div>
-        ) : (
-            <div class="md:col-span-2 flex w-full">
-                <PostCard
-                    entry={item.entry}
-                    title={item.entry.data.title}
-                    tags={item.entry.data.tags}
-                    category={item.entry.data.category}
-                    published={item.entry.data.published}
-                    updated={item.entry.data.updated}
-                    url={item.url}
-                    image={item.entry.data.image}
-                    description={item.entry.data.description}
-                    draft={item.entry.data.draft}
-                    class:list="onload-animation flex-1 w-full"
-                    style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
-                ></PostCard>
-            </div>
-        )
+        <div class="flex w-full">
+            <PostCard
+                entry={item.entry}
+                title={item.entry.data.title}
+                tags={item.entry.data.tags}
+                category={item.entry.data.category}
+                published={item.entry.data.published}
+                updated={item.entry.data.updated}
+                url={item.url}
+                image={item.entry.data.image}
+                description={item.entry.data.description}
+                draft={item.entry.data.draft}
+                class:list="onload-animation flex-1 w-full"
+                style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
+            ></PostCard>
+        </div>
     ))}
 </div>
 
