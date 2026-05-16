@@ -4,12 +4,14 @@ import { i18n } from "@i18n/translation";
 import { getCategoryUrl } from "@utils/url-utils.ts";
 
 // Retrieve posts and sort them by publication date
+// src/utils/content-utils.ts
+
 async function getRawSortedPosts() {
     const allBlogPosts = await getCollection("posts", ({ data }) => {
         return import.meta.env.PROD ? data.draft !== true : true;
     });
 
-    // 1. 严格升序排序，确保 TT 编号稳定（完全保持原样）
+    // 1. 严格升序排序，确保自动生成的 TT 编号稳定
     const entriesForCalc = [...allBlogPosts].sort((a, b) => {
         const dateA = a.data.published.getTime();
         const dateB = b.data.published.getTime();
@@ -21,10 +23,16 @@ async function getRawSortedPosts() {
     const slugMap = new Map();
 
     entriesForCalc.forEach((entry) => {
+        // 如果文章在 frontmatter 里自己写了 slug，直接用写好的，不参与自动计算
+        if (entry.data.slug) {
+            slugMap.set(entry.id, entry.data.slug);
+            return;
+        }
+
+        // 否则，自动计算时间加 TT 编号
         const date = entry.data.published;
         const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
-        // 自动计算 TT 编号
         if (dailyCount[dateStr] === undefined) dailyCount[dateStr] = 0;
         else dailyCount[dateStr]++;
         const tt = String(dailyCount[dateStr]).padStart(2, '0');
@@ -35,9 +43,7 @@ async function getRawSortedPosts() {
         pathParts.pop();
         const prefix = pathParts.length > 0 ? pathParts.join('/') + '/' : '';
 
-        // 如果文章 frontmatter 没写 slug，就用这种“目录+日期+TT”的格式
-        const finalSlug = entry.data.slug || `${prefix}${generatedId}`;
-        slugMap.set(entry.id, finalSlug);
+        slugMap.set(entry.id, `${prefix}${generatedId}`);
     });
 
     // 帮助函数：根据 sync 状态动态决定排序时间基准
@@ -48,13 +54,13 @@ async function getRawSortedPosts() {
         return entry.data.published.getTime();
     };
 
-    // 2. 注入新 slug，但【最终返回时】改为按动态计算出的时间降序返回（供主页显示）
+    // 2. 最终返回时，绝对不要去污染覆盖原生的 post.slug 属性，仅修正 data 内部的引用
     return allBlogPosts.map(post => {
-        const newSlug = slugMap.get(post.id);
+        const finalSlug = slugMap.get(post.id) || post.slug;
         return {
             ...post,
-            slug: newSlug,
-            data: { ...post.data, slug: newSlug }
+            slug: finalSlug, // 确保这个对外暴露的 slug 完美对应
+            data: { ...post.data, slug: finalSlug }
         };
     }).sort((a, b) => getSortDate(b) - getSortDate(a));
 }

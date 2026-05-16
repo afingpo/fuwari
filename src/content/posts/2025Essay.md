@@ -5,7 +5,7 @@ updated: 2025-12-10
 slug: 2025Essay
 sync: true
 tags: ["订年散稿"]
-category: "闲谈随笔"
+category: "杂谈随笔"
 ---
 
 # 乙巳杂言
