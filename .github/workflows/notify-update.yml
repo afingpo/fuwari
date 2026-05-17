@@ -17,19 +17,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2 # 确保基础 diff 能跑通
+          fetch-depth: 2
 
       - name: Get changed files from Git
         id: changed
         run: |
-          # 用最简单稳妥的原生命令行抓取
           CHANGED=$(git diff --name-only HEAD~1 HEAD | grep 'src/content/posts/.*\.md$' || true)
           if [ -z "$CHANGED" ]; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
             echo "files=" >> $GITHUB_OUTPUT
           else
             echo "has_changes=true" >> $GITHUB_OUTPUT
-            # 采用 EOF 注入，防止多行路径引发 Invalid 报错
             echo "files<<EOF" >> $GITHUB_OUTPUT
             echo "$CHANGED" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
@@ -43,7 +41,7 @@ jobs:
 
       - name: Setup pnpm
         if: steps.changed.outputs.has_changes == 'true'
-        uses: actions/pnpm/action-setup@v4
+        uses: pnpm/action-setup@v4.1.0 # ✨ 这里彻底修好了！
         with:
           run_install: false
 
@@ -53,7 +51,6 @@ jobs:
 
       - name: Run Astro Build (注入环境变量)
         if: steps.changed.outputs.has_changes == 'true'
-        # ✨ 核心：把 Actions 抓到的路径当成环境变量喂给 Astro 编译流程
         env:
           CHANGED_FILES: ${{ steps.changed.outputs.files }}
         run: pnpm astro build
