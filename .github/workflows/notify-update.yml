@@ -16,11 +16,10 @@ env:
 jobs:
   notify:
     runs-on: ubuntu-latest
-    # ✨ 核心修复：显式声明此流水线拥有对 issues 写入的权限
     permissions:
       issues: write
       contents: read
-      
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,11 +30,14 @@ jobs:
         run: |
           CHANGED=$(git diff --name-only HEAD~1 HEAD | grep 'src/content/posts/.*\.md$' || true)
           if [ -z "$CHANGED" ]; then
-            echo "changed=" >> $GITHUB_OUTPUT
             echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "changed=" >> $GITHUB_OUTPUT
           else
-            echo "changed=${CHANGED}" >> $GITHUB_OUTPUT
             echo "has_changes=true" >> $GITHUB_OUTPUT
+            # ✨ 核心修复：使用 GitHub 官方推荐的 EOF 定界符包裹多行变量，彻底解决 Invalid format 报错
+            echo "changed<<EOF" >> $GITHUB_OUTPUT
+            echo "$CHANGED" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
           fi
 
       - name: Build and post notification
@@ -54,11 +56,13 @@ jobs:
             const issueNumber = parseInt(process.env.TARGET_ISSUE_NUMBER, 10);
             const templatePath = process.env.TEMPLATE_PATH;
 
-            const changedFiles = process.env.CHANGED_FILES.trim().split(/\s+/).filter(Boolean);
+            // 将多行字符串安全地按换行符或空格切分成数组
+            const changedFiles = process.env.CHANGED_FILES.trim().split(/\r?\n|\s+/).filter(Boolean);
             const commitMsg = require('child_process').execSync('git log -1 --pretty=format:%s').toString().trim().split('\n')[0];
             const commitSha = require('child_process').execSync('git log -1 --pretty=format:%h').toString().trim();
 
             function parseFrontmatter(filepath) {
+              if (!fs.existsSync(filepath)) return {};
               const content = fs.readFileSync(filepath, 'utf-8');
               const m = content.match(/^---\s*\n(.*?)\n---/s);
               if (!m) return {};
@@ -77,7 +81,7 @@ jobs:
             // 2. 解析文章数据（仅抓取 Title 和 摘要）
             const posts = [];
             for (const file of changedFiles) {
-              if (!file.endsWith('.md')) continue;
+              if (!file.endsWith('.md') || !fs.existsSync(file)) continue;
               const content = fs.readFileSync(file, 'utf-8');
               const fm = parseFrontmatter(file);
               const filename = path.basename(file, '.md');
@@ -94,6 +98,11 @@ jobs:
                 published: fm['published'] || '',
                 url: baseUrl
               });
+            }
+
+            if (posts.length === 0) {
+              console.log('No valid markdown posts found.');
+              return;
             }
 
             // 3. 读取模板并动态替换渲染
