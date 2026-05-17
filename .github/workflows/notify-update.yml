@@ -10,12 +10,17 @@ on:
 # ==================== 全局变量统一管理 ====================
 env:
   BLOG_BASE_URL: 'https://afipo.top'       # 你的博客主页
-  TARGET_ISSUE_NUMBER: 108                  # 触发通知的 GitHub Issue 编号
+  TARGET_ISSUE_NUMBER: 108                # 触发通知的 GitHub Issue 编号
   TEMPLATE_PATH: '.github/notify-update.md' # 模板文件路径
 
 jobs:
   notify:
     runs-on: ubuntu-latest
+    # ✨ 核心修复：显式声明此流水线拥有对 issues 写入的权限
+    permissions:
+      issues: write
+      contents: read
+      
     steps:
       - uses: actions/checkout@v4
         with:
@@ -84,10 +89,10 @@ jobs:
               const preview = plainText.length > 80 ? plainText.substring(0, 80) + '...' : plainText;
 
               posts.push({
-                title: fm['title'] || filename, // 严格确保提取 Frontmatter 的 title，没有则用文件名兜底
+                title: fm['title'] || filename,
                 summary: fm['description'] || preview,
                 published: fm['published'] || '',
-                url: baseUrl // 统一指向主页
+                url: baseUrl
               });
             }
 
