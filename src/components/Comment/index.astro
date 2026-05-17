@@ -11,7 +11,7 @@ const { slug } = Astro.props.post
 const path = `/posts/${slug}`
 
 // 在此选择评论系统：'twikoo' | 'giscus' | ''
-const commentService = 'giscus' 
+const commentService = 'twikoo' 
 ---
 
 {commentService !== '' && (
