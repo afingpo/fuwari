@@ -1,0 +1,133 @@
+name: Notify Blog Update
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/content/posts/**/*.md'
+      - '!src/content/posts/talk/**'
+
+# ==================== 全局变量统一管理 ====================
+env:
+  BLOG_BASE_URL: 'https://afipo.top'       # 你的博客主页
+  TARGET_ISSUE_NUMBER: 66                 # 触发通知的 GitHub Issue 编号
+  TEMPLATE_PATH: '.github/notify-update.md' # 模板文件路径
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Get changed files
+        id: changed
+        run: |
+          CHANGED=$(git diff --name-only HEAD~1 HEAD | grep 'src/content/posts/.*\.md$' || true)
+          if [ -z "$CHANGED" ]; then
+            echo "changed=" >> $GITHUB_OUTPUT
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=${CHANGED}" >> $GITHUB_OUTPUT
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build and post notification
+        if: steps.changed.outputs.has_changes == 'true'
+        env:
+          CHANGED_FILES: ${{ steps.changed.outputs.changed }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            // 1. 获取全局配置
+            const baseUrl = process.env.BLOG_BASE_URL;
+            const issueNumber = parseInt(process.env.TARGET_ISSUE_NUMBER, 10);
+            const templatePath = process.env.TEMPLATE_PATH;
+
+            const changedFiles = process.env.CHANGED_FILES.trim().split(/\s+/).filter(Boolean);
+            const commitMsg = require('child_process').execSync('git log -1 --pretty=format:%s').toString().trim().split('\n')[0];
+            const commitSha = require('child_process').execSync('git log -1 --pretty=format:%h').toString().trim();
+
+            function parseFrontmatter(filepath) {
+              const content = fs.readFileSync(filepath, 'utf-8');
+              const m = content.match(/^---\s*\n(.*?)\n---/s);
+              if (!m) return {};
+              const fm = {};
+              m[1].split('\n').forEach(line => {
+                const idx = line.indexOf(':');
+                if (idx !== -1) {
+                  const key = line.substring(0, idx).trim();
+                  let val = line.substring(idx + 1).trim().replace(/^['"<]+|['">]+$/g, '');
+                  fm[key] = val;
+                }
+              });
+              return fm;
+            }
+
+            // 2. 解析文章数据（仅抓取 Title 和 摘要）
+            const posts = [];
+            for (const file of changedFiles) {
+              if (!file.endsWith('.md')) continue;
+              const content = fs.readFileSync(file, 'utf-8');
+              const fm = parseFrontmatter(file);
+              const filename = path.basename(file, '.md');
+
+              // 提取预览摘要
+              const fmEnd = content.indexOf('---', 3) + 3;
+              const body = content.substring(fmEnd).trim();
+              const plainText = body.replace(/^#+\s+/gm, '').replace(/!\[.*?\]\(.*?\)/g, '').replace(/\[.*?\]\(.*?\)/g, '$1').replace(/[*_~`#]/g, '').replace(/\n+/g, ' ').trim();
+              const preview = plainText.length > 80 ? plainText.substring(0, 80) + '...' : plainText;
+
+              posts.push({
+                title: fm['title'] || filename, // 严格确保提取 Frontmatter 的 title，没有则用文件名兜底
+                summary: fm['description'] || preview,
+                published: fm['published'] || '',
+                url: baseUrl // 统一指向主页
+              });
+            }
+
+            // 3. 读取模板并动态替换渲染
+            if (!fs.existsSync(templatePath)) {
+              throw new Error(`模板文件未找到: ${templatePath}`);
+            }
+            let template = fs.readFileSync(templatePath, 'utf-8');
+
+            const postLoopMatch = template.match(/\{\{#posts\}\}([\s\S]*?)\{\{\/posts\}\}/);
+            if (postLoopMatch) {
+              const loopTemplate = postLoopMatch[1];
+              const renderedPosts = posts.map(p => {
+                let item = loopTemplate
+                  .replace(/\{\{title\}\}/g, p.title)
+                  .replace(/\{\{summary\}\}/g, p.summary)
+                  .replace(/\{\{url\}\}/g, p.url);
+
+                if (p.published) {
+                  item = item.replace(/\{\{#published\}\}(.*?)\{\{\/published\}\}/g, `$1`).replace(/\{\{published\}\}/g, p.published);
+                } else {
+                  item = item.replace(/\{\{#published\}\}[\s\S]*?\{\{\/published\}\}/g, '');
+                }
+                return item;
+              }).join('\n');
+
+              template = template.replace(/\{\{#posts\}\}[\s\S]*?\{\{\/posts\}\}/, renderedPosts);
+            }
+
+            const finalBody = template
+              .replace(/\{\{commitSha\}\}/g, commitSha)
+              .replace(/\{\{commitMsg\}\}/g, commitMsg);
+
+            // 4. 发送评论
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: finalBody
+            });
+
+            console.log('Notification with titles and homepage links posted successfully.');
+
