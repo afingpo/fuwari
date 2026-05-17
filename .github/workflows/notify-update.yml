@@ -1,4 +1,4 @@
-name: Notify Blog Update (Depend on Astro Self)
+name: Notify Blog Update (Pure Build Mode)
 
 on:
   push:
@@ -17,25 +17,49 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2 # 拉取2个深度
+          fetch-depth: 2 # 确保基础 diff 能跑通
+
+      - name: Get changed files from Git
+        id: changed
+        run: |
+          # 用最简单稳妥的原生命令行抓取
+          CHANGED=$(git diff --name-only HEAD~1 HEAD | grep 'src/content/posts/.*\.md$' || true)
+          if [ -z "$CHANGED" ]; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "files=" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            # 采用 EOF 注入，防止多行路径引发 Invalid 报错
+            echo "files<<EOF" >> $GITHUB_OUTPUT
+            echo "$CHANGED" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
 
       - name: Setup Node.js
+        if: steps.changed.outputs.has_changes == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        if: steps.changed.outputs.has_changes == 'true'
+        uses: actions/pnpm/action-setup@v4
         with:
           run_install: false
 
       - name: Install dependencies
+        if: steps.changed.outputs.has_changes == 'true'
         run: pnpm install --frozen-lockfile
 
-      - name: Run Astro Build
+      - name: Run Astro Build (注入环境变量)
+        if: steps.changed.outputs.has_changes == 'true'
+        # ✨ 核心：把 Actions 抓到的路径当成环境变量喂给 Astro 编译流程
+        env:
+          CHANGED_FILES: ${{ steps.changed.outputs.files }}
         run: pnpm astro build
 
       - name: Read JSON and post notification
+        if: steps.changed.outputs.has_changes == 'true'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -51,14 +75,13 @@ jobs:
             }
 
             if (!fs.existsSync(jsonPath)) {
-              console.log('Error: update-posts.json 未找到。');
+              console.log('Error: update-posts.json 未能生成。');
               return;
             }
 
             const posts = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
-            
             if (posts.length === 0) {
-              console.log('No actual post changes mapped to JSON. Skipping notification.');
+              console.log('JSON is empty. Skipping notification.');
               return;
             }
 
@@ -98,5 +121,5 @@ jobs:
               body: finalBody
             });
 
-            console.log(`Notification sent successfully for ${posts.length} changed post(s).`);
+            console.log(`Notification sent successfully for ${posts.length} post(s).`);
 
