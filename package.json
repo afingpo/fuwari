@@ -65,6 +65,7 @@
     "@astrojs/ts-plugin": "^1.10.7",
     "@biomejs/biome": "2.2.2",
     "@iconify-json/material-symbols": "^1.2.66",
+    "@iconify-json/mdi": "^1.2.3",
     "@iconify-json/simple-icons": "^1.2.77",
     "@rollup/plugin-yaml": "^4.1.2",
     "@types/hast": "^3.0.4",
