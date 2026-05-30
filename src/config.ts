@@ -83,14 +83,19 @@ export const profileConfig: ProfileConfig = {
 		{
 			name: "GitHub",
 			icon: "fa6-brands:github",
-			url: "https://github.com/afingpo",
+			url: "https://github.com/afingpo"
 		},
 		{
 			name: "Codeberg",
 			icon: "simple-icons:codeberg",
-			url: "https://codeberg.org/afingpo",
+			url: "https://codeberg.org/afingpo"
 		},
-	],
+		{
+			name: "爱发电",
+			icon: "simple-icons:afdian",
+			url: "https://www.ifdian.net/a/afipo"
+		}
+	]
 };
 
 export const licenseConfig: LicenseConfig = {
