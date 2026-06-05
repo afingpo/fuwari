@@ -5,6 +5,7 @@ import Profile from "./Profile.astro";
 import Tag from "./Tags.astro";
 import UmamiStatus from "./UmamiStatus.astro";
 import Music from "./Music.astro";
+import ExtraBlock from "./ExtraBlock.astro";
 
 interface Props {
 	class?: string;
@@ -22,6 +23,7 @@ const headings = Astro.props.headings;
 		<Categories class="onload-animation" style="animation-delay: 150ms"></Categories>
 		<!-- <Tag class="onload-animation" style="animation-delay: 200ms"></Tag>  -->
 		<!-- <UmamiStatus class="onload-animation" style="animation-delay: 200ms" /> -->
-		<Music class="onload-animation" style="animation-delay: 200ms"></Music>
+		<!-- <Music class="onload-animation" style="animation-delay: 200ms"></Music> -->
+		<ExtraBlock class="onload-animation" style="animation-delay: 150ms"></ExtraBlock>
 	</div>
 </div>
