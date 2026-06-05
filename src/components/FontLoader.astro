@@ -74,19 +74,10 @@
         font-display: swap;
 	}
 
-	/*
 	@font-face {
 		font-family: 'Noto Serif SC';
 		src: url('/fonts/NotoSerifSC-Regular.woff2') format('woff2');
 		font-weight: 400;
-		font-display: swap;
-	}
-	*/
-
-	@font-face {
-		font-family: 'Noto Serif SC';
-		src: url('/fonts/NotoSerifSC-Extralight.woff2') format('woff2');
-		font-weight: 200;
 		font-display: swap;
 	}
 
@@ -97,18 +88,11 @@
     }
 
     @font-face {
-        font-family: 'LXGW WenKai TC';
-        src: url('/fonts/LXGWWenKaiTC-Regular.woff2') format('woff2');
-        font-display: swap;
-    }
-
-    @font-face {
         font-family: 'LXGW WenKai Lite';
         src: url('/fonts/LXGWWenKaiLite-Regular.woff2') format('woff2');
         font-display: swap;
     }
 
-	/* --- 3. 全局应用逻辑 --- */
 	body {
         font-family: 'IBM Plex Sans', 'Noto Serif SC', 'SymbolsNerdFont', sans-serif;
         text-rendering: optimizeLegibility;
@@ -116,16 +100,12 @@
 		-moz-osx-font-smoothing: grayscale;
     }
 
-    /* 核心修复：代码块强制应用 Maple Mono 及其连字 */
     code, pre, kbd, samp {
 		font-family: 'Maple Mono', 'SymbolsNerdFont', monospace !important;
-        /* 开启 Maple Mono 标志性的连字特性 */
         font-variant-ligatures: common-ligatures;
-        /* 提升代码渲染精度 */
 		text-rendering: optimizeLegibility;
     }
 
-    /* 确保加粗在所有地方都生效 */
     b, strong, h1, h2, h3, h4, h5, h6 {
         font-weight: 700;
     }
