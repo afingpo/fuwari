@@ -1,11 +1,24 @@
-@font-face {
-  font-family: 'LXGW WenKai';
-  src: url('/fonts/LXGWWenKaiLite-Regular.woff2') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+:root {
+  /* 定义语义化字族字段 */
+  --font-title: 'IBM Plex Sans', 'Noto Serif SC', 'SymbolsNerdFont', serif;
+  --font-text: 'IBM Plex Sans', 'Noto Sans SC', 'SymbolsNerdFont', sans-serif;
+  --font-card: 'LXGW WenKai Lite', sans-serif;
+  --font-code: 'Maple Mono', 'SymbolsNerdFont', monospace;
 }
+
+/* 全局默认正文使用黑体字段 */
 body {
-  font-family: 'LXGW WenKai', 'Noto Sans SC', sans-serif;
+  font-family: var(--font-text);
+}
+
+/* 所有的标题强制使用宋体字段 */
+h1, h2, h3, h4, h5, h6, .markdown-body h1, .markdown-body h2 {
+  font-family: var(--font-title) !important;
+  font-weight: 700;
+}
+
+/* 所有的代码区域强制使用等宽字段 */
+code, pre, kbd, samp {
+  font-family: var(--font-code) !important;
 }
 

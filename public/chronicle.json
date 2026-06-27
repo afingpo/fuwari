@@ -1,6 +1,11 @@
 {
 	"development": [
 		{
+			"date": "2026-06-28",
+			"title": "转到 iluc.cn 域名",
+			"contect": "购买 iluc.cn 域名，全站转移"
+		},
+		{
 			"date": "2026-04-12",
 			"title": "博客代码仓库开源",
 			"contect": "经考虑，将原先的私有repo改为公开。"

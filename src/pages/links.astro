@@ -1,6 +1,5 @@
 ---
 import { getEntry, render } from "astro:content";
-import Markdown from "@components/misc/Markdown.astro";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
@@ -14,18 +13,19 @@ const linksPost = await getEntry("spec", "links");
 if (!linksPost) {
   throw new Error("Links page content not found");
 }
+
+// 渲染 Markdown 内容为组件
 const { Content } = await render(linksPost);
 
-// links2 的原始数据处理
+// links 的原始数据处理
 const { origin } = links
-const linkEditPage = 'https://github.com/---/---/blob/main/public/links.json'
 
-// 在这里直接硬编码你的站点信息
+// 在这里直接硬编码你的站点信息（点击复制部分）
 const applyTip = [
-  { name: '名称', val: '博客名称' },
-  { name: '网址', val: 'https://' },
-  { name: '头像', val: 'https://' },
-  { name: '简介', val: '博客简介' }
+  { name: 'NAME', val: '涵哲子居' },
+  { name: 'URl', val: 'https://iluc.cn' },
+  { name: 'LOGO', val: 'https://iluc.cn/logo.webp' },
+  { name: 'DESC', val: '天哲地理，共公卿好' }
 ]
 ---
 
@@ -33,18 +33,16 @@ const applyTip = [
   <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
     <div class="card-base z-10 px-9 py-6 relative w-full ">
 
-      <p>排序随机，不分先后。</p>
-      
       <h2 id='个人收藏' class="text-2xl font-bold my-4 text-neutral-900 dark:text-neutral-100">个人收藏</h2>
       <LinksList list={origin[0]} />
 
       <h2 id='先链后友' class="text-2xl font-bold my-4 text-neutral-900 dark:text-neutral-100">先链后友</h2>
       <LinksList list={origin[1]} />
 
-	  <h2 id='先友后链' class="text-2xl font-bold my-4 text-neutral-900 dark:text-neutral-100">先友后链</h2>
-	  <LinksList list={origin[2]} />
+      <h2 id='先友后链' class="text-2xl font-bold my-4 text-neutral-900 dark:text-neutral-100">先友后链</h2>
+      <LinksList list={origin[2]} />
 
-      <p>本站信息（点击复制）：</p>
+      <p class="mt-8">本站信息（点击复制）：</p>
       <blockquote class='not-prose grid grid-cols-[auto_1fr] gap-x-2 break-words border-s-4 ps-4 my-3'>
         {
           applyTip.map(({ name, val }) => {
@@ -60,20 +58,11 @@ const applyTip = [
           })
         }
       </blockquote>
-
-      <p class="mt-4">
-        可通过下方留言或 <a href={linkEditPage} target='_blank' class="text-[var(--primary)] underline">提交 PR</a> 申请友链。申请说明：
-      </p>
-      <ul class="list-disc list-inside space-y-1 mt-2">
-        <li>推荐了本站，请先将本站添加至您的友链中</li>
-        <li>站点正常运营且拥有正式域名</li>
-        <li>至少五篇原创文章，且最近一年内有更新</li>
-        <li>内容不违反法律法规</li>
-      </ul>
-
-      <Markdown class="mt-6">
+      
+	  <div class="prose dark:prose-invert max-w-none mb-6">
         <Content />
-      </Markdown>
+      </div>
+
     </div>
   </div>
 

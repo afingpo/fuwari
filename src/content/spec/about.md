@@ -58,8 +58,8 @@
 
 ### 何以共谈
 
-- 邮箱: [`me@afipo.top`](mailto:me@afipo.top)
-    - 获取: [PGP公钥](https://afipo.top/pubkey.asc)
+- 邮箱: [`me@iluc.cn`](mailto:me@iluc.cn)
+    - 获取: [PGP公钥](https://iluc.cn/pubkey.asc)
 
 - Matrix: `#afipo_chat:mozilla.org`
     - 使用 Matrix 服务商所提供的用户加入
@@ -75,14 +75,10 @@
     - [Vercel](https://vercel.com)
 
 - 字体展品味：
-    - 霞鹜文楷 TC ([LXGW WenKai TC](https://github.com/lxgw/LxgwWenKai-Lite))
-    - 霞鹜文楷 Lite ([LXGW WenKai Lite](https://github.com/lxgw/LxgwWenkaiTC))
-    - Klee One ([Klee One](https://github.com/fontworks-fonts/Klee))
+    - 霞鹜文楷 Lite ([LXGW WenKai Lite](https://github.com/lxgw/LxgwWenKai-Lite))
+    - 思源黑体 ([Noto Sans SC](https://github.com/adobe-fonts/source-han-sans/))
+    - 思源宋体 ([Noto Serif SC](https://github.com/adobe-fonts/source-han-serif/))
 
 - 源码有依托：
     - [Github](https://github.com)
-    - [Codeberg](https://codeberg.org)
-
-> 此会有学得笔记、折腾日记、平日乱言相记，  
->
-> 若有友志趣相投，愿互置友链，共结网缘。
+    - [Codeberg](https://codeberg.org)。

@@ -31,7 +31,7 @@ import { readFileSync } from 'node:fs';
 
 // https://astro.build/config
 export default defineConfig({
-	site: "https://afipo.top/",
+	site: "https://iluc.cn/",
 	base: "/",
 	trailingSlash: "always",
 	integrations: [
