@@ -1,78 +1,82 @@
 ---
-
 import { getEntry, render } from "astro:content";
 import Markdown from "@components/misc/Markdown.astro";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 import Comment from "@components/Comment/index.astro";
-//import LinksData from '../data/links.json'
 
-//const items = LinksData || [];
+import links from "@public/links.json"
+import LinksList from '@components/LinksList.astro'
+
+// 获取 markdown 格式的页面补充内容
 const linksPost = await getEntry("spec", "links");
-
 if (!linksPost) {
-	throw new Error("Links page content not found");
+  throw new Error("Links page content not found");
 }
-
 const { Content } = await render(linksPost);
 
-//Use Raw URL
-let items = [];
+// links2 的原始数据处理
+const { origin } = links
+const linkEditPage = 'https://github.com/---/---/blob/main/public/links.json'
 
-try {
-    const response = await fetch("https://raw.githubusercontent.com/afingpo/blog-data/refs/heads/main/src/links.json");
-    if (response.ok) {
-        items = await response.json();
-    } else {
-        console.error("获取友链数据失败，使用备用数据");
-		items = []
-    }
-} catch (error) {
-    console.error("获取友链数据时出错:", error);
-    items = []
-}
-
-
-
+// 在这里直接硬编码你的站点信息
+const applyTip = [
+  { name: '名称', val: '博客名称' },
+  { name: '网址', val: 'https://' },
+  { name: '头像', val: 'https://' },
+  { name: '简介', val: '博客简介' }
+]
 ---
-<MainGridLayout title={i18n(I18nKey.links)} description={i18n(I18nKey.links)}>
-	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
-    	<div class="card-base z-10 px-9 py-6 relative w-full ">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8 my-4" id="friends-list">
-				{items.map((item: any) => (
-        			<div class="friend-card flex flex-nowrap items-center h-28 gap-4 p-2 rounded-[var(--radius-large)] border border-black/10 dark:border-white/10 hover:border-[var(--primary)] transition-all">
-    					<div class="w-24 h-24 flex-shrink-0 rounded-[var(--radius-large)] overflow-hidden bg-zinc-200 dark:bg-zinc-900">
-							<img src={item.imgurl} alt="站点头像" class="w-full h-full object-cover" />
-    					</div>
-						<div class="grow w-full">
-							<div class="font-bold transition text-lg text-neutral-900 dark:text-neutral-100 mb-1">{item.title}</div>
-							<div class="text-50 text-sm font-medium">{item.desc}</div>
-    					</div>
-						<a href={item.siteurl} target="_blank" rel="noopener noreferrer" class="flex btn-regular w-12 h-12 rounded-full self-center bg-[var(--enter-btn-bg)] hover:bg-[var(--enter-btn-bg-hover)] active:bg-[var(--enter-btn-bg-active)] active:scale-95">
-        				</a>
-					</div>
-				))}
-    		</div>
-            <Markdown class="mt-2">
-                <Content />
-            </Markdown>
-        </div>
-    </div>
 
-<script>
-window.addEventListener('DOMContentLoaded', () => {
-    const container = document.getElementById('friends-list');
-    if (!container) return;
-    const cards = Array.from(container.children);
-    // 洗牌算法
-    for (let i = cards.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [cards[i], cards[j]] = [cards[j], cards[i]];
-    }
-    // 重新插入
-    cards.forEach(card => container.appendChild(card));
-});
-</script>
-<Comment post={linksPost}></Comment>
+<MainGridLayout title={i18n(I18nKey.links)} description={i18n(I18nKey.links)}>
+  <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+    <div class="card-base z-10 px-9 py-6 relative w-full ">
+
+      <p>排序随机，不分先后。</p>
+      
+      <h2 id='个人收藏' class="text-2xl font-bold my-4 text-neutral-900 dark:text-neutral-100">个人收藏</h2>
+      <LinksList list={origin[0]} />
+
+      <h2 id='先链后友' class="text-2xl font-bold my-4 text-neutral-900 dark:text-neutral-100">先链后友</h2>
+      <LinksList list={origin[1]} />
+
+	  <h2 id='先友后链' class="text-2xl font-bold my-4 text-neutral-900 dark:text-neutral-100">先友后链</h2>
+	  <LinksList list={origin[2]} />
+
+      <p>本站信息（点击复制）：</p>
+      <blockquote class='not-prose grid grid-cols-[auto_1fr] gap-x-2 break-words border-s-4 ps-4 my-3'>
+        {
+          applyTip.map(({ name, val }) => {
+            const script = `navigator.clipboard.writeText('${val}');document.dispatchEvent(new CustomEvent('toast',{detail:{message:'已复制 "${val}" 到剪贴板!'}}))`
+            return (
+              <>
+                <span class='text-end font-medium'>{name}:</span>
+                <samp class='cursor-pointer text-neutral-600 dark:text-neutral-400 hover:text-[var(--primary)]' onclick={script}>
+                  {val}
+                </samp>
+              </>
+            )
+          })
+        }
+      </blockquote>
+
+      <p class="mt-4">
+        可通过下方留言或 <a href={linkEditPage} target='_blank' class="text-[var(--primary)] underline">提交 PR</a> 申请友链。申请说明：
+      </p>
+      <ul class="list-disc list-inside space-y-1 mt-2">
+        <li>推荐了本站，请先将本站添加至您的友链中</li>
+        <li>站点正常运营且拥有正式域名</li>
+        <li>至少五篇原创文章，且最近一年内有更新</li>
+        <li>内容不违反法律法规</li>
+      </ul>
+
+      <Markdown class="mt-6">
+        <Content />
+      </Markdown>
+    </div>
+  </div>
+
+  <Comment post={linksPost}></Comment>
 </MainGridLayout>
+

@@ -1,0 +1,54 @@
+{
+  "origin": [
+    {
+      "id_name": "个人收藏",
+      "link_list": [
+        {
+          "title": "涵哲子居",
+          "imgurl": "https://afipo.top/logo.webp",
+          "desc": "天哲地理，共公卿好",
+          "siteurl": "https://afipo.top"
+        },
+        {
+          "title": "NorthZero",
+          "imgurl": "https://nzdnzd.top/favicon-512x512.png",
+          "desc": "o_O",
+          "siteurl": "https://nzdnzd.top"
+        },
+        {
+          "title": "霞之葉間",
+          "imgurl": "https://kasuha.com/avatar.webp",
+          "desc": "光と言葉の狭间",
+          "siteurl": "https://kasuha.com/"
+        },
+        {
+          "title": "UpXuu's blog",
+          "imgurl": "https://upxuu.com/images/20260214145619.jpg",
+          "desc": "逐光而上！",
+          "siteurl": "https://upxuu.com"
+        },
+        {
+          "title": "二叉树树",
+          "siteurl": "https://2x.nz",
+          "desc": "Protect What You Love.",
+          "imgurl": "https://q2.qlogo.cn/headimg_dl?dst_uin=2726730791&spec=0"
+        },
+        {
+          "title": "Olinl Blog",
+          "siteurl": "https://blog.olinl.com",
+          "desc": "分享、实践、学习",
+          "imgurl": "https://q2.qlogo.cn/headimg_dl?dst_uin=9892214&spec=0"
+        }
+      ]
+    },
+    {
+      "id_name": "先链后友",
+      "link_list": []
+    },
+    {
+      "id_name": "先友后链",
+      "link_list": []
+    }
+  ]
+}
+

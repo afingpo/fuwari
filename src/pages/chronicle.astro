@@ -4,27 +4,12 @@ import ChroniclePanel from '@components/ChroniclePanel.svelte';
 import { i18n } from '@i18n/translation';
 import I18nKey from '@i18n/i18nKey';
 
-const DATA_URL = "https://raw.githubusercontent.com/afingpo/blog-data/refs/heads/main/src/chronicle.json";
+// 1. 改为直接通过别名静态导入 JSON（它在构建时会被正确解析和打包）
+import chronicleData from '@public/chronicle.json';
 
-let development = [];
-let acknowledgments = [];
-
-try {
-    // 增加超时控制防止挂死构建
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-    const response = await fetch(DATA_URL, { signal: controller.signal });
-    clearTimeout(timeoutId);
-
-    if (response.ok) {
-        const data = await response.json();
-        development = data.development || [];
-        acknowledgments = data.acknowledgments || [];
-    }
-} catch (e) {
-    console.error("Fetch 失败:", e);
-}
+// 2. 直接从导入的对象中解构数据，设置默认空数组兜底
+const development = chronicleData.development || [];
+const acknowledgments = chronicleData.acknowledgments || [];
 ---
 
 <MainGridLayout title="纪事" description="网站发展历程与鸣谢">

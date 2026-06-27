@@ -12,13 +12,14 @@
     ],
     "paths": {
       "@components/*": ["src/components/*"],
-      "@assets/*": ["src/assets/*"],
+      "@assets/*": ["public/assets/*"],
       "@constants/*": ["src/constants/*"],
       "@utils/*": ["src/utils/*"],
       "@i18n/*": ["src/i18n/*"],
       "@layouts/*": ["src/layouts/*"],
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+	  "@public/*": ["public/*"]
     }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "public/**/*"]
 }
