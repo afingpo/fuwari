@@ -5,7 +5,7 @@ import Markdown from "@components/misc/Markdown.astro";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
-import Comment from '@components/Comment/index.astro';
+import Comment from "@components/Comment/index.astro";
 //import LinksData from '../data/links.json'
 
 //const items = LinksData || [];
@@ -18,30 +18,21 @@ if (!linksPost) {
 const { Content } = await render(linksPost);
 
 //Use Raw URL
-const DATA_RAW_URL = 'https://raw.githubusercontent.com/afingpo/blog-data/refs/heads/main/src/links.json';
 let items = [];
 
 try {
-    const response = await fetch(DATA_RAW_URL);
+    const response = await fetch("https://raw.githubusercontent.com/afingpo/blog-data/refs/heads/main/src/links.json");
     if (response.ok) {
         items = await response.json();
     } else {
-        console.error('获取友链数据失败，使用备用数据');
-        items = []; // 可以在这里设置备用数据
+        console.error("获取友链数据失败，使用备用数据");
+		items = []
     }
 } catch (error) {
-    console.error('获取友链数据时出错:', error);
-    items = []; // 可以在这里设置备用数据
+    console.error("获取友链数据时出错:", error);
+    items = []
 }
 
-/*const items = [
-  {
-    title: 'Astro',
-    imgurl: 'https://avatars.githubusercontent.com/u/44914786?s=48&v=4',
-    desc: 'The web framework for content-driven websites. ⭐️ Star to support our work!',
-    siteurl: 'https://github.com/withastro/astro',
-  },
-]*/
 
 
 ---

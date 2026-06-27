@@ -7,124 +7,103 @@ import { getCategoryUrl } from "@utils/url-utils.ts";
 // src/utils/content-utils.ts
 
 async function getRawSortedPosts() {
-    const allBlogPosts = await getCollection("posts", ({ data }) => {
-        return import.meta.env.PROD ? data.draft !== true : true;
-    });
+	// 获取 posts 集合并过滤掉生产环境下的草稿
+	const allBlogPosts = await getCollection("posts", ({ data }) => {
+		return import.meta.env.PROD ? data.draft !== true : true;
+	});
 
-    // 1. 严格升序排序，确保自动生成的 TT 编号稳定
-    const entriesForCalc = [...allBlogPosts].sort((a, b) => {
-        const dateA = a.data.published.getTime();
-        const dateB = b.data.published.getTime();
-        if (dateA !== dateB) return dateA - dateB;
-        return a.id.localeCompare(b.id);
-    });
+	// 动态决定排序时间基准
+	const getSortDate = (entry: any) => {
+		if (entry.data.sync === true) {
+			return entry.data.updated ? entry.data.updated.getTime() : entry.data.published.getTime();
+		}
+		return entry.data.published.getTime();
+	};
 
-    const dailyCount: Record<string, number> = {};
-    const slugMap = new Map();
+	return allBlogPosts.map(post => {
+        // 优先读取 Astro 已经帮你提取到最外层的 post.slug
+        const finalSlug = post.slug || post.data.slug; 
 
-    entriesForCalc.forEach((entry) => {
-        // 如果文章在 frontmatter 里自己写了 slug，直接用写好的，不参与自动计算
-        if (entry.data.slug) {
-            slugMap.set(entry.id, entry.data.slug);
-            return;
-        }
-
-        // 否则，自动计算时间加 TT 编号
-        const date = entry.data.published;
-        const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-
-        if (dailyCount[dateStr] === undefined) dailyCount[dateStr] = 0;
-        else dailyCount[dateStr]++;
-        const tt = String(dailyCount[dateStr]).padStart(2, '0');
-        const generatedId = `${dateStr}-${tt}`;
-
-        // 保留目录前缀（比如 essay/）
-        const pathParts = entry.slug.split('/');
-        pathParts.pop();
-        const prefix = pathParts.length > 0 ? pathParts.join('/') + '/' : '';
-
-        slugMap.set(entry.id, `${prefix}${generatedId}`);
-    });
-
-    // 帮助函数：根据 sync 状态动态决定排序时间基准
-    const getSortDate = (entry: any) => {
-        if (entry.data.sync === true) {
-            return entry.data.updated ? entry.data.updated.getTime() : entry.data.published.getTime();
-        }
-        return entry.data.published.getTime();
-    };
-
-    // 2. 最终返回时，绝对不要去污染覆盖原生的 post.slug 属性，仅修正 data 内部的引用
-    return allBlogPosts.map(post => {
-        const finalSlug = slugMap.get(post.id) || post.slug;
         return {
-            ...post,
-            slug: finalSlug, // 确保这个对外暴露的 slug 完美对应
-            data: { ...post.data, slug: finalSlug }
+                ...post,
+                slug: finalSlug, 
+                data: { ...post.data, slug: finalSlug }
         };
-    }).sort((a, b) => getSortDate(b) - getSortDate(a));
-}
+	}).sort((a, b) => getSortDate(b) - getSortDate(a));
 
+}
 
 export async function getSortedPosts() {
-        const sorted = await getRawSortedPosts();
+	const sorted = await getRawSortedPosts();
 
-        for (let i = 1; i < sorted.length; i++) {
-                sorted[i].data.nextSlug = sorted[i - 1].slug;
-                sorted[i].data.nextTitle = sorted[i - 1].data.title;
-        }
-        for (let i = 0; i < sorted.length - 1; i++) {
-                sorted[i].data.prevSlug = sorted[i + 1].slug;
-                sorted[i].data.prevTitle = sorted[i + 1].data.title;
-        }
-
-        return sorted;
+	for (let i = 1; i < sorted.length; i++) {
+		sorted[i].data.nextSlug = sorted[i - 1].slug;
+		sorted[i].data.nextTitle = sorted[i - 1].data.title;
+	}
+	for (let i = 0; i < sorted.length - 1; i++) {
+		sorted[i].data.prevSlug = sorted[i + 1].slug;
+		sorted[i].data.prevTitle = sorted[i + 1].data.title;
+	}
+	return sorted;
 }
+
 export type PostForList = {
-        slug: string;
-        data: CollectionEntry<"posts">["data"];
+	slug: string;
+	data: CollectionEntry<"posts">["data"];
 };
+
+/*
 export async function getSortedPostsList(): Promise<PostForList[]> {
-        const sortedFullPosts = await getRawSortedPosts();
+	const sortedFullPosts = await getRawSortedPosts();
 
-        // delete post.body
-        const sortedPostsList = sortedFullPosts.map((post) => ({
-                slug: post.slug,
-                data: post.data,
-        }));
-
-        return sortedPostsList;
+	// delete post.body
+	const sortedPostsList = sortedFullPosts.map((post) => ({
+		slug: post.slug,
+		data: post.data,
+	}));
+	return sortedPostsList;
 }
+*/
+
+export async function getSortedPostsList(): Promise<PostForList[]> {
+	const sortedFullPosts = await getSortedPosts();
+
+	const sortedPostsList = sortedFullPosts.map((post) => ({
+		slug: post.slug,
+		data: post.data,
+	}));
+	return sortedPostsList;
+}
+
 export type Tag = {
-        name: string;
-        count: number;
+	name: string;
+	count: number;
 };
 
 export async function getTagList(): Promise<Tag[]> {
-        const allBlogPosts = await getCollection<"posts">("posts", ({ data }) => {
-                return import.meta.env.PROD ? data.draft !== true : true;
-        });
+	const allBlogPosts = await getCollection<"posts">("posts", ({ data }) => {
+		return import.meta.env.PROD ? data.draft !== true : true;
+	});
 
-        const countMap: { [key: string]: number } = {};
-        allBlogPosts.forEach((post: { data: { tags: string[] } }) => {
-                post.data.tags.forEach((tag: string) => {
-                        if (!countMap[tag]) countMap[tag] = 0;
-                        countMap[tag]++;
-                });
-        });
+	const countMap: { [key: string]: number } = {};
+	allBlogPosts.forEach((post: { data: { tags: string[] } }) => {
+		post.data.tags.forEach((tag: string) => {
+			if (!countMap[tag]) countMap[tag] = 0;
+			countMap[tag]++;
+		});
+	});
 
-        // sort tags
-        const keys: string[] = Object.keys(countMap).sort((a, b) => {
-                return a.toLowerCase().localeCompare(b.toLowerCase());
-        });
-
-        return keys.map((key) => ({ name: key, count: countMap[key] }));
+	// sort tags
+	const keys: string[] = Object.keys(countMap).sort((a, b) => {
+		return a.toLowerCase().localeCompare(b.toLowerCase());
+	});
+	return keys.map((key) => ({ name: key, count: countMap[key] }));
 }
 
 export type Category = {
-        name: string;
-        count: number;
-        url: string;
+	name: string;
+	count: number;
+	url: string;
 };
 
 export async function getCategoryList(): Promise<Category[]> {

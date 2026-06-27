@@ -1,6 +1,8 @@
 import { defineCollection, z } from "astro:content";
+import { glob } from "astro/loaders";
 
 const postsCollection = defineCollection({
+	loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/posts' }),
 	schema: z.object({
 		title: z.string(),
 		author: z.array(z.string()).default(["涵哲子"]),
@@ -28,6 +30,7 @@ const postsCollection = defineCollection({
 	}),
 });
 const specCollection = defineCollection({
+	loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/spec' }),
 	schema: z.object({}),
 });
 export const collections = {

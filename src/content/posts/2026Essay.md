@@ -3,7 +3,7 @@ title: "丙午杂言"
 published: 2026-03-12
 updated: 2026-03-19
 sync: true
-slug: 2026Essay
+slug: "2026Essay"
 tags: ["订年散稿"]
 category: "杂谈随笔"
 ---

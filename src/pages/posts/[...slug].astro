@@ -13,7 +13,8 @@ import ImageWrapper from "../../components/misc/ImageWrapper.astro";
 import PostMetadata from "../../components/PostMeta.astro";
 import { profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
-import Comment from '@components/Comment/index.astro';
+import Comment from "@components/Comment/index.astro";
+import { render } from "astro:content"
 
 export async function getStaticPaths() {
     // 这里的 blogEntries 已经是 content-utils.ts 处理过的
@@ -30,9 +31,9 @@ export async function getStaticPaths() {
 
 
 const { entry } = Astro.props;
-const { Content, headings } = await entry.render();
-
-const { remarkPluginFrontmatter } = await entry.render();
+// const { Content, headings } = await entry.render();
+// const { remarkPluginFrontmatter } = await entry.render();
+const { Content, headings, remarkPluginFrontmatter } = await render(entry);
 
 const jsonLd = {
 	"@context": "https://schema.org",

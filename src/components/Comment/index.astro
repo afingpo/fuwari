@@ -1,17 +1,23 @@
 ---
-import type { CollectionEntry } from 'astro:content'
 import Twikoo from './Twikoo.astro'
 import Giscus from './Giscus.astro'
 
 interface Props {
-  post: CollectionEntry<'posts'>
+  // 接收一个 post 对象，类型放宽以兼容扩展过的 entry
+  post: any
 }
 
-const { slug } = Astro.props.post
-const path = `/posts/${slug}`
+const { post } = Astro.props
+
+// 安全地提取 slug 和 collection，如果拿不到 collection 则默认当做 posts 处理
+const slug = post?.slug
+const collection = post && 'collection' in post ? post.collection : 'posts'
+
+// 动态计算评论路径
+const path = collection === 'spec' ? `/${slug}` : `/posts/${slug}`
 
 // 在此选择评论系统：'twikoo' | 'giscus' | ''
-const commentService = 'twikoo' 
+const commentService: 'twikoo' | 'giscus' | '' = 'twikoo'
 ---
 
 {commentService !== '' && (

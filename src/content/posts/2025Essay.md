@@ -2,7 +2,7 @@
 title: "乙巳杂言"
 published: 2025-05-19
 updated: 2025-12-10
-slug: 2025Essay
+slug: "2025Essay"
 sync: true
 tags: ["订年散稿"]
 category: "杂谈随笔"
