@@ -4,12 +4,8 @@ interface Props {
 }
 const { path } = Astro.props
 
-// 直接在这里硬编码你的后端 URL，不再引用 config.ts
 const twikooConfig = {
-  // envId: 'https://twikoo3-060502-netlify.netlify.app/.netlify/functions/twikoo', // Netlify
-  // envId: 'https://twikoo3-vercel.afipo.top', // Vercel
-  // envId: 'https://twikoo3-260502-vercel-ke3dc0xsu-han-lius-projects.vercel.app', // Vercel
-  envId: 'https://twikoo3-netlify.afipo.top/.netlify/functions/twikoo', // Netlify
+  envId: 'https://twikoo.iluc.cn/.netlify/functions/twikoo', // Netlify
   lang: 'zh-CN',
   el: '#tcomment',
   path: path,
@@ -20,8 +16,8 @@ const twikooConfig = {
 <div id="tcomment"></div>
 
 <script 
-  src="https://cdn.jsdelivr.net/npm/twikoo@1.7.9/dist/twikoo.min.js" 
-  integrity="sha384-uS5XTM0hprJZj0R184twNRV12L55VagOlT/XQaj1uAebA0RtO7diEr+dE9TBn5N2"
+  src="https://registry.npmmirror.com/twikoo/1.7.13/files/dist/twikoo.min.js" 
+  integrity="sha384-tolmjgXFAyQqyrcD+IC55sJypZy4Khcl8sD8ricVii2yGfrLCf0kG1zp3u00K2fp"
   crossorigin="anonymous"
 ></script>
 
