@@ -38,6 +38,12 @@
           "siteurl": "https://blog.olinl.com",
           "desc": "分享、实践、学习",
           "imgurl": "https://q2.qlogo.cn/headimg_dl?dst_uin=9892214&spec=0"
+        },
+        {
+          "title": "崔话记",
+          "siteurl": "https://cuixiping.com/",
+          "desc": "向着理想的方向，爬一会儿，躺一会儿",
+          "imgurl": "https://cuixiping.com/logo-cat.svg"
         }
       ]
     },
