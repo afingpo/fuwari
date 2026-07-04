@@ -7,18 +7,23 @@ slug: "2025-11-16-00"
 tags: [Blog, Astro, Fuwari]
 category: "博客改造"
 ---
+
+{#正文}
+# 给fuwari添加NMP播放器
+
 上周在逛 Bilibili 的时候，偶然刷到了这个项目，UI 尚可，便尝试一下。
 官网：[https://nmp.hypcvgm.top](https://nmp.hypcvgm.top)
 
-![](/assets/2025-11-16-00-p1.webp)
+![photo1](/assets/2025-11-16-00-p1.webp)
 
 ## 准备工具
 
 - 一个善良、友好的 AI，在报错时先问问它
 - 一个优良的、已经配置好的环境，Windows 建议使用 `Git Bash` 或 `WSL`（文章使用 `Termux` 的 ` Proot-distro Archlinux ` 环境），应有：
-	- 已经配置好的 Git 环境
-	- `nodejs` + `pnpm` 或 `npm`
-	-  一个符合自己使用习惯的 IDE（文章使用自己配置的 `Neovim`）
+
+  - 已经配置好的 Git 环境
+  - `nodejs` + `pnpm` 或 `npm`
+  -  一个符合自己使用习惯的 IDE（文章使用自己配置的 `Neovim`）
 - NMP 文档：[https://docs.nmp.hypcvgm.top](https://docs.nmp.hypcvgm.top)
 
 > [!TIP]
@@ -46,7 +51,9 @@ category: "博客改造"
 ### 配置 Components
 
 新建文件 `NMP.astro`：
-```astro title="src/components/NMP.astro"
+
+{title="src/components/NMP.astro"}
+``` astro
 ---
 ---
 <!-- NeteaseMiniPlayer -->
@@ -73,7 +80,8 @@ category: "博客改造"
 > 
 > 如果使用 CDN，请对文件后半部分进行替换：
 >
-> ```astro title="src/components/NMP.astro" del={1-6} ins={7-12}
+> {title="src/components/NMP.astro"}
+> ``` astro
 > <link
 >   rel="stylesheet"
 >   href="/NMP/netease-mini-player-v2.css" />
@@ -91,7 +99,9 @@ category: "博客改造"
 ### 配置 Layout
 
 更改文件 `Layout.astro`:
-```astro title="src/layouts/Layout.astro" ins={2, 25}
+
+{title="src/layouts/Layout.astro"}
+``` astro
 ---
 import NMP from "@components/NMP.astro";
 import "@fontsource/roboto/400.css";
@@ -120,10 +130,10 @@ if (window.swup) {
 ```
 ### 上线测试
 
-```bash
+``` bash
 pnpm run dev
 ```
 
-![](/assets/2025-11-16-00-p2.webp)
+![photo2](/assets/2025-11-16-00-p2.webp)
 
 已经成功配置！

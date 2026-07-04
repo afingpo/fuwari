@@ -148,3 +148,40 @@
     }
   }
 }
+
+.shiki, 
+pre[title] .shiki, 
+div.code-block pre,
+.prose pre {
+  border-radius: 6px !important;
+  @apply p-4 overflow-auto !block my-4;
+  background-color: #24292e !important; 
+  color: #e1e4e8 !important;            
+  font-family: monospace;
+  line-height: 1.6 !important;          
+}
+
+.shiki code {
+  color: inherit !important;
+  background: transparent !important;
+  border-radius: 0px !important;
+  @apply p-0 font-normal;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.shiki .line {
+  @apply bg-transparent border-none;
+  display: inline-block !important; 
+  width: 100%;
+  padding: 0 !important;
+  margin: 0 !important;             
+  background-image: none !important;
+}
+
+.shiki .line::before,
+.shiki .line::after {
+  content: none !important;         
+  display: none !important;
+}
+

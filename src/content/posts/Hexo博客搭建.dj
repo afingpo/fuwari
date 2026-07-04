@@ -12,7 +12,7 @@ category: "博客改造"
 
 大概是上个月，在看国光大佬的[Termux 高级终端安装使用配置教程](https://www.sqlsec.com/2018/05/termux.html)得时候，其中有一段是这么说的：
 
-> Hexo 是一个用 Nodejs 编写的快速、简洁且高效的博客框架。Hexo 使用 Markdown 解析文章，在几秒内，即可利用靓丽的主题生成静态网页。*另外大家看到国光我的博客就是使用 Hexo 搭建的哦*。
+> Hexo 是一个用 Nodejs 编写的快速、简洁且高效的博客框架。Hexo 使用 Markdown 解析文章，在几秒内，即可利用靓丽的主题生成静态网页。*另外大家看到国光我的博客 就是使用 Hexo 搭建的哦*。
 
 这时就有了搭建博客的想法。当然，为了在Android端操作，容器就是[Termux](https://github.com/termux/termux-app)
 
@@ -20,7 +20,7 @@ category: "博客改造"
 
 - npm (或pnpm)
 - node.js
-- termux  
+- termux
   注：`termux`的作用是模拟Linux环境，所以Linux/mac端操作基本大同小异；Win端需酌情替换命令（WSL也可）。
 
 ## 安装环境 (已有可略过)
@@ -29,19 +29,19 @@ category: "博客改造"
 
 - 安装node.js
 
-```bash
+``` bash
 pkg install nodejs
 ```
 
 - 安装pnpm
 
-```bash
+``` bash
 pkg install pnpm
 ```
 
 - 验证安装
 
-```bash
+``` bash
 node -v
 npm -v
 
@@ -50,7 +50,7 @@ npm -v
 
 - 安装Hexo
 
-```bash
+``` bash
 npm i -g hexo-cli
 ```
 
@@ -58,7 +58,7 @@ npm i -g hexo-cli
 
 ## 初始化Hexo项目
 
-```bash
+``` bash
 # 创建博客项目
 hexo init my-blog
 
@@ -73,7 +73,7 @@ npm install
 
 ## 启动本地服务器
 
-```bash
+``` bash
 hexo s
 ```
 
@@ -81,23 +81,23 @@ hexo s
 
 ## 常用命令速查
 
-| 命令              | 功能     | 简写        |
-|-------------------|---------|------------|
-| `hexo server`     | 启动服务器 | `hexo s`   |
-| `hexo generate`   | 生成静态文件 | `hexo g`   |
-| `hexo deploy`     | 部署     | `hexo d`   |
-| `hexo clean`      | 清除缓存 | `hexo cl`  |
-| `hexo new "标题"` | 新建文章 | `hexo n`   |
+| 命令              | 功能       | 简写      |
+|-------------------|-----------|-----------|
+| `hexo server`     | 启动服务器 | `hexo s`  |
+| `hexo generate`   | 生成静态文件| `hexo g`  |
+| `hexo deploy`     | 部署       | `hexo d`  |
+| `hexo clean`      | 清除缓存   | `hexo cl` |
+| `hexo new "标题"` | 新建文章   | `hexo n`  |
 
 - 常用命令组合
-```bash
+``` bash
 hexo cl && hexo g && hexo s
 hexo cl && hexo g && hexo d
 ```
 
 ## 创建新文章
 
-```bash
+``` bash
 hexo new "我的第一篇博客"
 ```
 
@@ -106,12 +106,12 @@ hexo new "我的第一篇博客"
 ## 更换主题（Butterfly示例）
 
 1. 安装主题：
-```bash
+``` bash
 npm i hexo-theme-butterfly --save
 ```
 
 2. 修改主配置（`_config.yml`）：
-```yaml
+``` yaml
 theme: butterfly
 ```
 
@@ -123,13 +123,13 @@ theme: butterfly
 
 1. 安装部署插件：
 
-```bash
+``` bash
 npm install hexo-deployer-git --save
 ```
 
 2. 配置（`_config.yml`）：
 
-```yaml
+``` yaml
 deploy:
   type: git
   repo: git@github.com:<user.name>/<user.repo>.git
@@ -140,12 +140,12 @@ deploy:
 
 3. 生成并部署：
 
-```bash
+``` bash
 hexo cl && hexo g && hexo d
 ```
 
 ## 备份策略
-```bash
+``` bash
 # 初始化Git仓库
 git init
 
@@ -168,7 +168,7 @@ git push -u origin main
 ## 完成配置
 
 最终主要目录结构：
-```
+``` txt
 .
 ├── _config.yml
 ├── _config.butterfly.yml
@@ -185,7 +185,7 @@ git push -u origin main
 注：在新版本，您更常见会遇到主题文件在`node_modules`下的情况。如果你想要自定义主题文件、修改主题，请自行复制到`themes`目录下
 
 ## 维护命令
-```bash
+``` bash
 # 日常更新流程
 hexo cl && hexo g && hexo d
 
@@ -199,6 +199,7 @@ hexo cl && hexo g && hexo s
 ## 部署到Netlify/Vercel（推荐）
 
 ### Netlify部署步骤：
+
 1. 将代码推送到GitHub仓库
 2. 登录 [Netlify](https://app.netlify.com)
 3. 选择 "New site from Git" > GitHub
@@ -208,6 +209,7 @@ hexo cl && hexo g && hexo s
 5. 点击 "Deploy site"
 
 ### Vercel部署步骤：
+
 1. 登录 [Vercel](https://vercel.com)
 2. 点击 "Add New Project"
 3. 导入GitHub仓库
@@ -219,3 +221,4 @@ hexo cl && hexo g && hexo s
 ## 后记
 
 Netlify和Vercel都提供了比GitHub Page更好的页面加载速度和操作体验。对于域名，您可以寻找免费域名（如.us.kg、.dpdns.org等）或到付费平台购买专业域名。希望您能有一个愉快的博客搭建体验。
+

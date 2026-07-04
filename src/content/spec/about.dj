@@ -38,7 +38,7 @@
 
 ## 何我者也
 
-余**涵哲子**也，依世而立，功就所存。
+余*涵哲子*也，依世而立，功就所存。
 
 闲者也，平居于何处？身立存于世亦基网何、不得论也。
 
@@ -59,9 +59,11 @@
 ### 何以共谈
 
 - 邮箱: [`me@iluc.cn`](mailto:me@iluc.cn)
+
     - 获取: [PGP公钥](https://iluc.cn/pubkey.asc)
 
 - Matrix: `#afipo_chat:mozilla.org`
+    
     - 使用 Matrix 服务商所提供的用户加入
 
 ---
@@ -71,14 +73,18 @@
 - 框架为基底：[Astro](https://astro.build) + [Fuwari](https://github.com/saicaca/fuwari) 
 
 - 部署在它方：
+
     - [Netlify](https://www.netlify.com)
     - [Vercel](https://vercel.com)
 
 - 字体展品味：
+
     - 霞鹜文楷 Lite ([LXGW WenKai Lite](https://github.com/lxgw/LxgwWenKai-Lite))
     - 思源黑体 ([Noto Sans SC](https://github.com/adobe-fonts/source-han-sans/))
     - 思源宋体 ([Noto Serif SC](https://github.com/adobe-fonts/source-han-serif/))
 
 - 源码有依托：
+
     - [Github](https://github.com)
     - [Codeberg](https://codeberg.org)。
+

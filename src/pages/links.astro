@@ -1,5 +1,5 @@
 ---
-import { getEntry, render } from "astro:content";
+import { getEntry } from "astro:content";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
@@ -8,19 +8,19 @@ import Comment from "@components/Comment/index.astro";
 import links from "@public/links.json"
 import LinksList from '@components/LinksList.astro'
 
-// 获取 markdown 格式的页面补充内容
+// 获取 djot 格式的页面补充内容
 const linksPost = await getEntry("spec", "links");
 if (!linksPost) {
   throw new Error("Links page content not found");
 }
 
-// 渲染 Markdown 内容为组件
-const { Content } = await render(linksPost);
+// 直接从 data 中解构出渲染好的纯 HTML 字符串
+const { html = "" } = linksPost.data as any;
 
 // links 的原始数据处理
 const { origin } = links
 
-// 在这里直接硬编码你的站点信息（点击复制部分）
+// 在这里编码站点信息
 const applyTip = [
   { name: 'NAME', val: '涵哲子居' },
   { name: 'URl', val: 'https://iluc.cn' },
@@ -58,14 +58,13 @@ const applyTip = [
           })
         }
       </blockquote>
-      
-	  <div class="prose dark:prose-invert max-w-none mb-6">
-        <Content />
+
+      <div class="prose dark:prose-invert max-w-none mb-6">
+        <Fragment set:html={html} />
       </div>
 
     </div>
   </div>
-
   <Comment post={linksPost}></Comment>
 </MainGridLayout>
 

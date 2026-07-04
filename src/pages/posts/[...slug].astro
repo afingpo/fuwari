@@ -17,23 +17,23 @@ import Comment from "@components/Comment/index.astro";
 import { render } from "astro:content"
 
 export async function getStaticPaths() {
-    // 这里的 blogEntries 已经是 content-utils.ts 处理过的
-    // 它的 slug 已经包含了目录前缀和 TT 编号（例如 "essay/2026-05-02-00"）
     const blogEntries = await getSortedPosts();
-    
     return blogEntries.map((entry) => {
         return {
-            params: { slug: entry.slug }, // 直接透传 entry.slug
+            params: { slug: entry.slug },
             props: { entry },
         };
     });
 }
 
-
 const { entry } = Astro.props;
 // const { Content, headings } = await entry.render();
-// const { remarkPluginFrontmatter } = await entry.render();
-const { Content, headings, remarkPluginFrontmatter } = await render(entry);
+// const { remarkPluginFrontmatter } = await render(entry);
+// const { Content, headings, remarkPluginFrontmatter } = await render(entry);
+// const { html, headings, metadata } = await render(entry);
+// const remarkPluginFrontmatter = metadata?.remarkPluginFrontmatter || { words: 0, minutes: 0 };
+// const { html, headings, remarkPluginFrontmatter } = entry.data;
+const { html, headings, remarkPluginFrontmatter = { words: 0, minutes: 0 } } = entry.data;
 
 const jsonLd = {
 	"@context": "https://schema.org",
@@ -111,7 +111,7 @@ const jsonLd = {
 
 
             <Markdown class="mb-6 markdown-content onload-animation">
-                <Content />
+                <Fragment set:html={html} />
             </Markdown>
 
             {licenseConfig.enable && <License title={entry.data.title} slug={entry.slug} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
