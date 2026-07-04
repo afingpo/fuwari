@@ -1,4 +1,4 @@
-// src/pages/rss.xml.ts
+// src/pages/atom.xml.ts
 import rss from "@astrojs/rss";
 import { getSortedPosts } from "@utils/content-utils";
 import { url } from "@utils/url-utils";
@@ -21,6 +21,11 @@ export async function GET(context: APIContext) {
         title: siteConfig.title,
         description: siteConfig.subtitle || "No description",
         site: context.site ?? "https://iluc.cn",
+        customData: `
+            <language>${siteConfig.lang}</language>
+            <atom:link href="${new URL('atom.xml', context.site || 'https://iluc.cn').href}" rel="self" type="application/rss+xml" />
+            <updated>${new Date().toISOString()}</updated>
+        `,
         items: blog.map((post) => {
             const rawHtml = post.data.html || "";
             const cleanedHtml = stripInvalidXmlChars(rawHtml);
@@ -43,7 +48,6 @@ export async function GET(context: APIContext) {
                 }),
             };
         }),
-        customData: `<language>${siteConfig.lang}</language>`,
     });
 }
 
