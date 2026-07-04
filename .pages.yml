@@ -1,0 +1,88 @@
+# .pages.yml
+# 针对 Djot 架构与 Fuwari 主题微调的 Pages CMS 配置文件
+
+media_folder: public/assets # 这样在网页后台上传的图片能直接进你的本地静态目录
+
+collections:
+  - name: posts
+    label: 博客文章
+    type: folder
+    path: src/content/posts
+    # 🎯 核心锚定：强制 Pages CMS 读写 .dj 格式而不是默认的 .md
+    extension: dj 
+    format: frontmatter
+    slug: "{{title}}"
+    fields:
+      - name: title
+        label: 标题
+        type: string
+        required: true
+
+      - name: published
+        label: 发布日期
+        type: date
+        required: true
+
+      - name: updated
+        label: 更新日期
+        type: date
+        required: false
+
+      - name: description
+        label: 文章摘要
+        type: string
+        required: false
+
+      - name: category
+        label: 分类
+        type: string
+        required: false
+
+      - name: tags
+        label: 标签
+        type: list
+        required: false
+
+      - name: image
+        label: 封面图片路径
+        type: string
+        required: false
+        hint: "例如: /assets/xxxx-p1.webp"
+
+      - name: draft
+        label: 草稿隐藏
+        type: boolean
+        default: false
+
+      - name: comments
+        label: 开启评论
+        type: boolean
+        default: true
+
+      - name: body
+        label: 正文内容 (使用 Djot 语法)
+        type: rich-text
+        required: true
+
+  - name: spec
+    label: 自定义独立页
+    type: folder
+    path: src/content/spec
+    # 🎯 同样约束为 .dj
+    extension: dj
+    format: frontmatter
+    slug: "{{title}}"
+    fields:
+      - name: title
+        label: 页面标题
+        type: string
+        required: false
+      - name: description
+        label: 页面描述
+        type: string
+        required: false
+      - name: body
+        label: 页面正文
+        type: rich-text
+        required: true
+
