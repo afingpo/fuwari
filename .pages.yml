@@ -1,17 +1,21 @@
 # .pages.yml
-# 针对 Djot 架构与 Fuwari 主题微调的 Pages CMS 配置文件
+# 严格适配 Pages CMS 官方最新规范 (2.x 版本)
 
-media_folder: public/assets # 这样在网页后台上传的图片能直接进你的本地静态目录
+# 1. 媒体资源全局声明
+media:
+  input: public/assets
+  output: /assets
 
-collections:
+# 2. 内容集合与结构声明
+content:
   - name: posts
     label: 博客文章
-    type: folder
+    type: collection
     path: src/content/posts
-    # 🎯 核心锚定：强制 Pages CMS 读写 .dj 格式而不是默认的 .md
-    extension: dj 
-    format: frontmatter
-    slug: "{{title}}"
+    # 🎯 关键修正 1：用 filename 语法锁死 Pages CMS 创建/读取新文件的后缀为 .dj
+    filename: "{primary}.dj"
+    # 🎯 关键修正 2：声明文件存储格式为标准 YAML-Frontmatter
+    format: yaml-frontmatter
     fields:
       - name: title
         label: 标题
@@ -47,7 +51,7 @@ collections:
         label: 封面图片路径
         type: string
         required: false
-        hint: "例如: /assets/xxxx-p1.webp"
+        description: "例如: /assets/xxxx-p1.webp"
 
       - name: draft
         label: 草稿隐藏
@@ -60,18 +64,18 @@ collections:
         default: true
 
       - name: body
-        label: 正文内容 (使用 Djot 语法)
+        label: 正文内容 (支持 Djot 语法)
         type: rich-text
         required: true
+        options:
+          format: markdown # 让富文本编辑器输出对 djot 友好的类 markdown 纯文本结构
 
   - name: spec
     label: 自定义独立页
-    type: folder
+    type: collection
     path: src/content/spec
-    # 🎯 同样约束为 .dj
-    extension: dj
-    format: frontmatter
-    slug: "{{title}}"
+    filename: "{primary}.dj"
+    format: yaml-frontmatter
     fields:
       - name: title
         label: 页面标题
@@ -85,4 +89,5 @@ collections:
         label: 页面正文
         type: rich-text
         required: true
-
+        options:
+          format: markdown
