@@ -50,6 +50,12 @@
           "siteurl": "https://gxy.cn.mt",
           "desc": "一个装着些稀奇古怪东西的个人小站，欢迎来逛逛~",
           "imgurl": "https://gxy.cn.mt/assets/avatar.webp"
+        },
+        {
+          "title": "EXYONE@BLOG",
+          "siteurl": "https://exyone.is-a.dev",
+          "desc": "将好奇心转化为代码",
+          "imgurl": ""
         }
       ]
     },
