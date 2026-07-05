@@ -1,6 +1,6 @@
 // src/content/config.ts
 import { defineCollection, z } from "astro:content";
-import { djotLoader } from "../loaders/djotLoader";
+import { djotLoader } from "@/loaders/djotLoader";
 
 const postsCollection = defineCollection({
         loader: djotLoader({ base: './src/content/posts' }),
@@ -42,7 +42,6 @@ const specCollection = defineCollection({
 });
 
 export const collections = {
-        collections: postsCollection,
         posts: postsCollection,
         spec: specCollection,
 };

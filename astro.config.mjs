@@ -91,6 +91,7 @@ export default defineConfig({
         vite: {
                 assetsInclude: ["**/*.dj"],
                 build: {
+                        cssMinify: 'esbuild',
                         rollupOptions: {
                                 onwarn(warning, warn) {
                                         if (
