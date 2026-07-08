@@ -67,12 +67,14 @@ const { remarkPluginFrontmatter = { words: 0, minutes: 0 }, excerpt = "" } = ent
             <Icon name="material-symbols:chevron-right-rounded"
                   class="text-[var(--primary)] text-2xl ml-0.5 shrink-0 transition-transform group-hover:translate-x-1" />
         </a>
-        
+
         <PostMetadata published={published} updated={updated} tags={tags} category={category} hideTagsForMobile={true} hideUpdateDate={true} class="mb-4"></PostMetadata>
 
-        <div class:list={["transition text-75 mb-3.5 pr-4", {"line-clamp-2 md:line-clamp-1": !description}]}>
-            { description || excerpt }
-        </div>
+        { (description || excerpt) && (
+            <div class:list={["transition text-75 mb-3.5 pr-4", {"line-clamp-2 md:line-clamp-1": !description}]}>
+                { description || excerpt }
+            </div>
+        )}
 
         <div class="text-sm text-black/30 dark:text-white/30 flex gap-4 transition">
             <div>

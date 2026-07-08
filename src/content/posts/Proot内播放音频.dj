@@ -3,6 +3,7 @@ title: Termux在Proot内播放音频文件的问题
 published: 2026-02-05
 updated: 2026-05-02
 author: ["涵哲子"]
+desc: "昨天，我突发奇想打算找个TUI播放器在Termux的Arch里使用，但是，发生了一些令人不悦的小插曲。"
 slug: "2026-02-05-00"
 tags: ["Linux", "Termux"]
 category: "日常折腾"
