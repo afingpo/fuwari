@@ -61,7 +61,14 @@
     },
     {
       "id_name": "先链后友",
-      "link_list": []
+      "link_list": [
+		{
+		  "title": "爱吃可比克的鲸鱼",
+		  "siteurl": "https://zxs24719.codeberg.page",
+		  "desc": "生活起起伏伏，始终充满热爱",
+		  "imgurl": "https://zxs24719.codeberg.page/avatar.jpg"
+		}
+	  ]
     },
     {
       "id_name": "先友后链",
