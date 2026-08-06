@@ -23,22 +23,20 @@ const posts: PostItem[] = page.data.map((entry: CollectionEntry<"posts">) => {
 
 <div class="transition grid grid-cols-1 gap-4 mb-4 items-stretch">
     {posts.map((item) => (
-        <div class="flex w-full">
-            <PostCard
-                entry={item.entry}
-                title={item.entry.data.title}
-                tags={item.entry.data.tags}
-                category={item.entry.data.category}
-                published={item.entry.data.published}
-                updated={item.entry.data.updated}
-                url={item.url}
-                image={item.entry.data.image}
-                description={item.entry.data.description}
-                draft={item.entry.data.draft}
-                class:list="onload-animation flex-1 w-full"
-                style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
-            ></PostCard>
-        </div>
+        <PostCard
+            entry={item.entry}
+            title={item.entry.data.title}
+            tags={item.entry.data.tags}
+            category={item.entry.data.category}
+            published={item.entry.data.published}
+            updated={item.entry.data.updated}
+            url={item.url}
+            image={item.entry.data.image}
+            description={item.entry.data.description}
+            draft={item.entry.data.draft}
+            class:list="onload-animation w-full"
+            style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
+        ></PostCard>
     ))}
 </div>
 
