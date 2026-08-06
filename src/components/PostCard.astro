@@ -44,7 +44,7 @@ const coverWidth = "28%";
 const { remarkPluginFrontmatter = { words: 0, minutes: 0 }, excerpt = "" } = entry.data as any;
 ---
 
-<div class:list={["card-base flex flex-col-reverse md:flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative group mx-auto", className]} style={style}>
+<div class:list={["card-base flex flex-col-reverse md:flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative group", className]} style={style}>
     <div class:list={[
         "p-6 md:pl-7 md:pr-6 md:pt-7 md:pb-6 relative w-full",
         { "md:w-[calc(100%_-_var(--coverWidth)_-_12px)]": hasCover }
