@@ -1,0 +1,271 @@
+---
+import { getEntry } from "astro:content";
+import { popups, type PopupItem } from "./config";
+import I18nKey from "../../i18n/i18nKey";
+import { i18n } from "../../i18n/translation";
+
+const expandText = i18n(I18nKey.expand);
+const collapseText = i18n(I18nKey.collapse);
+
+const sorted = [...popups].sort((a, b) => a.order - b.order);
+
+// 从 @/content/<collection>/<entry>.dj 路径中提取 collection 和 entry 名称
+function parseSource(source: string): { collection: string; entry: string } | null {
+    const match = source.match(/@\/content\/([^/]+)\/([^/]+)\.dj$/);
+    if (!match) return null;
+    return { collection: match[1], entry: match[2] };
+}
+
+// 加载所有弹窗内容
+const loaded = await Promise.all(
+    sorted.map(async (p) => {
+        let html = p.content || "";
+        if (p.source) {
+            const parsed = parseSource(p.source);
+            if (parsed) {
+                const entry = await getEntry(parsed.collection, parsed.entry);
+                html = (entry?.data as any)?.html || html;
+            }
+        }
+        return { ...p, html };
+    })
+);
+---
+
+<div id="popup-overlay">
+    {loaded.map((p, i) => {
+        // 指数递增延迟：0s, 0.3s, 0.7s, 1.2s, ...
+        const delay = i === 0 ? 0 : (0.3 * Math.pow(2, i - 1)).toFixed(1);
+        const extraStyle = [
+            p.col ? `--popup-max-h: ${p.maxH}` : "",
+            `animation-delay: ${delay}s`,
+        ].filter(Boolean).join(";");
+        return (
+            <div
+                class:list={[
+                    "popup-item",
+                    `popup-${p.pos}`,
+                    { "popup-collapsible": p.col },
+                ]}
+                data-id={p.id}
+                data-time={p.time || 0}
+                data-max-h={p.maxH}
+                style={extraStyle}
+            >
+                <div class="popup-header">
+                    <span class="popup-title">{p.title}</span>
+                    <div class="popup-header-right">
+                        {(p.time || 0) > 0 && (
+                            <span class="popup-timer" data-id={p.id}>{p.time}s</span>
+                        )}
+                        <button class="popup-close" data-id={p.id} aria-label="关闭">
+                            <svg width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="m12 10.587l4.95-4.95l1.414 1.414l-4.95 4.95l4.95 4.95l-1.414 1.414l-4.95-4.95l-4.95 4.95l-1.414-1.414l4.95-4.95l-4.95-4.95L7.05 5.637z"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class:list={["popup-body", { "popup-collapsed": p.col }]}>
+                    <div class="popup-content" set:html={p.html} />
+                </div>
+                {p.col && (
+                    <button class="popup-expand" data-id={p.id} data-expand={expandText} data-collapse={collapseText}>
+                        {expandText}
+                    </button>
+                )}
+            </div>
+        );
+    })}
+</div>
+
+<style>
+    #popup-overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 9999;
+    }
+
+    .popup-item {
+        pointer-events: auto;
+        position: absolute;
+        width: 20rem;
+        max-width: calc(100vw - 2rem);
+        background: var(--card-bg);
+        border: 1px solid var(--primary);
+        border-radius: var(--radius-large);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        opacity: 0;
+        transform: translateX(calc(100% + 2rem));
+        animation: popup-slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .popup-top-right { top: 1rem; right: 1rem; }
+    .popup-top-center { top: 1rem; left: 50%; }
+    .popup-top-left { top: 1rem; left: 1rem; }
+    .popup-bottom-right { bottom: 1rem; right: 1rem; }
+    .popup-bottom-center { bottom: 1rem; left: 50%; }
+    .popup-bottom-left { bottom: 1rem; left: 1rem; }
+
+    @keyframes popup-slide-in {
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .popup-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.5rem 0.75rem;
+        border-bottom: 1px solid var(--line-divider);
+    }
+
+    .popup-title {
+        font-weight: 700;
+        font-size: 0.875rem;
+        color: var(--primary);
+    }
+
+    .popup-header-right {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .popup-timer {
+        font-size: 0.75rem;
+        color: var(--text-color-50, rgba(0, 0, 0, 0.3));
+        font-variant-numeric: tabular-nums;
+    }
+
+    .popup-close {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--text-color-50, rgba(0, 0, 0, 0.3));
+        padding: 0.125rem;
+        border-radius: 0.25rem;
+        display: flex;
+        align-items: center;
+        transition: color 0.2s, background 0.2s;
+    }
+    .popup-close:hover {
+        color: var(--primary);
+        background: var(--btn-plain-bg-hover);
+    }
+
+    .popup-body {
+        padding: 0.75rem;
+        font-size: 0.875rem;
+        line-height: 1.6;
+        color: var(--text-color-75, rgba(0, 0, 0, 0.75));
+    }
+
+    .popup-collapsed {
+        max-height: var(--popup-max-h);
+        overflow: hidden;
+        position: relative;
+    }
+    .popup-collapsed::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2rem;
+        background: linear-gradient(transparent, var(--card-bg));
+        pointer-events: none;
+    }
+
+    .popup-expand {
+        display: block;
+        width: 100%;
+        background: none;
+        border: none;
+        border-top: 1px solid var(--line-divider);
+        padding: 0.375rem;
+        font-size: 0.75rem;
+        color: var(--primary);
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .popup-expand:hover {
+        background: var(--btn-plain-bg-hover);
+    }
+
+    .popup-hidden {
+        display: none !important;
+    }
+</style>
+
+<script>
+    function closePopup(item: HTMLElement, id: string) {
+        item.classList.add("popup-hidden");
+        sessionStorage.setItem(`popup-closed-${id}`, "1");
+    }
+
+    function initPopups() {
+        const overlay = document.getElementById("popup-overlay");
+        if (!overlay) return;
+
+        const items = overlay.querySelectorAll<HTMLElement>(".popup-item");
+        items.forEach((item) => {
+            const id = item.dataset.id!;
+
+            // 检查是否已关闭
+            if (sessionStorage.getItem(`popup-closed-${id}`)) {
+                item.classList.add("popup-hidden");
+                return;
+            }
+
+            // 关闭按钮
+            const closeBtn = item.querySelector<HTMLButtonElement>(`.popup-close`);
+            closeBtn?.addEventListener("click", () => closePopup(item, id));
+
+            // 展开/收起
+            const expandBtn = item.querySelector<HTMLButtonElement>(`.popup-expand`);
+            const body = item.querySelector<HTMLElement>(`.popup-body`);
+            if (expandBtn && body) {
+                expandBtn.addEventListener("click", () => {
+                    const isCollapsed = body.classList.toggle("popup-collapsed");
+                    expandBtn.textContent = isCollapsed
+                        ? expandBtn.dataset.expand || "Expand"
+                        : expandBtn.dataset.collapse || "Collapse";
+                });
+            }
+
+            // 自动关闭倒计时
+            const time = Math.max(0, Number(item.dataset.time) || 0);
+            if (time > 0) {
+                const timerEl = item.querySelector<HTMLElement>(`.popup-timer`);
+                let remaining = time;
+                if (timerEl) timerEl.textContent = `${remaining}s`;
+
+                let intervalId: ReturnType<typeof setInterval>;
+
+                const startTimer = () => {
+                    intervalId = setInterval(() => {
+                        remaining--;
+                        if (timerEl) timerEl.textContent = `${remaining}s`;
+                        if (remaining <= 0) {
+                            clearInterval(intervalId);
+                            closePopup(item, id);
+                        }
+                    }, 1000);
+                };
+
+                startTimer();
+
+                // 鼠标悬停时暂停，移开后恢复
+                item.addEventListener("mouseenter", () => clearInterval(intervalId));
+                item.addEventListener("mouseleave", () => {
+                    if (remaining > 0) startTimer();
+                });
+            }
+        });
+    }
+
+    initPopups();
+    document.addEventListener("astro:page-load", initPopups);
+</script>

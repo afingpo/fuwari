@@ -39,4 +39,8 @@ export const en: Translation = {
 	[Key.bangumi]: "Bangumi",
 	[Key.essay]: "Essay",
 	[Key.chronicle]: "Chronicle",
+
+	[Key.notice]: "Notice",
+	[Key.expand]: "Expand",
+	[Key.collapse]: "Collapse",
 };

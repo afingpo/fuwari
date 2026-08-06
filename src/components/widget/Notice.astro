@@ -2,6 +2,8 @@
 import { getEntry } from "astro:content";
 import Markdown from "@components/misc/Markdown.astro";
 import WidgetLayout from "./WidgetLayout.astro";
+import I18nKey from "../../i18n/i18nKey";
+import { i18n } from "../../i18n/translation";
 
 interface Props {
     class?: string;
@@ -13,7 +15,7 @@ const noticePost = await getEntry("spec", "notice");
 const { html = "" } = (noticePost?.data || {}) as any;
 ---
 
-<WidgetLayout name="公告" id="notice" class={className} style={style}>
+<WidgetLayout name={i18n(I18nKey.notice)} id="notice" class={className} style={style}>
     <Markdown class="text-sm text-neutral-500">
         <Fragment set:html={html} />
     </Markdown>

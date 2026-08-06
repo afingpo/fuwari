@@ -36,6 +36,10 @@ enum I18nKey {
 	bangumi = "bangumi",
 	essay = "essay",
 	chronicle = "chronicle",
+
+	notice = "notice",
+	expand = "expand",
+	collapse = "collapse",
 }
 
 export default I18nKey;

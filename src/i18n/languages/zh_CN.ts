@@ -39,4 +39,8 @@ export const zh_CN: Translation = {
 	[Key.bangumi]: "追番",
 	[Key.essay]: "闲谈",
 	[Key.chronicle]: "纪事",
+
+	[Key.notice]: "公告",
+	[Key.expand]: "展开",
+	[Key.collapse]: "收起",
 };

@@ -1,5 +1,6 @@
 ---
 import NMP from "@components/NMP.astro";
+import PopupContainer from "@components/popup/PopupContainer.astro";
 import FontLoader from "@components/FontLoader.astro"
 import CookieConsent from "@components/CookieConsent.astro";
 import "@fontsource/roboto/400.css";
@@ -210,6 +211,8 @@ const bannerOffset =
 
 		<!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
 		<div id="page-height-extend" class="hidden h-[300vh]"></div>
+
+		<PopupContainer />
 	</body>
 </html>
 
