@@ -624,6 +624,20 @@ if (window.swup) {
 }
 </script>
 
+<script>
+// 防止 NMP 播放器封面图覆盖页面背景
+(function() {
+	const body = document.body;
+	const observer = new MutationObserver(() => {
+		const bg = getComputedStyle(body).backgroundImage;
+		if (bg && bg !== 'none') {
+			body.style.backgroundImage = 'none';
+		}
+	});
+	observer.observe(body, { attributes: true, attributeFilter: ['style', 'class'] });
+})();
+</script>
+
 <NMP />
 
 <!--
