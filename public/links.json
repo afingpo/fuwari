@@ -25,17 +25,17 @@
           "title": "UpXuu's blog",
           "imgurl": "https://upxuu.com/images/20260214145619.jpg",
           "desc": "逐光而上！",
-          "siteurl": "https://upxuu.com"
+          "siteurl": "https://upxuu.com/"
         },
         {
           "title": "二叉树树",
-          "siteurl": "https://2x.nz",
+          "siteurl": "https://2x.nz/",
           "desc": "Protect What You Love.",
           "imgurl": "https://q2.qlogo.cn/headimg_dl?dst_uin=2726730791&spec=0"
         },
         {
           "title": "Olinl Blog",
-          "siteurl": "https://blog.olinl.com",
+          "siteurl": "https://blog.olinl.com/",
           "desc": "分享、实践、学习",
           "imgurl": "https://q2.qlogo.cn/headimg_dl?dst_uin=9892214&spec=0"
         },
@@ -47,15 +47,21 @@
         },
         {
           "title": "高新炀的小站",
-          "siteurl": "https://gxy.cn.mt",
+          "siteurl": "https://gxy.cn.mt/",
           "desc": "一个装着些稀奇古怪东西的个人小站，欢迎来逛逛~",
           "imgurl": "https://gxy.cn.mt/assets/avatar.webp"
         },
         {
           "title": "Exyone Blog",
-          "siteurl": "https://exyon.ee",
+          "siteurl": "https://exyon.ee/",
           "desc": "一隅藏天地，流水遇知音。",
           "imgurl": "https://avatars.githubusercontent.com/u/224994577?v=4"
+        },
+        {
+          "title": "雾小蒜の小窝",
+          "siteurl": "https://ciallovo.top/",
+          "desc": "共寻繁星，逐光前行！",
+          "imgurl": "https://ciallovo.top/assets/pic/icon.webp"
         }
       ]
     },
