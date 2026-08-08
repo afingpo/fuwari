@@ -66,8 +66,9 @@
         return filterTag === 'all' || (Array.isArray(postTags) && postTags.includes(filterTag));
     });
 
-    // --- 6. 同步到地址栏 ---
-    $: if (typeof window !== 'undefined') {
+    // --- 6. 同步到地址栏（仅在用户交互时调用，不在初始化时调用） ---
+    function syncUrl() {
+        if (typeof window === 'undefined') return;
         const url = new URL(window.location.href);
         if (filterCategory === '未分类') {
             url.searchParams.set('uncategorized', 'true');
@@ -133,7 +134,7 @@
                 {#each categories as cat}
                     <button
                         class="w-full text-left px-4 py-2 text-sm hover:bg-[var(--primary-light)] hover:text-[var(--primary)] transition-colors {filterCategory === cat ? 'text-[var(--primary)] font-bold' : 'text-75'}"
-                        on:click={() => { filterCategory = cat; showCatMenu = false; }}
+                        on:click={() => { filterCategory = cat; showCatMenu = false; syncUrl(); }}
                     >
                         {cat === 'all' ? '显示全部' : cat}
                     </button>
@@ -156,7 +157,7 @@
                 {#each availableTags as t}
                     <button
                         class="w-full text-left px-4 py-2 text-sm hover:bg-[var(--primary-light)] hover:text-[var(--primary)] transition-colors {filterTag === t ? 'text-[var(--primary)] font-bold' : 'text-75'}"
-                        on:click={() => { filterTag = t; showTagMenu = false; }}
+                        on:click={() => { filterTag = t; showTagMenu = false; syncUrl(); }}
                     >
                         {t === 'all' ? '在该分类下搜索...' : `# ${t}`}
                     </button>

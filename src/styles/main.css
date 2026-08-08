@@ -102,11 +102,11 @@
 
     .btn-regular-dark {
         @apply flex items-center justify-center
-        bg-[oklch(0.45_0.01_var(--hue))] hover:bg-[oklch(0.50_0.01_var(--hue))] active:bg-[oklch(0.55_0.01_var(--hue))]
-        dark:bg-[oklch(0.30_0.02_var(--hue))] dark:hover:bg-[oklch(0.35_0.03_var(--hue))] dark:active:bg-[oklch(0.40_0.03_var(--hue))]
+        bg-[oklch(from_var(--primary)_0.45_0.01_h)] hover:bg-[oklch(from_var(--primary)_0.50_0.01_h)] active:bg-[oklch(from_var(--primary)_0.55_0.01_h)]
+        dark:bg-[oklch(from_var(--primary)_0.30_0.02_h)] dark:hover:bg-[oklch(from_var(--primary)_0.35_0.03_h)] dark:active:bg-[oklch(from_var(--primary)_0.40_0.03_h)]
     }
     .btn-regular-dark.success {
-        @apply bg-[oklch(0.75_0.14_var(--hue))] dark:bg-[oklch(0.75_0.14_var(--hue))]
+        @apply bg-[oklch(from_var(--primary)_0.75_0.14_h)] dark:bg-[oklch(from_var(--primary)_0.75_0.14_h)]
     }
 }
 

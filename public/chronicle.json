@@ -106,11 +106,17 @@
     		"content": "目前正在使用的「追番」页面来源，感谢「幽々子」（现：霞葉）对我的教程请求的响应"
     	},
     	{
-    		"title": "友链页面",
+    		"title": "友链页面（旧）",
     		"author": "AULyPc",
     		"link": "https://blog.aulypc0x0.online/posts/website/add_friendspage_in_fuwari/",
-    		"content": "目前正在使用的「友链」页面来源。"
+    		"content": "之前使用的「友链」页面来源。"
     	},
+	{
+		"title": "友链页面（现）",
+		"author": "astro-theme-pure",
+		"link": "https://github.com/cworld1/astro-theme-pure",
+		"content": "现在使用的「友链」页面来源"
+	},
     	{
     		"title": "Stellar / Icarus / Butterfly",
     		"author": "Hexo Community",

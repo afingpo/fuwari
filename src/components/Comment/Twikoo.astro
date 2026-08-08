@@ -5,7 +5,7 @@ interface Props {
 const { path } = Astro.props
 
 const twikooConfig = {
-  envId: 'https://twikoo.iluc.cn/.netlify/functions/twikoo', // Netlify
+  envId: 'https://twikoo.iluc.cn/.netlify/functions/twikoo',
   lang: 'zh-CN',
   el: '#tcomment',
   path: path,
@@ -24,11 +24,26 @@ const twikooConfig = {
 <script is:inline define:vars={{ twikooConfig }}>
   function initTwikoo() {
     const el = document.querySelector('#tcomment');
-    if (el && window.twikoo) {
+    if (!el) return;
+
+    // 如果 twikoo 已加载，直接初始化
+    if (window.twikoo) {
       window.twikoo.init(twikooConfig);
+      return;
     }
+
+    // 未加载则轮询等待（最多 5 秒）
+    let retries = 0;
+    const timer = setInterval(() => {
+      if (window.twikoo) {
+        clearInterval(timer);
+        window.twikoo.init(twikooConfig);
+      } else if (++retries > 50) {
+        clearInterval(timer);
+      }
+    }, 100);
   }
+
   initTwikoo();
   document.addEventListener('astro:after-swap', initTwikoo);
 </script>
-

@@ -27,7 +27,6 @@ define(vars)
 define({
   /* --- 核心主题色：指向 $cc-theme-color --- */
   --primary: $cc-theme-color $cc-theme-color
-  --hue: hue($cc-theme-color)
   
   --page-bg: #f6f6f6 #121212
   --card-bg: #ffffff #1e1e1e
@@ -53,7 +52,7 @@ define({
   --enter-btn-bg-hover: var(--btn-regular-bg-hover)
   --enter-btn-bg-active: var(--btn-regular-bg-active)
 
-  --deep-text: oklch(0.25 0.02 var(--hue))
+  --deep-text: oklch(from var(--primary) 0.25 0.02 h)
   --title-active: $cc-theme-color $cc-theme-color
   
   --line-divider: black(0.08) white(0.08)
@@ -66,8 +65,8 @@ define({
   --selection-bg: rgba($cc-theme-color, 0.2) rgba($cc-theme-color, 0.3)
   --codeblock-selection: rgba($cc-theme-color, 0.4)
   
-  --codeblock-bg: oklch(0.17 0.015 var(--hue)) oklch(0.17 0.015 var(--hue))
-  --codeblock-topbar-bg: oklch(0.3 0.02 var(--hue)) oklch(0.12 0.015 var(--hue))
+  --codeblock-bg: oklch(from var(--primary) 0.17 0.015 h) oklch(from var(--primary) 0.17 0.015 h)
+  --codeblock-topbar-bg: oklch(from var(--primary) 0.3 0.02 h) oklch(from var(--primary) 0.12 0.015 h)
   
   --license-block-bg: black(0.03) var(--codeblock-bg)
   
@@ -96,8 +95,8 @@ define({
   --admonitions-color-caution: #e74c3c #ff6b6b
 
   --toc-badge-bg: rgba($cc-theme-color, 0.1) var(--btn-regular-bg)
-  --toc-btn-hover: rgba($cc-theme-color, 0.05) oklch(0.22 0.02 var(--hue))
-  --toc-btn-active: rgba($cc-theme-color, 0.1) oklch(0.25 0.02 var(--hue))
+  --toc-btn-hover: rgba($cc-theme-color, 0.05) oklch(from var(--primary) 0.22 0.02 h)
+  --toc-btn-active: rgba($cc-theme-color, 0.1) oklch(from var(--primary) 0.25 0.02 h)
   --toc-width: calc((100vw - var(--page-width)) / 2 - 1rem)
   --toc-item-active: $cc-theme-color $cc-theme-color
 })

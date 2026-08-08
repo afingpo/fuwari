@@ -1,5 +1,4 @@
 ---
-import NMP from "@components/NMP.astro";
 import PopupContainer from "@components/popup/PopupContainer.astro";
 import FontLoader from "@components/FontLoader.astro"
 import CookieConsent from "@components/CookieConsent.astro";
@@ -7,7 +6,6 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-import ConfigCarrier from "@components/ConfigCarrier.astro";
 import { profileConfig, siteConfig } from "@/config";
 import {
 	AUTO_MODE,
@@ -41,7 +39,6 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 
 // defines global css variables
 // why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
-const configHue = siteConfig.themeColor.hue;
 if (!banner || typeof banner !== "string" || banner.trim() === "") {
 	banner = siteConfig.banner.src;
 }
@@ -133,7 +130,7 @@ const bannerOffset =
 		<link rel="prefetch" as="image" href="https://www.blogsclub.org/badge/iluc.cn">
 
 		<!-- Set the theme before the page is rendered to avoid a flash -->
-		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH, configHue}}>
+		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH}}>
 			// Load the theme from local storage
 			const theme = localStorage.getItem('theme') || DEFAULT_THEME;
 			switch (theme) {
@@ -145,16 +142,12 @@ const bannerOffset =
 					break
 				case AUTO_MODE:
 					if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-						document.documentElement.classList.add('dark');
-					} else {
-						document.documentElement.classList.remove('dark');
-					}
+					document.documentElement.classList.add('dark');
+				} else {
+					document.documentElement.classList.remove('dark');
+				}
     		}
 			
-
-			// Load the hue from local storage
-			const hue = localStorage.getItem('hue') || configHue;
-			document.documentElement.style.setProperty('--hue', hue);
 
 			// calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text
 			let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
@@ -162,7 +155,6 @@ const bannerOffset =
 			document.documentElement.style.setProperty('--banner-height-extend', `${offset}px`);
 		</script>
 		<style define:vars={{
-			configHue,
 			'page-width': `${PAGE_WIDTH}rem`,
 		}}></style>  <!-- defines global css variables. This will be applied to <html> <body> and some other elements idk why -->
 
@@ -206,7 +198,6 @@ const bannerOffset =
 	<body class=" min-h-screen transition " class:list={[{"lg:is-home": isHomePage, "enable-banner": enableBanner}]}
 		  data-overlayscrollbars-initialize
 	>
-		<ConfigCarrier></ConfigCarrier>
 		<slot />
 
 		<!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
@@ -259,7 +250,7 @@ import {
 	// SizeObserverPlugin,
 	// ClickScrollPlugin
 } from 'overlayscrollbars';
-import {getHue, getStoredTheme, setHue, setTheme, syncNMPTheme} from "../utils/setting-utils";
+import {getStoredTheme, setTheme} from "../utils/setting-utils";
 import {pathsEqual, url} from "../utils/url-utils";
 import {
 	BANNER_HEIGHT,
@@ -337,10 +328,6 @@ setClickOutsideToClose("nav-menu-panel", ["nav-menu-panel", "nav-menu-switch"])
 function loadTheme() {
 	const theme = getStoredTheme()
 	setTheme(theme)
-}
-
-function loadHue() {
-	setHue(getHue())
 }
 
 function initCustomScrollbar() {
@@ -423,10 +410,8 @@ function showBanner() {
 function init() {
 	// disableAnimation()()		// TODO
 	loadTheme();
-	loadHue();
 	initCustomScrollbar();
 	showBanner();
-	syncNMPTheme();
 }
 
 /* Load settings when entering the site */
@@ -623,22 +608,6 @@ if (window.swup) {
 	document.addEventListener("swup:enable", setup)
 }
 </script>
-
-<script>
-// 防止 NMP 播放器封面图覆盖页面背景
-(function() {
-	const body = document.body;
-	const observer = new MutationObserver(() => {
-		const bg = getComputedStyle(body).backgroundImage;
-		if (bg && bg !== 'none') {
-			body.style.backgroundImage = 'none';
-		}
-	});
-	observer.observe(body, { attributes: true, attributeFilter: ['style', 'class'] });
-})();
-</script>
-
-<NMP />
 
 <!--
 <CookieConsent />
