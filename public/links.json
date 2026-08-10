@@ -73,7 +73,13 @@
 		  "siteurl": "https://zxs24719.codeberg.page",
 		  "desc": "生活起起伏伏，始终充满热爱",
 		  "imgurl": "https://zxs24719.codeberg.page/avatar.jpg"
-		}
+		},
+        {
+          "title": "Brandon's Blog",
+          "siteurl": "https://blog.oopss.top",
+          "desc": "记录Brandon的生活日常",
+          "imgurl": "https://cdn.oopss.top/icon.jpg"
+        }
 	  ]
     },
     {
