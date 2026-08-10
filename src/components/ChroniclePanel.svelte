@@ -17,7 +17,7 @@
 
     <div class="space-y-0"> {#each items as item}
             <div class="group flex flex-row items-start min-h-12">
-                <div class="w-[20%] md:w-[15%] text-sm text-right text-50 mt-1 pr-4 font-mono">
+                <div class="w-[28%] md:w-[18%] text-sm text-right text-50 mt-1 pr-4 font-mono whitespace-nowrap">
                     {formatDate(item.date)}
                 </div>
                 <div class="relative self-stretch flex flex-col items-center px-4">

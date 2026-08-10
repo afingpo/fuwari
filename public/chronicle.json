@@ -1,6 +1,11 @@
 {
 	"development": [
 		{
+			"date": "2026-08-10",
+			"title": "对博客进行大量优化、重构",
+			"contect": "开始单独主题发布计划"
+		},
+		{
 			"date": "2026-06-28",
 			"title": "转到 iluc.cn 域名",
 			"contect": "购买 iluc.cn 域名，全站转移"
