@@ -1,0 +1,45 @@
+name: Build and Deploy Website
+
+on:
+  push:
+    branches:
+      - main  # 当触发推送至 main 分支时自动执行
+
+jobs:
+  deploy:
+    runs-on: docker
+    steps:
+      # 1. 拉取仓库代码
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. 安装 pnpm（确保 setup-node 的 pnpm 缓存能够正常启动）
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      # 3. 配置 Node.js 环境并开启 pnpm 缓存
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      # 4. 安装依赖
+      - name: Install dependencies
+        run: pnpm install
+
+      # 5. 构建 Astro 项目（输出到 dist 目录）
+      - name: Build Astro site
+        run: pnpm run build
+
+      # 6. 将构建出的 dist 目录发布到 pages 分支
+      - name: Deploy to pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: pages
+          force_orphan: true # 保持 pages 分支历史简洁（只留最新的构建产物）
+
