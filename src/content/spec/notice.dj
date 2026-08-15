@@ -1,2 +1,3 @@
 - 开了个QQ群，感兴趣的可以进来玩玩：[1042706465](https://qun.qq.com/universal-share/share?ac=1&authKey=jxYGtkbeMzZQjutmTl3T%2F3vf%2BafYuCHShUideSnxhDUjXj0xj9JCnQtcGTilqP5g&busi_data=eyJncm91cENvZGUiOiIxMDQyNzA2NDY1IiwidG9rZW4iOiJlRkNvL3FzeE04SkZ2cnNGdTYrbnRpUnpRcjkyQU81SG1tbHBKUUlLL20vZDFpTXgrUlgwcExRS01ianZ3eitqIiwidWluIjoiMzg2MDE2OTU3OSJ9&data=1IabUINW8g0elAnZkmA1y8-FTmtS7UmtQwyqeE5ECEl5lXEVafcb5-KdGJTd7tzBccJGzULmFLtv2ZkkQ5jX0g&svctype=4&tempid=h5_group_info)
 - 新增一处[「博客讯息发布」](https://codeberg.org/afingpo/fuwari/issues/119)，会更新一些博客相关的信息之类的，可以订阅一下
+- 将网站从原来的 `Codeberg -> Github -> Vercel -> Cf CDN` 改为 `Codeberg -> VPS -> Cf CDN`
