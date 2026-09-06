@@ -33,3 +33,6 @@ yarn.lock
 # Local Netlify folder
 .netlify
 .env*.local
+
+# log file
+logs/
