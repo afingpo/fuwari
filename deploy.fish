@@ -32,18 +32,18 @@ function _do_deploy
         return 1
     end
 
-    set_color cyan; echo "[INFO] [4/5] 构建 Astro..."; set_color normal
-    if not pnpm run build
+        set_color cyan; echo "[INFO] [4/5] 构建 Astro..."; set_color normal
+    if not UV_THREADPOOL_SIZE=2 NODE_OPTIONS="--max-old-space-size=1536" pnpm run build
         set_color red; echo "[ERROR] 构建失败。同步被阻止"; set_color normal
         return 1
     end
 
-    # 已修复：去掉 ls 外部的双引号，正常解析命令输出
-    if not test -d dist; or test -z (ls -A dist 2>/dev/null)
+    # 修复：使用 count 计算文件数量，防止参数展开导致语法崩溃
+    if not test -d dist; or test (count dist/*) -eq 0
         set_color red; echo "[ERROR] dist 目录不存在或为空，阻止同步！"; set_color normal
         return 1
     end
-
+    
     set_color cyan; echo "[INFO] [5/5] 同步静态产物至 Caddy 目录..."; set_color normal
     mkdir -p $DEST_DIR
     rsync -av --delete dist/ $DEST_DIR/
