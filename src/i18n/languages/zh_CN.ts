@@ -43,4 +43,17 @@ export const zh_CN: Translation = {
 	[Key.notice]: "公告",
 	[Key.expand]: "展开",
 	[Key.collapse]: "收起",
+
+	[Key.revisionHistory]: "修订记录",
+	[Key.revision]: "修订",
+	[Key.revisions]: "修订",
+	[Key.version]: "版本",
+	[Key.revisionNote]: "修订说明",
+	[Key.currentVersion]: "当前版本",
+	[Key.oldVersion]: "旧版本",
+	[Key.viewDiff]: "查看差异",
+	[Key.viewFullVersion]: "查看全文",
+	[Key.archivedVersion]: "你正在查看《{title}》的 v{version} 归档版本",
+	[Key.returnToRevisions]: "返回修订记录",
+	[Key.noRevisions]: "暂无修订记录",
 };

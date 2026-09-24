@@ -7,6 +7,7 @@ import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getSortedPosts } from "@utils/content-utils";
 import { getDir, getPostUrlBySlug } from "@utils/url-utils";
+import { getRevisionUrl } from "@utils/revision-utils";
 import { Icon } from "astro-icon/components";
 import ImageWrapper from "../../components/misc/ImageWrapper.astro";
 import PostMetadata from "../../components/PostMeta.astro";
@@ -98,6 +99,8 @@ const jsonLd = {
                         updated={entry.data.updated}
                         tags={entry.data.tags}
                         category={entry.data.category}
+                        revisions={entry.data.revisions || []}
+                        revisionUrl={getRevisionUrl(entry.data.slug)}
                 ></PostMetadata>
                 {!entry.data.image && <div class="border-[var(--line-divider)] border-dashed border-b-[1px] mb-5"></div>}
             </div>

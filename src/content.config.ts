@@ -22,6 +22,11 @@ const postsCollection = defineCollection({
                 prevSlug: z.string().default(""),
                 nextTitle: z.string().default(""),
                 nextSlug: z.string().default(""),
+                revisions: z.array(z.object({
+                        version: z.number(),
+                        date: z.date(),
+                        note: z.string().default("")
+                })).optional().default([]),
                 html: z.string().optional(),
                 headings: z.array(z.any()).optional(),
                 remarkPluginFrontmatter: z.object({

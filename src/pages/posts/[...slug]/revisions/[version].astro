@@ -1,0 +1,140 @@
+---
+import path from "node:path";
+import fs from "node:fs";
+import matter from "gray-matter";
+import { parse, renderHTML } from "@djot/djot";
+import Markdown from "@components/misc/Markdown.astro";
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { getSortedPosts } from "@utils/content-utils";
+import { getDir } from "@utils/url-utils";
+import { Icon } from "astro-icon/components";
+import ImageWrapper from "../../../../components/misc/ImageWrapper.astro";
+import PostMetadata from "../../../../components/PostMeta.astro";
+import { highlightCodeBlocks, getReadingTime, extractHeadings } from "../../../../loaders/transformers";
+import { formatDateToYYYYMMDD } from "../../../../utils/date-utils";
+
+export async function getStaticPaths() {
+    const blogEntries = await getSortedPosts();
+    const paths = [];
+
+    for (const entry of blogEntries) {
+        const revisions = entry.data.revisions || [];
+        for (const rev of revisions) {
+            paths.push({
+                params: {
+                    slug: entry.slug,
+                    version: rev.version.toString(),
+                },
+                props: {
+                    entry,
+                    version: rev.version,
+                    revisionNote: rev.note,
+                    revisionDate: rev.date,
+                },
+            });
+        }
+    }
+    return paths;
+}
+
+const { entry, version, revisionNote, revisionDate } = Astro.props;
+
+// Read the revision file
+const revisionsDir = path.dirname(path.join("src/content/posts", entry.id));
+const filePath = path.join(revisionsDir, "_revisions", `v${version}.dj`);
+const fileContent = fs.readFileSync(filePath, "utf-8");
+const { data: rawData, content } = matter(fileContent);
+
+// Render to HTML
+const ast = parse(content);
+let html = renderHTML(ast);
+html = await highlightCodeBlocks(html);
+const { words, minutes } = getReadingTime(content);
+const headings = extractHeadings(html);
+
+// Use revision file's title if present, otherwise fall back to current title
+const title = rawData.title || entry.data.title;
+const description = rawData.description || entry.data.description;
+
+const archivedBanner = i18n(I18nKey.archivedVersion)
+    .replace("{title}", entry.data.title)
+    .replace("{version}", version.toString());
+---
+<MainGridLayout title={`${title} - v${version}`} description={description} lang={entry.data.lang} setOGTypeArticle={true} headings={headings}>
+    <div class="flex flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative mb-4">
+        {/* archived version banner */}
+        <div class="bg-[#FFE500] text-black text-xs py-1 px-6 md:px-9 flex items-center gap-2 shrink-0 onload-animation">
+            <Icon name="material-symbols:warning-outline-rounded" class="text-sm shrink-0 leading-none"></Icon>
+            <span class="font-medium leading-none">{archivedBanner}</span>
+        </div>
+        <div id="post-container" class:list={["card-base z-10 px-6 md:px-9 pt-6 pb-4 relative w-full ",
+            {}
+        ]}>
+
+            {/* word count and reading time */}
+            <div class="flex flex-row text-black/30 dark:text-white/30 gap-5 mb-3 transition onload-animation">
+                <div class="flex flex-row items-center">
+                    <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2">
+                        <Icon name="material-symbols:notes-rounded"></Icon>
+                    </div>
+                    <div class="text-sm">{words} {" " + i18n(I18nKey.wordsCount)}</div>
+                </div>
+                <div class="flex flex-row items-center">
+                    <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2">
+                        <Icon name="material-symbols:schedule-outline-rounded"></Icon>
+                    </div>
+                    <div class="text-sm">
+                        {minutes} {" " + i18n(minutes === 1 ? I18nKey.minuteCount : I18nKey.minutesCount)}
+                    </div>
+                </div>
+            </div>
+
+            {/* title */}
+            <div class="relative onload-animation">
+                <div
+                    class="transition w-full block font-bold mb-3
+                    text-3xl md:text-[2.25rem]/[2.75rem]
+                    text-black/90 dark:text-white/90
+                    md:before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
+                    before:absolute before:top-[0.75rem] before:left-[-1.125rem]
+                " style="font-family: var(--font-title);">
+                    {title}
+                </div>
+            </div>
+
+            {/* metadata */}
+            <div class="onload-animation">
+                <PostMetadata
+                        class="mb-5"
+                        published={entry.data.published}
+                        updated={entry.data.updated}
+                        tags={entry.data.tags}
+                        category={entry.data.category}
+                ></PostMetadata>
+                {!entry.data.image && <div class="border-[var(--line-divider)] border-dashed border-b-[1px] mb-5"></div>}
+            </div>
+
+            {/* cover image */}
+            {entry.data.image &&
+                <ImageWrapper id="post-cover" src={entry.data.image} basePath={path.join("content/posts/", getDir(entry.id))} class="mb-8 rounded-xl banner-container onload-animation"/>
+            }
+
+            {/* content */}
+            <Markdown class="mb-6 markdown-content onload-animation">
+                <Fragment set:html={html} />
+            </Markdown>
+
+            {/* return link */}
+            <div class="mt-8 pt-4 border-t border-[var(--line-divider)] onload-animation">
+                <a href={`/posts/${entry.data.slug}/revisions/`}
+                   class="inline-flex items-center gap-2 text-sm text-black/50 dark:text-white/50 hover:text-[var(--primary)] dark:hover:text-[var(--primary)] transition">
+                    <Icon name="material-symbols:arrow-back-rounded" class="text-lg"></Icon>
+                    {i18n(I18nKey.returnToRevisions)}
+                </a>
+            </div>
+
+        </div>
+    </div>
+</MainGridLayout>

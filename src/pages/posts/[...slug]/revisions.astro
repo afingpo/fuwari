@@ -1,0 +1,90 @@
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { getSortedPosts } from "@utils/content-utils";
+import { getRevisionUrl } from "@utils/revision-utils";
+import { Icon } from "astro-icon/components";
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
+import { formatDateToYYYYMMDD } from "../../../utils/date-utils";
+
+export async function getStaticPaths() {
+    const blogEntries = await getSortedPosts();
+    return blogEntries
+        .filter((entry) => entry.data.revisions && entry.data.revisions.length > 0)
+        .map((entry) => {
+            return {
+                params: { slug: entry.slug },
+                props: { entry },
+            };
+        });
+}
+
+const { entry } = Astro.props;
+const revisions = entry.data.revisions || [];
+const sortedRevisions = [...revisions].sort((a, b) => a.version - b.version);
+---
+<MainGridLayout title={`${entry.data.title} - ${i18n(I18nKey.revisionHistory)}`} description={i18n(I18nKey.revisionHistory)}>
+    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative mb-4">
+        <div class="card-base z-10 px-6 md:px-9 pt-6 pb-4 relative w-full">
+            <!-- header -->
+            <div class="flex items-center gap-3 mb-6">
+                <div class="transition h-8 w-8 rounded-lg bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center">
+                    <Icon name="material-symbols:history-rounded" class="text-xl"></Icon>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-black/90 dark:text-white/90" style="font-family: var(--font-title);">
+                        {i18n(I18nKey.revisionHistory)}
+                    </h1>
+                    <div class="text-sm text-black/50 dark:text-white/50">
+                        {entry.data.title}
+                    </div>
+                </div>
+            </div>
+
+            {/* back to post */}
+            <a href={`/posts/${entry.data.slug}/`}
+               class="inline-flex items-center gap-2 text-sm text-black/50 dark:text-white/50 hover:text-[var(--primary)] dark:hover:text-[var(--primary)] transition mb-6">
+                <Icon name="material-symbols:arrow-back-rounded" class="text-lg"></Icon>
+                {i18n(I18nKey.currentVersion)}
+            </a>
+
+            {/* revision list */}
+            <div class="space-y-4">
+                {sortedRevisions.map((rev) => (
+                    <div class="border border-[var(--line-divider)] rounded-xl p-4 hover:border-[var(--primary)] transition">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-medium text-black/30 dark:text-white/30">
+                                    v{rev.version}
+                                </span>
+                                <span class="text-sm font-medium text-black/70 dark:text-white/70">
+                                    {i18n(I18nKey.version)} {rev.version}
+                                </span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm text-black/50 dark:text-white/50">
+                                    {formatDateToYYYYMMDD(rev.date)}
+                                </span>
+                                <a href={`/posts/${entry.data.slug}/revisions/${rev.version}/`}
+                                   class="text-sm text-[var(--primary)] hover:underline">
+                                    {i18n(I18nKey.viewFullVersion)} →
+                                </a>
+                            </div>
+                        </div>
+                        {rev.note && (
+                            <div class="text-sm text-black/70 dark:text-white/70 mt-2 ml-5">
+                                {rev.note}
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+
+            {sortedRevisions.length === 0 && (
+                <div class="text-center py-8 text-black/50 dark:text-white/50">
+                    {i18n(I18nKey.noRevisions)}
+                </div>
+            )}
+        </div>
+    </div>
+</MainGridLayout>

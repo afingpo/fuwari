@@ -13,6 +13,8 @@ interface Props {
 	category: string | null;
 	hideTagsForMobile?: boolean;
 	hideUpdateDate?: boolean;
+	revisions?: { version: number; date: Date; note: string }[];
+	revisionUrl?: string;
 }
 const {
 	published,
@@ -21,6 +23,8 @@ const {
 	category,
 	hideTagsForMobile = false,
 	hideUpdateDate = false,
+	revisions = [],
+	revisionUrl = "",
 } = Astro.props;
 const className = Astro.props.class;
 ---
@@ -79,4 +83,18 @@ const className = Astro.props.class;
             {!(tags && tags.length > 0) && <div class="transition text-50 text-sm font-medium">{i18n(I18nKey.noTags)}</div>}
         </div>
     </div>
+
+    {/* revisions */}
+    {revisions.length > 0 && revisionUrl && (
+        <div class="flex items-center">
+            <div class="meta-icon">
+                <Icon name="material-symbols:history-rounded" class="text-xl"></Icon>
+            </div>
+            <a href={revisionUrl} aria-label="View revision history"
+               class="link-lg transition text-50 text-sm font-medium
+                            hover:text-[var(--primary)] dark:hover:text-[var(--primary)] whitespace-nowrap">
+                {i18n(I18nKey.revisionHistory)} ({revisions.length})
+            </a>
+        </div>
+    )}
 </div>

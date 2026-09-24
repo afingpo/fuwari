@@ -40,6 +40,19 @@ enum I18nKey {
 	notice = "notice",
 	expand = "expand",
 	collapse = "collapse",
+
+	revisionHistory = "revisionHistory",
+	revision = "revision",
+	revisions = "revisions",
+	version = "version",
+	revisionNote = "revisionNote",
+	currentVersion = "currentVersion",
+	oldVersion = "oldVersion",
+	viewDiff = "viewDiff",
+	viewFullVersion = "viewFullVersion",
+	archivedVersion = "archivedVersion",
+	returnToRevisions = "returnToRevisions",
+	noRevisions = "noRevisions",
 }
 
 export default I18nKey;

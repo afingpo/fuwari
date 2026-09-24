@@ -43,4 +43,17 @@ export const en: Translation = {
 	[Key.notice]: "Notice",
 	[Key.expand]: "Expand",
 	[Key.collapse]: "Collapse",
+
+	[Key.revisionHistory]: "Revision History",
+	[Key.revision]: "Revision",
+	[Key.revisions]: "Revisions",
+	[Key.version]: "Version",
+	[Key.revisionNote]: "Revision Note",
+	[Key.currentVersion]: "Current Version",
+	[Key.oldVersion]: "Old Version",
+	[Key.viewDiff]: "View Diff",
+	[Key.viewFullVersion]: "View Full",
+	[Key.archivedVersion]: "You are viewing the v{version} archived version of «{title}»",
+	[Key.returnToRevisions]: "Return to Revision History",
+	[Key.noRevisions]: "No revision history",
 };
