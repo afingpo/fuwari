@@ -5,7 +5,7 @@ import type {
 
 export const siteConfig: SiteConfig = {
 	title: "涵哲子居",
-	subtitle: "Afingpo's Blog",
+	subtitle: "Cxulis's Blog",
 	lang: "zh_CN", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {},
 	banner: {
@@ -46,19 +46,24 @@ export const profileConfig: ProfileConfig = {
 	bio: "天哲地理，共公卿好",
 	links: [
 		{
-			name: "Mail",
+			name: "Mail-1",
 			icon: "material-symbols:mail",
 			url: "mailto:me@iluc.cn"
+		},
+        {
+			name: "Mail-2",
+			icon: "material-symbols:mail",
+			url: "mailto:cxulis@disroot.org"
 		},
 		{
 			name: "GitHub",
 			icon: "fa6-brands:github",
-			url: "https://github.com/afingpo"
+			url: "https://github.com/afingpo/"
 		},
 		{
 			name: "Codeberg",
 			icon: "simple-icons:codeberg",
-			url: "https://codeberg.org/afingpo"
+			url: "https://codeberg.org/cxulis/"
 		},
 		{
 			name: "爱发电",
