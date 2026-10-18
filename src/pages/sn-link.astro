@@ -5,8 +5,22 @@ import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 
-// 要展示的 Solar Network 账号（公开可见的全部帖子）
+// ── 可调配置（改这里就够了）──────────────────────────────────
+// 要展示的 Solar Network 账号名（公开可见的自己发的帖子）
 const SOLIAN_ACCOUNT = "cxulis";
+// 直接指定 publisher 名；留空数组则自动按账号解析全部 publisher
+const SOLIAN_PUBLISHERS: string[] = [];
+// Stargate API 源
+const API_BASE_URL = "https://api.solian.app";
+// 每页拉取条数
+const PAGE_TAKE = 20;
+// 是否包含回复（false = 只要主帖）
+const INCLUDE_REPLIES = false;
+// 新在前（true）还是旧在前（false）
+const ORDER_DESC = true;
+// sk-post 展示形态："feed"（列表行）或 "card"（卡片）
+const POST_VARIANT = "feed";
+// ────────────────────────────────────────────────────────────
 
 // 库自带的 sk-post 预设样式需要注入 shadow root，故内联为 data URL。
 // post.css 中的 @import 在 data URL 下无法解析，这里手动把 media.css 拼进去。
@@ -19,7 +33,16 @@ const presetCssUrl = `data:text/css;base64,${Buffer.from(presetCss).toString("ba
 <MainGridLayout title={i18n(I18nKey.snLink)} description={i18n(I18nKey.snLink)}>
     <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
         <div class="card-base z-10 px-9 py-6 relative w-full">
-            <div id="sn-posts" class="flex flex-col gap-4" data-account={SOLIAN_ACCOUNT} data-preset={presetCssUrl} data-error={i18n(I18nKey.snLinkLoadFailed)}></div>
+            <div id="sn-posts" class="flex flex-col gap-4"
+                 data-account={SOLIAN_ACCOUNT}
+                 data-publishers={SOLIAN_PUBLISHERS.join(",")}
+                 data-api-base={API_BASE_URL}
+                 data-take={String(PAGE_TAKE)}
+                 data-replies={String(INCLUDE_REPLIES)}
+                 data-order-desc={String(ORDER_DESC)}
+                 data-variant={POST_VARIANT}
+                 data-preset={presetCssUrl}
+                 data-error={i18n(I18nKey.snLinkLoadFailed)}></div>
         </div>
     </div>
 </MainGridLayout>
@@ -34,10 +57,20 @@ async function loadPosts() {
 		return;
 	container.dataset.loaded = "true";
 
+	// 读取 frontmatter 传下来的配置
 	const account = container.dataset.account ?? "";
+	const publishersOverride = (container.dataset.publishers ?? "")
+		.split(",")
+		.map((s) => s.trim())
+		.filter(Boolean);
+	const apiBaseUrl = container.dataset.apiBase || "https://api.solian.app";
+	const take = Number(container.dataset.take || 20);
+	const includeReplies = container.dataset.replies === "true";
+	const orderDesc = container.dataset.orderDesc !== "false";
+	const variant = container.dataset.variant || "feed";
 	const preset = container.dataset.preset;
 	configure({
-		baseUrl: "https://api.solian.app",
+		baseUrl: apiBaseUrl,
 		...(preset ? { css: [preset] } : {}),
 	});
 
@@ -51,42 +84,11 @@ async function loadPosts() {
 	};
 
 	const client = createApiClient();
-	const take = 20;
-	const path = "/sphere/posts";
-	let offset = 0;
-	try {
-		for (; ; offset += take) {
-			// 公开读：服务端只返回访客可见的帖子
-			const { data, headers } = await client.requestWithHeaders<SnPost[]>(
-				path,
-				{
-					auth: false,
-					query: { account, take, offset, replies: false, orderDesc: true },
-				},
-			);
-			for (const post of data) {
-				const el = document.createElement("sk-post") as PostElement;
-				el.post = post;
-				el.setAttribute("variant", "feed");
-				container.append(el);
-			}
-			const total = Number(headers.get("x-total") ?? 0);
-			if (data.length === 0 || data.length < take) break;
-			if (total > 0 && offset + data.length >= total) break;
-		}
-	} catch (err) {
-		console.error("sn-link: failed to load posts", err);
-		const query = new URLSearchParams({
-			account,
-			take: String(take),
-			offset: String(offset),
-			replies: "false",
-			orderDesc: "true",
-		});
-		const url = client.url(path, query);
-		let detail: string;
+	let lastUrl = "";
+
+	const describeError = (err: unknown): string => {
 		if (err instanceof ApiError) {
-			detail = [
+			return [
 				`HTTP ${err.status}`,
 				err.code && `code=${err.code}`,
 				err.detail,
@@ -94,12 +96,69 @@ async function loadPosts() {
 			]
 				.filter(Boolean)
 				.join(" ");
-		} else if (err instanceof Error) {
-			detail = err.message;
-		} else {
-			detail = String(err);
 		}
-		showError(`${container.dataset.error ?? "Request failed"}: GET ${url} — ${detail}`);
+		if (err instanceof Error) return err.message;
+		return String(err);
+	};
+
+	try {
+		// publisher 来源：直接指定 > 按账号自动解析
+		// （不能用 `account=` 查询——那是互动时间线，会混入回复/转发的别人的帖子）
+		let pubNames = publishersOverride;
+		if (pubNames.length === 0) {
+			const accountPath = `/stargate/accounts/${encodeURIComponent(account)}`;
+			lastUrl = client.url(accountPath);
+			const accountInfo = await client.request<{ id: string }>(accountPath, {
+				auth: false,
+			});
+			const publishersPath = `/sphere/publishers/of/${encodeURIComponent(accountInfo.id)}`;
+			lastUrl = client.url(publishersPath);
+			const publishers = await client.request<Array<{ name: string }>>(
+				publishersPath,
+				{ auth: false },
+			);
+			pubNames = publishers.map((p) => p.name).filter(Boolean);
+		}
+		if (pubNames.length === 0) {
+			showError(`${container.dataset.error ?? "Request failed"}: no publishers`);
+			return;
+		}
+
+		const path = "/sphere/posts";
+		for (const pub of pubNames) {
+			let offset = 0;
+			for (; ; offset += take) {
+				// 公开读：服务端只返回访客可见的帖子
+				lastUrl = client.url(path, {
+					pub,
+					take,
+					offset,
+					replies: includeReplies,
+					orderDesc,
+				});
+				const { data, headers } = await client.requestWithHeaders<SnPost[]>(
+					path,
+					{
+						auth: false,
+						query: { pub, take, offset, replies: includeReplies, orderDesc },
+					},
+				);
+				for (const post of data) {
+					const el = document.createElement("sk-post") as PostElement;
+					el.post = post;
+					el.setAttribute("variant", variant);
+					container.append(el);
+				}
+				const total = Number(headers.get("x-total") ?? 0);
+				if (data.length === 0 || data.length < take) break;
+				if (total > 0 && offset + data.length >= total) break;
+			}
+		}
+	} catch (err) {
+		console.error("sn-link: failed to load posts", err);
+		showError(
+			`${container.dataset.error ?? "Request failed"}: GET ${lastUrl} — ${describeError(err)}`,
+		);
 	}
 }
 
