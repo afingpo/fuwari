@@ -36,6 +36,8 @@ enum I18nKey {
 	bangumi = "bangumi",
 	essay = "essay",
 	chronicle = "chronicle",
+	snLink = "snLink",
+	snLinkLoadFailed = "snLinkLoadFailed",
 
 	notice = "notice",
 	expand = "expand",

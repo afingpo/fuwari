@@ -1,0 +1,84 @@
+---
+import postPresetRaw from "@solsynth/sunkenland/presets/post.css?raw";
+import mediaPresetRaw from "@solsynth/sunkenland/presets/media.css?raw";
+import I18nKey from "../i18n/i18nKey";
+import { i18n } from "../i18n/translation";
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+
+// 要展示的 Solar Network 账号（公开可见的全部帖子）
+const SOLIAN_ACCOUNT = "cxulis";
+
+// 库自带的 sk-post 预设样式需要注入 shadow root，故内联为 data URL。
+// post.css 中的 @import 在 data URL 下无法解析，这里手动把 media.css 拼进去。
+const presetCss = postPresetRaw.replace(
+	/@import\s+["']\.\/media\.css["'];?/,
+	mediaPresetRaw,
+);
+const presetCssUrl = `data:text/css;base64,${Buffer.from(presetCss).toString("base64")}`;
+---
+<MainGridLayout title={i18n(I18nKey.snLink)} description={i18n(I18nKey.snLink)}>
+    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+        <div class="card-base z-10 px-9 py-6 relative w-full">
+            <div id="sn-posts" class="flex flex-col gap-4" data-account={SOLIAN_ACCOUNT} data-preset={presetCssUrl}></div>
+            <p id="sn-posts-error" class="hidden transition text-50 text-sm font-medium mt-2">{i18n(I18nKey.snLinkLoadFailed)}</p>
+        </div>
+    </div>
+</MainGridLayout>
+
+<script>
+import { configure, createApiClient } from "@solsynth/sunkenland";
+import type { PostElement, SnPost } from "@solsynth/sunkenland";
+
+async function loadPosts() {
+	const container = document.getElementById("sn-posts");
+	const errorEl = document.getElementById("sn-posts-error");
+	if (!container || !errorEl || container.dataset.loaded === "true")
+		return;
+	container.dataset.loaded = "true";
+
+	const account = container.dataset.account ?? "";
+	const preset = container.dataset.preset;
+	configure({
+		baseUrl: "https://api.solian.app",
+		...(preset ? { css: [preset] } : {}),
+	});
+
+	const client = createApiClient();
+	const take = 20;
+	try {
+		for (let offset = 0; ; offset += take) {
+			// 公开读：服务端只返回访客可见的帖子
+			const { data, headers } = await client.requestWithHeaders<SnPost[]>(
+				"/sphere/posts",
+				{
+					auth: false,
+					query: { account, take, offset, replies: false, orderDesc: true },
+				},
+			);
+			for (const post of data) {
+				const el = document.createElement("sk-post") as PostElement;
+				el.post = post;
+				el.setAttribute("variant", "feed");
+				container.append(el);
+			}
+			const total = Number(headers.get("x-total") ?? 0);
+			if (data.length === 0 || data.length < take) break;
+			if (total > 0 && offset + data.length >= total) break;
+		}
+	} catch (err) {
+		console.error("sn-link: failed to load posts", err);
+		errorEl.classList.remove("hidden");
+	}
+}
+
+function bindSwup() {
+	if (window.swup) {
+		window.swup.hooks.on("page:view", loadPosts);
+	} else {
+		document.addEventListener("swup:enable", bindSwup, { once: true });
+	}
+}
+
+loadPosts();
+bindSwup();
+</script>

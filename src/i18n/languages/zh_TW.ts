@@ -39,6 +39,8 @@ export const zh_TW: Translation = {
 	[Key.bangumi]: "追番",
 	[Key.essay]: "閒談",
 	[Key.chronicle]: "紀事",
+	[Key.snLink]: "貼文",
+	[Key.snLinkLoadFailed]: "請求失敗",
 
 	[Key.notice]: "公告",
 	[Key.expand]: "展開",

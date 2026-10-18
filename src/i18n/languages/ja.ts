@@ -39,6 +39,8 @@ export const ja: Translation = {
 	[Key.bangumi]: "アニメ",
 	[Key.essay]: "雑記",
 	[Key.chronicle]: "クロニクル",
+	[Key.snLink]: "投稿",
+	[Key.snLinkLoadFailed]: "投稿の読み込みに失敗しました",
 
 	[Key.notice]: "お知らせ",
 	[Key.expand]: "展開",

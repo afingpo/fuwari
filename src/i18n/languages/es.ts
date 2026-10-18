@@ -35,6 +35,8 @@ export const es: Translation = {
 	[Key.author]: "Autor",
 	[Key.publishedAt]: "Publicado el",
 	[Key.license]: "Licencia",
+	[Key.snLink]: "Publicaciones",
+	[Key.snLinkLoadFailed]: "Error al cargar las publicaciones",
 
 	[Key.notice]: "Aviso",
 	[Key.expand]: "Expandir",

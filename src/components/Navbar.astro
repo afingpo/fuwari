@@ -17,6 +17,7 @@ enum LinkPreset {
     Links = 3,
     Bangumi = 4,
     Chronicle = 5,
+    SnLink = 6,
 }
 
 const className = Astro.props.class;
@@ -29,6 +30,7 @@ const linkPresets: { [key in LinkPreset]: NavBarLink } = {
     [LinkPreset.Chronicle]: { name: i18n(I18nKey.chronicle), url: "/chronicle/" },
     [LinkPreset.Links]:     { name: i18n(I18nKey.links),     url: "/links/" },
     [LinkPreset.About]:     { name: i18n(I18nKey.about),     url: "/about/" },
+    [LinkPreset.SnLink]:    { name: i18n(I18nKey.snLink),    url: "/sn-link/" },
 };
 
 // 导航链接配置
@@ -39,6 +41,7 @@ const navLinks: (LinkPreset | NavBarLink)[] = [
     LinkPreset.Chronicle,
     LinkPreset.Links,
     LinkPreset.About,
+    LinkPreset.SnLink,
     {
         name: "开往",
         url: "https://www.travellings.cn/go.html",

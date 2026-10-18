@@ -35,6 +35,8 @@ export const ko: Translation = {
 	[Key.author]: "저자",
 	[Key.publishedAt]: "게시일",
 	[Key.license]: "라이선스",
+	[Key.snLink]: "게시물",
+	[Key.snLinkLoadFailed]: "게시물을 불러오지 못했습니다",
 
 	[Key.notice]: "공지사항",
 	[Key.expand]: "펼치기",

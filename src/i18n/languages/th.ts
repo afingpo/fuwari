@@ -35,6 +35,8 @@ export const th: Translation = {
 	[Key.author]: "ผู้เขียน",
 	[Key.publishedAt]: "เผยแพร่เมื่อ",
 	[Key.license]: "สัญญาอนุญาต",
+	[Key.snLink]: "โพสต์",
+	[Key.snLinkLoadFailed]: "โหลดโพสต์ไม่สำเร็จ",
 
 	[Key.notice]: "ประกาศ",
 	[Key.expand]: "ขยาย",
