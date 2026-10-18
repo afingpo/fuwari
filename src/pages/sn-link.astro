@@ -24,10 +24,32 @@ const POST_VARIANT = "feed";
 
 // 库自带的 sk-post 预设样式需要注入 shadow root，故内联为 data URL。
 // post.css 中的 @import 在 data URL 下无法解析，这里手动把 media.css 拼进去。
-const presetCss = postPresetRaw.replace(
-	/@import\s+["']\.\/media\.css["'];?/,
-	mediaPresetRaw,
-);
+// 库的暗色只跟系统 prefers-color-scheme 走，与本站 html.dark 切换不同步——
+// 这里剥掉 @media (prefers-color-scheme: dark)，改用 :host-context(.dark)
+// 让 shadow root 内的配色跟随站点自己的暗色开关。
+function stripOsDarkMode(css: string): string {
+	return css.replace(
+		/@media\s*\(prefers-color-scheme:\s*dark\)\s*\{(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\}/g,
+		"",
+	);
+}
+const darkBySiteClass = `
+:host-context(.dark) {
+  --sk-base-100: oklch(0% 0 0);
+  --sk-base-200: oklch(20% 0.016 285.938);
+  --sk-base-300: oklch(25% 0.013 285.805);
+  --sk-base-content: oklch(97.807% 0.029 256.847);
+  --sk-primary: oklch(50% 0.0873 281deg);
+  --sk-primary-content: oklch(96% 0.018 272.314);
+  --sk-border: color-mix(in oklch, var(--sk-base-300) 85%, transparent);
+  color-scheme: dark;
+}
+`;
+const presetCss =
+	stripOsDarkMode(postPresetRaw).replace(
+		/@import\s+["']\.\/media\.css["'];?/,
+		stripOsDarkMode(mediaPresetRaw),
+	) + darkBySiteClass;
 const presetCssUrl = `data:text/css;base64,${Buffer.from(presetCss).toString("base64")}`;
 ---
 <MainGridLayout title={i18n(I18nKey.snLink)} description={i18n(I18nKey.snLink)}>
