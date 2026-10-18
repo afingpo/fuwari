@@ -19,20 +19,18 @@ const presetCssUrl = `data:text/css;base64,${Buffer.from(presetCss).toString("ba
 <MainGridLayout title={i18n(I18nKey.snLink)} description={i18n(I18nKey.snLink)}>
     <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
         <div class="card-base z-10 px-9 py-6 relative w-full">
-            <div id="sn-posts" class="flex flex-col gap-4" data-account={SOLIAN_ACCOUNT} data-preset={presetCssUrl}></div>
-            <p id="sn-posts-error" class="hidden transition text-50 text-sm font-medium mt-2">{i18n(I18nKey.snLinkLoadFailed)}</p>
+            <div id="sn-posts" class="flex flex-col gap-4" data-account={SOLIAN_ACCOUNT} data-preset={presetCssUrl} data-error={i18n(I18nKey.snLinkLoadFailed)}></div>
         </div>
     </div>
 </MainGridLayout>
 
 <script>
-import { configure, createApiClient } from "@solsynth/sunkenland";
+import { ApiError, configure, createApiClient } from "@solsynth/sunkenland";
 import type { PostElement, SnPost } from "@solsynth/sunkenland";
 
 async function loadPosts() {
 	const container = document.getElementById("sn-posts");
-	const errorEl = document.getElementById("sn-posts-error");
-	if (!container || !errorEl || container.dataset.loaded === "true")
+	if (!container || container.dataset.loaded === "true")
 		return;
 	container.dataset.loaded = "true";
 
@@ -43,13 +41,24 @@ async function loadPosts() {
 		...(preset ? { css: [preset] } : {}),
 	});
 
+	const showError = (message: string) => {
+		if (container.querySelector(".sn-posts-error")) return;
+		const p = document.createElement("p");
+		p.className =
+			"sn-posts-error transition text-50 text-sm font-medium break-all";
+		p.textContent = message;
+		container.append(p);
+	};
+
 	const client = createApiClient();
 	const take = 20;
+	const path = "/sphere/posts";
+	let offset = 0;
 	try {
-		for (let offset = 0; ; offset += take) {
+		for (; ; offset += take) {
 			// 公开读：服务端只返回访客可见的帖子
 			const { data, headers } = await client.requestWithHeaders<SnPost[]>(
-				"/sphere/posts",
+				path,
 				{
 					auth: false,
 					query: { account, take, offset, replies: false, orderDesc: true },
@@ -67,7 +76,30 @@ async function loadPosts() {
 		}
 	} catch (err) {
 		console.error("sn-link: failed to load posts", err);
-		errorEl.classList.remove("hidden");
+		const query = new URLSearchParams({
+			account,
+			take: String(take),
+			offset: String(offset),
+			replies: "false",
+			orderDesc: "true",
+		});
+		const url = client.url(path, query);
+		let detail: string;
+		if (err instanceof ApiError) {
+			detail = [
+				`HTTP ${err.status}`,
+				err.code && `code=${err.code}`,
+				err.detail,
+				err.traceId && `traceId=${err.traceId}`,
+			]
+				.filter(Boolean)
+				.join(" ");
+		} else if (err instanceof Error) {
+			detail = err.message;
+		} else {
+			detail = String(err);
+		}
+		showError(`${container.dataset.error ?? "Request failed"}: GET ${url} — ${detail}`);
 	}
 }
 
