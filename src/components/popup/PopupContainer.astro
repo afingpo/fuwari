@@ -56,14 +56,14 @@ const loaded = await Promise.all(
                     <span class="popup-title">{p.title}</span>
                     <div class="popup-header-right">
                         {(p.time || 0) > 0 && (
-                            <span class="popup-timer" data-id={p.id}>{p.time}s</span>
+                            <span class="popup-timer text-50" data-id={p.id}>{p.time}s</span>
                         )}
-                        <button class="popup-close" data-id={p.id} aria-label="关闭">
+                        <button class="popup-close text-50" data-id={p.id} aria-label="关闭">
                             <svg width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="m12 10.587l4.95-4.95l1.414 1.414l-4.95 4.95l4.95 4.95l-1.414 1.414l-4.95-4.95l-4.95 4.95l-1.414-1.414l4.95-4.95l-4.95-4.95L7.05 5.637z"/></svg>
                         </button>
                     </div>
                 </div>
-                <div class:list={["popup-body", { "popup-collapsed": p.col }]}>
+                <div class:list={["popup-body", "text-75", { "popup-collapsed": p.col }]}>
                     <div class="popup-content" set:html={p.html} />
                 </div>
                 {p.col && (
@@ -135,7 +135,6 @@ const loaded = await Promise.all(
 
     .popup-timer {
         font-size: 0.75rem;
-        color: var(--text-color-50, rgba(0, 0, 0, 0.3));
         font-variant-numeric: tabular-nums;
     }
 
@@ -143,7 +142,6 @@ const loaded = await Promise.all(
         background: none;
         border: none;
         cursor: pointer;
-        color: var(--text-color-50, rgba(0, 0, 0, 0.3));
         padding: 0.125rem;
         border-radius: 0.25rem;
         display: flex;
@@ -159,7 +157,6 @@ const loaded = await Promise.all(
         padding: 0.75rem;
         font-size: 0.875rem;
         line-height: 1.6;
-        color: var(--text-color-75, rgba(0, 0, 0, 0.75));
     }
 
     .popup-collapsed {
